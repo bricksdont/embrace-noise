@@ -8,10 +8,10 @@ mkdir -p $tools
 
 echo "Make sure this script is executed AFTER you have activated a virtualenv"
 
-module purge
-module load rhel7/default-peta4
-module load cuda/9.1
-module add python-3.6.2-gcc-5.4.0-me5fsee
+# module purge
+# module load rhel7/default-peta4
+# module load cuda/9.1
+# module add python-3.6.2-gcc-5.4.0-me5fsee
 
 source $base/venvs/sockeye3/bin/activate
 
