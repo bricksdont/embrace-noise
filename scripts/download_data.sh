@@ -34,7 +34,7 @@ tar -xzvf $data/newstest2016.tgz -C $data
 
 for file in $data/sgm/*; do
   filename=`basename "$file"`
-  perl $MOSES/ems/support/input-from-sgm.perl < $file > $data/dev/$filename
+  perl $MOSES/ems/support/input-from-sgm.perl < $file > $data/dev/$filename".txt"
 done
 
 rm -r $data/sgm $data/newstest2016.tgz
@@ -46,7 +46,7 @@ tar -xzvf $data/newstest2017.tgz -C $data
 
 for file in $data/test/*; do
   filename=`basename "$file"`
-  perl $MOSES/ems/support/input-from-sgm.perl < $file > $data/test/$filename
+  perl $MOSES/ems/support/input-from-sgm.perl < $file > $data/test/$filename".txt"
 done
 
 rm -r $data/test $data/newstest2017.tgz
