@@ -18,7 +18,7 @@ source $base/venvs/sockeye3/bin/activate
 # install Sockeye
 
 # CUDA version on instance
-CUDA_VERSION=91
+CUDA_VERSION=90
 
 ## Method A: install from PyPi
 
