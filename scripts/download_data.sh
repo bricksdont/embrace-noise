@@ -9,7 +9,7 @@ data=$base/data
 
 mkdir -p $data
 
-mkdir $data/train $data/dev $data/test
+mkdir -p $data/train $data/dev $data/test
 
 # training data
 
