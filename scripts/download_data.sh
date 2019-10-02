@@ -13,38 +13,43 @@ mkdir $data/train $data/dev $data/test
 
 # training data
 
-wget -N http://data.statmt.org/noise/khayrallah_koehn2018_noise_data.tgz -P $data
+if [[ ! -f $data/khayrallah_koehn2018_noise_data.tgz ]]; then
+  wget -N http://data.statmt.org/noise/khayrallah_koehn2018_noise_data.tgz -P $data
+fi
 
-tar -xzvf $data/khayrallah_koehn2018_noise_data.tgz -C $data
-
+if [[ ! -d $data/khayrallah+koehn2018_noise_data ]]; then
+  tar -xzvf $data/khayrallah_koehn2018_noise_data.tgz -C $data
+fi
 mv $data/khayrallah+koehn2018_noise_data/data $data/train
 
 # remove zip file because quite big (5 GB)
-rm $data/khayrallah_koehn2018_noise_data.tgz
+
+# TODO: uncomment
+# rm $data/khayrallah_koehn2018_noise_data.tgz
 
 # dev data
 
-wget --content-disposition http://matrix.statmt.org/test_sets/newstest2016.tgz
-tar -xzvf newstest2016.tgz
+wget --content-disposition http://matrix.statmt.org/test_sets/newstest2016.tgz -P $data
+tar -xzvf newstest2016.tgz -C $data
 
 for file in $data/sgm/*; do
   filename=`basename "$file"`
   perl $MOSES/ems/support/input-from-sgm.perl < $file > $data/dev/$filename
 done
 
-rm $data/sgm $data/newstest2016.tgz
+rm -r $data/sgm $data/newstest2016.tgz
 
 # test data
 
-wget --content-disposition http://matrix.statmt.org/test_sets/newstest2017.tgz
-tar -xzvf newstest2017.tgz
+wget --content-disposition http://matrix.statmt.org/test_sets/newstest2017.tgz -P $data
+tar -xzvf newstest2017.tgz -C $data
 
 for file in $data/test/*; do
   filename=`basename "$file"`
   perl $MOSES/ems/support/input-from-sgm.perl < $file > $data/test/$filename
 done
 
-rm $data/test $data/newstest2017.tgz
+rm -r $data/test $data/newstest2017.tgz
 
 # sizes
 echo "Sizes of all files:"
