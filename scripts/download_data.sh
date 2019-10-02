@@ -30,7 +30,7 @@ mv $data/khayrallah+koehn2018_noise_data/data/* $data/train
 # dev data
 
 wget --content-disposition http://matrix.statmt.org/test_sets/newstest2016.tgz -P $data
-tar -xzvf newstest2016.tgz -C $data
+tar -xzvf $data/newstest2016.tgz -C $data
 
 for file in $data/sgm/*; do
   filename=`basename "$file"`
@@ -42,7 +42,7 @@ rm -r $data/sgm $data/newstest2016.tgz
 # test data
 
 wget --content-disposition http://matrix.statmt.org/test_sets/newstest2017.tgz -P $data
-tar -xzvf newstest2017.tgz -C $data
+tar -xzvf $data/newstest2017.tgz -C $data
 
 for file in $data/test/*; do
   filename=`basename "$file"`
