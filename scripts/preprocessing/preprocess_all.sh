@@ -51,11 +51,11 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
       data_sub=$data/$noise_type.$noise_amount
 
-      if [[ -d $data_sub]]; then
+      if [[ -d $data_sub ]]; then
         echo "Folder exists: $data_sub"
         echo "Skipping."
         continue
-      done
+      fi
 
       mkdir -p $data_sub
 
