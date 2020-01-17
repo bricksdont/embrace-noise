@@ -7,10 +7,17 @@
 # $bpe_vocab_threshold
 # $bpe_total_symbols
 
-scripts=$base/scripts
+data_sub=$1
+shared_models_sub=$2
+bpe_vocab_threshold=$3
+bpe_total_symbols=$4
 
 src=de
 trg=en
+
+# measure time
+
+SECONDS=0
 
 #################
 
@@ -42,3 +49,6 @@ wc -l $shared_models_sub/*
 
 # sanity checks
 echo "At this point, please make sure that 1) number of lines are as expected, 2) language suffixes are correct and 3) files are parallel"
+
+echo "time taken:"
+echo "$SECONDS seconds"

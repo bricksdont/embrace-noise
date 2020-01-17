@@ -1,12 +1,11 @@
 #! /bin/bash
 
-# work around slurm placing scripts in var folder
-if [[ $1 == "mode=sbatch" ]]; then
-  base=/net/cephfs/home/mathmu/scratch/noise-distill
-else
-  script_dir=`dirname "$0"`
-  base=$script_dir/../..
-fi;
+base=/net/cephfs/home/mathmu/scratch/noise-distill
+
+source $base/venvs/sockeye3-cpu/bin/activate
+module unuse /apps/etc/modules/start/
+module use /sapps/etc/modules/start/
+module load hydra
 
 src=de
 trg=en
@@ -43,12 +42,21 @@ done
 for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
     for noise_amount in 05 10 20 50 100; do
 
+      echo "#######################################"
+
       echo "noise_type: $noise_type"
       echo "noise_amount: $noise_amount"
 
       # folder for preprocessed data
 
       data_sub=$data/$noise_type.$noise_amount
+
+      if [[ -d $data_sub]]; then
+        echo "Folder exists: $data_sub"
+        echo "Skipping."
+        continue
+      done
+
       mkdir -p $data_sub
 
       # concatenate training data
@@ -68,7 +76,7 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
       shared_models_sub=$shared_models/$noise_type.$noise_amount
       mkdir -p $shared_models_sub
 
-    . $base/scripts/preprocessing/preprocess_generic.sh
+      sbatch --cpus-per-task=8 --time=12:00:00 --mem=64G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
     done
 done
 
@@ -90,4 +98,4 @@ done
 shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
-. $base/scripts/preprocessing/preprocess_generic.sh
+sbatch --cpus-per-task=8 --time=12:00:00 --mem=64G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
