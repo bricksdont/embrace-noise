@@ -22,7 +22,7 @@ mkdir -p $sub_data
 
 # concatenate different amounts of noise
 
-for amount in 05, 10, 20, 50, 100; do
+for amount in 05 10 20 50 100; do
   for lang in $src $trg; do
     cat $data/train/raw/baseline.tok.$lang $data/train/raw/$noise_type.$amount.tok.$lang > $sub_data/train.$amount.tok.$lang
   done
