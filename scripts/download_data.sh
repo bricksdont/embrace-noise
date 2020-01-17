@@ -7,9 +7,14 @@ MOSES=$base/tools/moses-scripts/scripts
 
 data=$base/data
 
+src=de
+trg=en
+
 mkdir -p $data
 
 mkdir -p $data/train $data/dev $data/test
+
+mkdir -p $data/train/raw
 
 # training data
 
@@ -20,7 +25,7 @@ fi
 if [[ ! -d $data/khayrallah+koehn2018_noise_data ]]; then
   tar -xzvf $data/khayrallah_koehn2018_noise_data.tgz -C $data
 fi
-mv $data/khayrallah+koehn2018_noise_data/data/* $data/train
+mv $data/khayrallah+koehn2018_noise_data/data/* $data/train/raw
 
 # remove zip file because quite big (5 GB)
 
@@ -51,10 +56,17 @@ done
 
 rm $data/newstest2017.tgz $data/test/*.sgm
 
+# link dev and test files
+ln -s $data/dev/newstest2016-$src$trg-src.$src.sgm.txt $data/dev/dev.$src
+ln -s $data/dev/newstest2016-$src$trg-ref.$trg.sgm.txt $data/dev/dev.$trg
+
+ln -s $data/test/newstest2017-$src$trg-src.$src.sgm.txt $data/test/test.$src
+ln -s $data/test/newstest2017-$src$trg-ref.$trg.sgm.txt $data/test/test.$trg
+
 # sizes
 echo "Sizes of all files:"
 
-wc -l $data/*/*
+wc -l $data/*/*/*
 
 # sanity checks
 echo "At this point, please make sure that 1) number of lines are as expected, 2) language suffixes are correct and 3) files are parallel"
