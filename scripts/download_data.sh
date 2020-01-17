@@ -1,7 +1,7 @@
 #! /bin/bash
 
-scripts=`dirname "$0"`
-base=$scripts/..
+base=/net/cephfs/home/mathmu/scratch/noise-distill
+scripts=$base/scripts
 
 MOSES=$base/tools/moses-scripts/scripts
 
@@ -57,6 +57,7 @@ for file in $data/test/*; do
 done
 
 rm $data/newstest2017.tgz $data/test/*.sgm
+rm -r $data/test
 
 # link dev and test files
 ln -s $data/raw/dev/newstest2016-$src$trg-src.$src.sgm.txt $data/raw/dev/dev.$src
