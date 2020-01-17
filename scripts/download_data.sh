@@ -31,8 +31,8 @@ mv $data/khayrallah+koehn2018_noise_data/data/* $data/raw/train
 
 # remove zip file because quite big (5 GB)
 
-rm $data/khayrallah_koehn2018_noise_data.tgz
-rm -r $data/khayrallah+koehn2018_noise_data
+# rm $data/khayrallah_koehn2018_noise_data.tgz
+# rm -r $data/khayrallah+koehn2018_noise_data
 
 # dev data
 
