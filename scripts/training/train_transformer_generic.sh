@@ -1,9 +1,17 @@
 #!/bin/bash
-#SBATCH --qos=vesta
-#SBATCH --time=168:00:00
-#SBATCH --gres gpu:Tesla-V100:4
-#SBATCH --cpus-per-task 5
-#SBATCH --mem 50g
+
+# calling script needs to set:
+
+# $prepared_sub
+# $data_sub
+# $model_path
+
+prepared_sub=$1
+data_sub=$2
+model_path=$3
+
+src=de
+trg=en
 
 echo $CUDA_VISIBLE_DEVICES
 echo "Done reading visible devices."
@@ -21,11 +29,10 @@ transformer_attention_heads="8"
 transformer_feed_forward_num_hidden="2048"
 
 python -m sockeye.train \
--s $train_source \
--t $train_target \
--vs $dev_source \
--vt $dev_target \
---output $models/$model_name \
+-d $prepared_sub \
+-vs $data_sub/dev.bpe.$src \
+-vt $data_sub/dev.bpe.$trg \
+--output $model_path \
 --seed 1 \
 --batch-type word \
 --batch-size $batch_size \

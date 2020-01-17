@@ -28,7 +28,7 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
         echo "Folder exists: $prepared_sub"
         echo "Skipping."
         continue
-      fi
+    fi
 
     mkdir -p $prepared_sub
 
