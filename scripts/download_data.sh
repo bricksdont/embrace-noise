@@ -27,7 +27,7 @@ fi
 if [[ ! -d $data/khayrallah+koehn2018_noise_data ]]; then
   tar -xzvf $data/khayrallah_koehn2018_noise_data.tgz -C $data
 fi
-mv $data/khayrallah+koehn2018_noise_data/data/* $data/raw/train
+cp $data/khayrallah+koehn2018_noise_data/data/* $data/raw/train
 
 # remove zip file because quite big (5 GB)
 
