@@ -12,5 +12,9 @@ mkdir -p $base/venvs
 
 virtualenv -p python3 $base/venvs/sockeye3
 
+# second one for mxnet on CPU
+
+virtualenv -p python3 $base/venvs/sockeye3-cpu
+
 echo "To activate your environment:"
 echo "    source $base/venvs/sockeye3/bin/activate"

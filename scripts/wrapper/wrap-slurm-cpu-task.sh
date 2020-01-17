@@ -1,9 +1,10 @@
 #!/bin/bash
 
-source /rds/project/t2_vol4/rds-t2-cs037/mmueller/domain-robustness/venvs/sockeye3/bin/activate
+base=/net/cephfs/home/mathmu/scratch/noise-distill
 
-module purge
-module load rhel7/default-peta4
-module add python-3.6.2-gcc-5.4.0-me5fsee
+source $base/venvs/sockeye3-cpu/bin/activate
+module unuse /apps/etc/modules/start/
+module use /sapps/etc/modules/start/
+module load hydra
 
-sbatch --cpus-per-task=64 --time=24:00:00 --mem=16G --partition=skylake $1 mode=sbatch
+sbatch --cpus-per-task=16 --time=12:00:00 --mem=64G --partition=hydra $1 mode=sbatch
