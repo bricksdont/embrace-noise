@@ -8,6 +8,11 @@ else
   base=$script_dir/../..
 fi;
 
+src=de
+trg=en
+
+data=$base/data
+
 MOSES=$base/tools/moses-scripts/scripts
 
 bpe_total_symbols=32000
