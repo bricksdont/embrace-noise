@@ -39,3 +39,34 @@ git clone https://github.com/bricksdont/moses-scripts $tools/moses-scripts
 # install sentencepiece for subword regularization
 
 pip install sentencepiece
+
+###########################################
+
+# THEN source VPU env and do the same again
+
+deactivate
+echo "check current python after deactivate:"
+which python
+
+source $base/venvs/sockeye3-cpu/bin/activate
+
+echo "check current python after sourcing CPU env:"
+which python
+
+wget https://raw.githubusercontent.com/awslabs/sockeye/master/requirements/requirements.txt
+pip install sockeye --no-deps -r requirements.txt
+rm requirements.txt
+
+pip install matplotlib mxboard
+
+# install BPE library
+
+pip install subword-nmt
+
+# install sacrebleu for evaluation
+
+pip install sacrebleu
+
+# install sentencepiece for subword regularization
+
+pip install sentencepiece
