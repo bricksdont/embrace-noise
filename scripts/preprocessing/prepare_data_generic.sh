@@ -6,6 +6,9 @@
 # $noise_type
 # $noise_amount
 
+echo "noise_type: $noise_type"
+echo "noise_amount: $noise_amount"
+
 data=$base/data
 scripts=$base/scripts
 

@@ -3,7 +3,13 @@
 # calling script has to set:
 
 # $base
+# $shared_models_individual
 # $noise_type
+# $noise_amount
+# $bpe_vocab_threshold
+# $bpe_total_symbols
+# $train_src
+# $train_trg
 
 scripts=$base/scripts
 
@@ -13,19 +19,19 @@ trg=en
 #################
 
 echo "noise_type: $noise_type"
+echo "noise_amount: $noise_amount"
 
-data=$base/data
+# learn BPE model on train (concatenate both languages)
 
-sub_data=$data/train/$noise_type
+subword-nmt learn-joint-bpe-and-vocab -i $train_src $train_trg \
+  --write-vocabulary $shared_models_individual/vocab.$src $shared_models_individual/vocab.$trg \
+  --total-symbols $bpe_total_symbols -o $shared_models_individual/$src$trg.bpe
 
-mkdir -p $sub_data
+# apply BPE model to train, test and dev
 
-# concatenate different amounts of noise
-
-for amount in 05 10 20 50 100; do
-  for lang in $src $trg; do
-    cat $data/train/raw/baseline.tok.$lang $data/train/raw/$noise_type.$amount.tok.$lang > $sub_data/train.$amount.tok.$lang
-  done
+for corpus in train dev test; do
+  subword-nmt apply-bpe -c $base/shared_models/$src$trg.$domain.bpe --vocabulary $base/shared_models/vocab.$domain.$src --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.truecased.$src > $data/$corpus.bpe.$src
+  subword-nmt apply-bpe -c $base/shared_models/$src$trg.$domain.bpe --vocabulary $base/shared_models/vocab.$domain.$trg --vocabulary-threshold $bpe_vocab_threshold < $data/$corpus.truecased.$trg > $data/$corpus.bpe.$trg
 done
 
 # sizes
