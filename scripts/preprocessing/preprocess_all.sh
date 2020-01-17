@@ -59,8 +59,8 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
       # link dev and test tokenized files
       for corpus in dev test; do
-        ln -s $data/raw/$corpus/$corpus.tok.$src $data/baseline/$corpus.tok.$src
-        ln -s $data/raw/$corpus/$corpus.tok.$trg $data/baseline/$corpus.tok.$trg
+        ln -s $data/raw/$corpus/$corpus.tok.$src $data_sub/$corpus.tok.$src
+        ln -s $data/raw/$corpus/$corpus.tok.$trg $data_sub/$corpus.tok.$trg
       done
 
       # folder for BPE model

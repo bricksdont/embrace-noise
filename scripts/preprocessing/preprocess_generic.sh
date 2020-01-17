@@ -18,6 +18,11 @@ echo "data_sub: $data_sub"
 
 # learn BPE model on train (concatenate both languages)
 
+bpe_cmd="subword-nmt learn-joint-bpe-and-vocab -i $data_sub/train.tok.$src $data_sub/train.tok.$trg --write-vocabulary $shared_models_sub/vocab.$src $shared_models_sub/vocab.$trg --total-symbols $bpe_total_symbols -o $shared_models_sub/$src$trg.bpe"
+
+echo "BPE command:"
+echo "$bpe_cmd"
+
 subword-nmt learn-joint-bpe-and-vocab -i $data_sub/train.tok.$src $data_sub/train.tok.$trg \
   --write-vocabulary $shared_models_sub/vocab.$src $shared_models_sub/vocab.$trg \
   --total-symbols $bpe_total_symbols -o $shared_models_sub/$src$trg.bpe
