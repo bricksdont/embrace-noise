@@ -11,6 +11,11 @@ prepared_sub=$2
 src=de
 trg=en
 
+cmd="python -m sockeye.prepare_data -s $data_sub/train.bpe.$src -t $data_sub/train.bpe.$trg --shared-vocab -o $prepared_sub"
+
+echo "Executing:"
+echo "$cmd"
+
 python -m sockeye.prepare_data \
                         -s $data_sub/train.bpe.$src \
                         -t $data_sub/train.bpe.$trg \
