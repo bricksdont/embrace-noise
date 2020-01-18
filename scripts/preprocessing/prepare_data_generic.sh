@@ -5,6 +5,10 @@
 # $data_sub
 # $prepared_sub
 
+# measure time
+
+SECONDS=0
+
 data_sub=$1
 prepared_sub=$2
 
@@ -21,3 +25,6 @@ python -m sockeye.prepare_data \
                         -t $data_sub/train.bpe.$trg \
 			                  --shared-vocab \
                         -o $prepared_sub
+
+echo "time taken:"
+echo "$SECONDS seconds"
