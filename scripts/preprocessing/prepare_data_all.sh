@@ -15,6 +15,19 @@ prepared=$data/prepared
 
 mkdir -p $prepared
 
+# custom prepare for baseline without noise
+
+data_sub=$data/baseline
+prepared_sub=$prepared/baseline
+
+mkdir -p $prepared_sub
+
+sbatch --cpus-per-task=4 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
+
+# for now, only try for baseline, then exit
+
+exit
+
 for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
   for noise_amount in 05 10 20 50 100; do
 
@@ -35,12 +48,3 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     sbatch --cpus-per-task=4 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
   done
 done
-
-# custom prepare for baseline without noise
-
-data_sub=$data/baseline
-prepared_sub=$prepared/baseline
-
-mkdir -p $prepared_sub
-
-sbatch --cpus-per-task=4 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
