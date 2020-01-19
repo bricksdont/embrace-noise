@@ -20,7 +20,7 @@ mkdir -p $evaluations
 
 data_sub=$data/baseline
 translations_sub=$translations/baseline
-evaluations_sub=$evaluation/baseline
+evaluations_sub=$evaluations/baseline
 
 mkdir -p $evaluations_sub
 
