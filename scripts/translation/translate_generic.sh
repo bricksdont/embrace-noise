@@ -27,7 +27,7 @@ for corpus in dev test; do
     # 1-best, fixed beam size, fixed batch size
 
     OMP_NUM_THREADS=$num_threads python -m sockeye.translate \
-            -i $data_sub/test.bpe.$src \
+            -i $data_sub/$corpus.bpe.$src \
             -o $translations_sub/$corpus.bpe.$trg \
             -m $model_path \
             --beam-size 10 \
