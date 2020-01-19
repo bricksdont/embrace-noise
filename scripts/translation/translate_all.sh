@@ -5,7 +5,7 @@ base=/net/cephfs/home/mathmu/scratch/noise-distill
 source $base/venvs/sockeye3/bin/activate
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
-module load hydra
+module load volta cuda/10.0
 
 src=de
 trg=en
