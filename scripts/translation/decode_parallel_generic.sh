@@ -39,7 +39,7 @@ done
 # query queue to see if finished
 # note: this might not work if you have other unrelated tasks in the queue
 
-while [[ `squeue -u mathmu -o "%.45j" | grep "chunk" | wc -l` != 1  ]];  do
+while [[ `squeue -u mathmu -o "%.45j" | grep "chunk" | wc -l` != 0  ]];  do
     echo "Waiting for chunk decoding to finish, sleep 1000"
     sleep 1000
 done
