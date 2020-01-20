@@ -25,7 +25,7 @@ mkdir -p $translations_sub
 
 model_path=$models/baseline
 
-sbatch --qos=vesta --time=1:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $model_path
+sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $model_path
 
 # for now, only try for baseline, then exit
 
@@ -48,6 +48,6 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     mkdir -p $translations_sub
 
-    sbatch --qos=vesta --time=1:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $model_path
+    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $model_path
   done
 done
