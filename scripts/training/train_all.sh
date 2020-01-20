@@ -49,7 +49,7 @@ function contains() {
 
 noise_types_subset=("untranslated_de_trg" "raw_paracrawl")
 
-for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
+for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg untranslated_de_trg_distilled short_max2 short_max5 raw_paracrawl raw_paracrawl_distilled; do
   for noise_amount in 05 10 20 50 100; do
 
     echo "noise_type: $noise_type"
