@@ -37,9 +37,10 @@ for chunk_index in $(seq -f "%03g" 0 $(($num_chunks - 1))); do
 done
 
 # query queue to see if finished
-# note: this does not work if you have other unrelated tasks in the queue
+# note: this might not work if you have other unrelated tasks in the queue
 
-while [[ `squeue -u mathmu | wc -l` != 1  ]];  do
+while [[ `squeue -u mathmu -o "%.45j" | grep "chunk" | wc -l` != 1  ]];  do
+    echo "Waiting for chunk decoding to finish, sleep 1000"
     sleep 1000
 done
 
@@ -49,5 +50,5 @@ mv $chunk_output_dir/*.log $chunk_log_dir/
 
 # concatenating results
 
-cat $chunk_output_dir/$chunk_prefix* > $distill_sub//train.bpe.$trg
+cat $chunk_output_dir/$chunk_prefix* > $distill_sub/train.bpe.$trg
 
