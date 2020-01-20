@@ -22,13 +22,32 @@ data_sub=$data/baseline
 prepared_sub=$prepared/baseline
 model_path=$models/baseline
 
-mkdir -p $model_path
+if [[ -d $model_path ]]; then
+  echo "Folder exists: $model_path"
+  echo "Skipping."
+else
+  mkdir -p $model_path
 
-sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/training/train_transformer_generic.sh $prepared_sub $data_sub $model_path
+  sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/training/train_transformer_generic.sh $prepared_sub $data_sub $model_path
 
-# for now, only try for baseline, then exit
+fi
 
-exit
+# subset of models that should be trained
+
+function contains() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            echo "y"
+            return 0
+        fi
+    }
+    echo "n"
+    return 1
+}
+
+noise_types_subset=("untranslated_de_trg" "raw_paracrawl")
 
 for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
   for noise_amount in 05 10 20 50 100; do
@@ -42,6 +61,12 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     if [[ -d $model_path ]]; then
         echo "Folder exists: $model_path"
+        echo "Skipping."
+        continue
+    fi
+
+    if [ $(contains "${noise_types_subset[@]}" $noise_type) == "n" ]; then
+        echo "noise_type not in subset that should be trained"
         echo "Skipping."
         continue
     fi
