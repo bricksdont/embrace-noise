@@ -29,9 +29,11 @@ mkdir -p $translations/$model_name
 chunk_prefix="$corpus.bpe.$model_name.chunk."
 chunk_input_dir=$translations/$model_name/chunk_inputs
 chunk_output_dir=$translations/$model_name/chunk_outputs
+chunk_log_dir=$translations/$model_name/chunk_logs
 
 mkdir -p $chunk_input_dir
 mkdir -p $chunk_output_dir
+mkdir -p $chunk_log_dir
 
 # splitting input file into chunks
 
@@ -50,13 +52,18 @@ for chunk_index in $(seq -f "%03g" 0 $(($num_chunks - 1))); do
             $chunk_input_dir $chunk_output_dir $chunk_prefix $chunk_index $model_paths $batch_size
 done
 
-# concatenating results
+# query queue to see if finished
+# note: this does not work if you have other unrelated tasks in the queue
 
 while [[ `squeue -u mathmu | wc -l` != 1  ]];  do
-	sleep 1000
+    sleep 1000
 done
 
-# not possible currently since we do not query the queue to see if translations are finished
+# move logs out of the way
+
+mv $chunk_output_dir/*.log $chunk_log_dir/
+
+# concatenating results
 
 cat $chunk_output_dir/$chunk_prefix* > $translations/$model_name/$corpus.bpe.$model_name.$trg
 
