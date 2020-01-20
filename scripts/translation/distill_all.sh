@@ -1,0 +1,99 @@
+#! /bin/bash
+
+base=/net/cephfs/home/mathmu/scratch/noise-distill
+
+source $base/venvs/sockeye3/bin/activate
+module unuse /apps/etc/modules/start/
+module use /sapps/etc/modules/start/
+module load volta cuda/10.0
+
+src=de
+trg=en
+
+scripts=$base/scripts
+data=$base/data
+models=$base/models
+
+batch_size=64
+chunk_size=25000
+
+# distill baseline
+
+data_sub=$data/baseline
+distill_sub=$data/baseline_distilled
+
+model_path=$models/baseline
+
+if [[ -d $distill_sub ]]; then
+  echo "Distill exists: $distill_sub"
+  echo "Skipping."
+else
+  mkdir -p $distill_sub
+
+  . $scripts/translation/decode_parallel_generic.sh
+
+fi
+
+# link dev and test without modifying them
+
+for corpus in dev test; do
+  ln -s $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
+  ln -s $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
+done
+
+# only try for baseline
+
+exit
+
+# subset of data sets that should be distilled
+
+function contains() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            echo "y"
+            return 0
+        fi
+    }
+    echo "n"
+    return 1
+}
+
+noise_types_subset=("untranslated_de_trg" "raw_paracrawl")
+
+for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
+  for noise_amount in 05 10 20 50 100; do
+
+    echo "noise_type: $noise_type"
+    echo "noise_amount: $noise_amount"
+
+    data_sub=$data/$noise_type.$noise_amount
+    distill_sub=$data/$noise_type.$noise_amount"_distilled"
+
+    model_path=$models/$noise_type.$noise_amount
+
+    if [[ -d $distill_sub ]]; then
+        echo "Folder exists: $distill_sub"
+        echo "Skipping."
+        continue
+    fi
+
+    if [ $(contains "${noise_types_subset[@]}" $noise_type) == "n" ]; then
+        echo "noise_type not in subset that should be distilled"
+        echo "Skipping."
+        continue
+    fi
+
+    mkdir -p $distill_sub
+
+    . $scripts/translation/decode_parallel_generic.sh
+
+    # link dev and test without modifying them
+
+    for corpus in dev test; do
+      ln -s $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
+      ln -s $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
+    done
+  done
+done
