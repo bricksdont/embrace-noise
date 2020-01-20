@@ -32,14 +32,14 @@ else
 
   . $scripts/translation/decode_parallel_generic.sh
 
+  # link dev and test without modifying them
+
+  for corpus in dev test; do
+    ln -s $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
+    ln -s $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
+  done
+
 fi
-
-# link dev and test without modifying them
-
-for corpus in dev test; do
-  ln -s $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
-  ln -s $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
-done
 
 # only try for baseline
 
