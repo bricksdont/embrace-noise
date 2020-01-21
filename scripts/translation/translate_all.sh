@@ -21,15 +21,16 @@ mkdir -p $translations
 data_sub=$data/baseline
 translations_sub=$translations/baseline
 
-mkdir -p $translations_sub
+if [[ -d $translations_sub ]]; then
+    echo "Folder exists: $translations_sub"
+    echo "Skipping."
+else
+    mkdir -p $translations_sub
 
-model_path=$models/baseline
+    model_path=$models/baseline
 
-sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $model_path
-
-# for now, only try for baseline, then exit
-
-exit
+    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $model_path
+fi
 
 for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
   for noise_amount in 05 10 20 50 100; do
