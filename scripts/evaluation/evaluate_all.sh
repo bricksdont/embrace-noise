@@ -31,6 +31,13 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     data_sub=$data/$noise_type.$noise_amount
     translations_sub=$translations/$noise_type.$noise_amount
+
+    if [[ ! -d $translations_sub ]]; then
+        echo "Folder does not exist: $translations_sub"
+        echo "Skipping."
+        continue
+    fi
+
     evaluations_sub=$evaluations/$noise_type.$noise_amount
 
     mkdir -p $evaluations_sub
