@@ -27,9 +27,9 @@ if [[ -d $translations_sub ]]; then
 else
     mkdir -p $translations_sub
 
-    model_path=$models/baseline
+    models_sub=$models/baseline
 
-    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $model_path
+    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $models_sub
 fi
 
 for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
@@ -40,6 +40,7 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     data_sub=$data/$noise_type.$noise_amount
     translations_sub=$translations/$noise_type.$noise_amount
+
     models_sub=$models/$noise_type.$noise_amount
 
     if [[ -d $translations_sub ]]; then
@@ -56,6 +57,6 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     mkdir -p $translations_sub
 
-    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $model_path
+    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $models_sub
   done
 done
