@@ -39,9 +39,16 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     data_sub=$data/$noise_type.$noise_amount
     translations_sub=$translations/$noise_type.$noise_amount
+    models_sub=$models/$noise_type.$noise_amount
 
     if [[ -d $translations_sub ]]; then
         echo "Folder exists: $translations_sub"
+        echo "Skipping."
+        continue
+    fi
+
+    if [[ ! -d $models_sub ]]; then
+        echo "Folder does not exist: $models_sub"
         echo "Skipping."
         continue
     fi
