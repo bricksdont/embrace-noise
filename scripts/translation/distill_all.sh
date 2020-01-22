@@ -39,6 +39,10 @@ else
     ln -s $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
   done
 
+  # link source side of training data
+
+  ln -s $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
+
 fi
 
 # only try for baseline
@@ -71,7 +75,7 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     data_sub=$data/$noise_type.$noise_amount
     distill_sub=$data/$noise_type.$noise_amount"_distilled"
 
-    model_path=$models/$noise_type.$noise_amount
+    model_path=$models/baseline
 
     if [[ -d $distill_sub ]]; then
         echo "Folder exists: $distill_sub"
@@ -95,5 +99,10 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
       ln -s $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
       ln -s $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
     done
+
+    # link source side of training data
+
+    ln -s $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
+
   done
 done
