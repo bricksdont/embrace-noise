@@ -30,7 +30,7 @@ if [[ -d $distill_sub ]]; then
 else
   mkdir -p $distill_sub
 
-  . $scripts/translation/decode_parallel_generic.sh
+  . $scripts/translation/decode_parallel_generic.sh &
 
   # link dev and test without modifying them
 
@@ -87,7 +87,7 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     mkdir -p $distill_sub
 
-    . $scripts/translation/decode_parallel_generic.sh
+    . $scripts/translation/decode_parallel_generic.sh &
 
     # link dev and test without modifying them
 
