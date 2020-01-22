@@ -45,10 +45,6 @@ else
 
 fi
 
-# only try for baseline
-
-exit
-
 # subset of data sets that should be distilled
 
 function contains() {
@@ -73,7 +69,7 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     echo "noise_amount: $noise_amount"
 
     data_sub=$data/$noise_type.$noise_amount
-    distill_sub=$data/$noise_type.$noise_amount"_distilled"
+    distill_sub=$data/$noise_type"_distilled".$noise_amount
 
     model_path=$models/baseline
 
