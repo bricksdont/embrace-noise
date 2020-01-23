@@ -32,6 +32,20 @@ echo "Number of chunks found: $num_chunks"
 # translating individual chunks
 
 for chunk_index in $(seq -f "%03g" 0 $(($num_chunks - 1))); do
+
+  if [[ -f $chunk_output_dir/$chunk_prefix"$chunk_index" ]]; then
+
+      num_lines_input_chunk=`wc -l $chunk_input_dir/$chunk_prefix"$chunk_index"`
+      num_lines_output_chunk=`wc -l $chunk_output_dir/$chunk_prefix"$chunk_index"`
+
+      if [[ $num_lines_input_chunk == $num_lines_output_chunk ]]; then
+          echo "output chunk exists and number of lines are equal to input chunk:"
+          echo "$num_lines_input_chunk == $num_lines_output_chunk"
+          echo "Skipping."
+          continue
+      fi
+  fi
+
 	sbatch --qos=vesta --time=00:30:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $scripts/translation/decode_chunk.sh \
             $chunk_input_dir $chunk_output_dir $chunk_prefix $chunk_index $model_path $batch_size
 done
