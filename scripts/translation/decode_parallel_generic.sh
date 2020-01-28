@@ -51,6 +51,9 @@ for chunk_index in $(seq -f "%03g" 0 $(($num_chunks - 1))); do
       fi
   fi
 
+  echo "file does not exist: $chunk_output_dir/$chunk_prefix$chunk_index"
+  exit
+
 	sbatch --qos=vesta --time=00:30:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $scripts/translation/decode_chunk.sh \
             $chunk_input_dir $chunk_output_dir $chunk_prefix $chunk_index $model_path $batch_size
 done
