@@ -92,13 +92,13 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     # link dev and test without modifying them
 
     for corpus in dev test; do
-      ln -s $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
-      ln -s $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
+      ln -sfn $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
+      ln -sfn $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
     done
 
     # link source side of training data
 
-    ln -s $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
+    ln -sfn $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
 
   done
 done

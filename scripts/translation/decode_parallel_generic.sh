@@ -38,6 +38,11 @@ for chunk_index in $(seq -f "%03g" 0 $(($num_chunks - 1))); do
       num_lines_input_chunk=`wc -l $chunk_input_dir/$chunk_prefix"$chunk_index"`
       num_lines_output_chunk=`wc -l $chunk_output_dir/$chunk_prefix"$chunk_index"`
 
+      echo "num_lines_input_chunk: $num_lines_input_chunk"
+      echo "num_lines_output_chunk: $num_lines_output_chunk"
+
+      exit
+
       if [[ $num_lines_input_chunk == $num_lines_output_chunk ]]; then
           echo "output chunk exists and number of lines are equal to input chunk:"
           echo "$num_lines_input_chunk == $num_lines_output_chunk"
