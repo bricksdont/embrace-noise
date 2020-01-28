@@ -16,11 +16,27 @@ models=$base/models
 
 mkdir -p models
 
-# custom prepare for baseline without noise
+# custom train for baseline without noise
 
 data_sub=$data/baseline
 prepared_sub=$prepared/baseline
 model_path=$models/baseline
+
+if [[ -d $model_path ]]; then
+  echo "Folder exists: $model_path"
+  echo "Skipping."
+else
+  mkdir -p $model_path
+
+  sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/training/train_transformer_generic.sh $prepared_sub $data_sub $model_path
+
+fi
+
+# custom train for baseline_distilled without noise
+
+data_sub=$data/baseline_distilled
+prepared_sub=$prepared/baseline_distilled
+model_path=$models/baseline_distilled
 
 if [[ -d $model_path ]]; then
   echo "Folder exists: $model_path"

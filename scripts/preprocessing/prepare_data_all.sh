@@ -29,6 +29,20 @@ else
     sbatch --cpus-per-task=4 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
 fi
 
+# custom prepare for baseline_distilled without noise
+
+data_sub=$data/baseline_distilled
+prepared_sub=$prepared/baseline_distilled
+
+if [[ -d $prepared_sub ]]; then
+    echo "Folder exists: $prepared_sub"
+    echo "Skipping."
+else
+    mkdir -p $prepared_sub
+
+    sbatch --cpus-per-task=4 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
+fi
+
 for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg untranslated_de_trg_distilled short_max2 short_max5 raw_paracrawl raw_paracrawl_distilled; do
   for noise_amount in 05 10 20 50 100; do
 

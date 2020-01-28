@@ -39,9 +39,9 @@ for chunk_index in $(seq -f "%03g" 0 $(($num_chunks - 1))); do
       num_lines_output_chunk=`cat $chunk_output_dir/$chunk_prefix"$chunk_index" | wc -l`
 
       if [[ $num_lines_input_chunk == $num_lines_output_chunk ]]; then
-          echo "output chunk exists and number of lines are equal to input chunk:"
-          echo "$num_lines_input_chunk == $num_lines_output_chunk"
-          echo "Skipping."
+          # echo "output chunk exists and number of lines are equal to input chunk:"
+          # echo "$num_lines_input_chunk == $num_lines_output_chunk"
+          # echo "Skipping."
           continue
       fi
   fi
