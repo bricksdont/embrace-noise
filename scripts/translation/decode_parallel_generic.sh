@@ -35,8 +35,8 @@ for chunk_index in $(seq -f "%03g" 0 $(($num_chunks - 1))); do
 
   if [[ -f $chunk_output_dir/$chunk_prefix"$chunk_index" ]]; then
 
-      num_lines_input_chunk=`wc -l $chunk_input_dir/$chunk_prefix"$chunk_index"`
-      num_lines_output_chunk=`wc -l $chunk_output_dir/$chunk_prefix"$chunk_index"`
+      num_lines_input_chunk=`cat $chunk_input_dir/$chunk_prefix"$chunk_index" | wc -l`
+      num_lines_output_chunk=`cat $chunk_output_dir/$chunk_prefix"$chunk_index" | wc -l`
 
       echo "num_lines_input_chunk: $num_lines_input_chunk"
       echo "num_lines_output_chunk: $num_lines_output_chunk"
@@ -73,4 +73,3 @@ mv $chunk_output_dir/*.log $chunk_log_dir/
 # concatenating results
 
 cat $chunk_output_dir/$chunk_prefix* > $distill_sub/train.bpe.$trg
-

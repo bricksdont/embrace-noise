@@ -73,11 +73,22 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     model_path=$models/baseline
 
-#    if [[ -d $distill_sub ]]; then
-#        echo "Folder exists: $distill_sub"
-#        echo "Skipping."
-#        continue
-#    fi
+    if [[ -d $distill_sub ]]; then
+        echo "Folder exists: $distill_sub"
+        if [[ -f $distill_sub/train.bpe.$trg ]]; then
+          echo "Distilled train data exists: $distill_sub/train.bpe.$trg"
+
+          num_lines_train_src=`cat $distill_sub/train.bpe.$src | wc -l`
+          num_lines_train_trg=`cat $distill_sub/train.bpe.$trg | wc -l`
+
+          if [[ $num_lines_train_src == $num_lines_train_trg ]]; then
+            echo "Same number of lines in training source and target:"
+            echo "$num_lines_train_src == $num_lines_train_trg"
+            echo "Skipping."
+            continue
+          fi
+        fi
+    fi
 
     if [ $(contains "${noise_types_subset[@]}" $noise_type) == "n" ]; then
         echo "noise_type not in subset that should be distilled"
