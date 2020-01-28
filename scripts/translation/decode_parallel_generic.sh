@@ -38,11 +38,6 @@ for chunk_index in $(seq -f "%03g" 0 $(($num_chunks - 1))); do
       num_lines_input_chunk=`cat $chunk_input_dir/$chunk_prefix"$chunk_index" | wc -l`
       num_lines_output_chunk=`cat $chunk_output_dir/$chunk_prefix"$chunk_index" | wc -l`
 
-      echo "num_lines_input_chunk: $num_lines_input_chunk"
-      echo "num_lines_output_chunk: $num_lines_output_chunk"
-
-      exit
-
       if [[ $num_lines_input_chunk == $num_lines_output_chunk ]]; then
           echo "output chunk exists and number of lines are equal to input chunk:"
           echo "$num_lines_input_chunk == $num_lines_output_chunk"
@@ -50,9 +45,6 @@ for chunk_index in $(seq -f "%03g" 0 $(($num_chunks - 1))); do
           continue
       fi
   fi
-
-  echo "file does not exist: $chunk_output_dir/$chunk_prefix$chunk_index"
-  exit
 
 	sbatch --qos=vesta --time=00:30:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $scripts/translation/decode_chunk.sh \
             $chunk_input_dir $chunk_output_dir $chunk_prefix $chunk_index $model_path $batch_size
