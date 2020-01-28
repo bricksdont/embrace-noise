@@ -73,11 +73,11 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     model_path=$models/baseline
 
-    if [[ -d $distill_sub ]]; then
-        echo "Folder exists: $distill_sub"
-        echo "Skipping."
-        continue
-    fi
+#    if [[ -d $distill_sub ]]; then
+#        echo "Folder exists: $distill_sub"
+#        echo "Skipping."
+#        continue
+#    fi
 
     if [ $(contains "${noise_types_subset[@]}" $noise_type) == "n" ]; then
         echo "noise_type not in subset that should be distilled"
