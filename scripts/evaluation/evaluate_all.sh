@@ -23,7 +23,17 @@ mkdir -p $evaluations_sub
 
 . $base/scripts/evaluation/evaluate_generic.sh
 
-for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
+# custom eval for baseline_distilled
+
+data_sub=$data/baseline_distilled
+translations_sub=$translations/baseline_distilled
+evaluations_sub=$evaluations/baseline_distilled
+
+mkdir -p $evaluations_sub
+
+. $base/scripts/evaluation/evaluate_generic.sh
+
+for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg untranslated_de_trg_distilled short_max2 short_max5 raw_paracrawl raw_paracrawl_distilled; do
   for noise_amount in 05 10 20 50 100; do
 
     echo "noise_type: $noise_type"
