@@ -160,13 +160,11 @@ def main():
                     stats[RULE_LID] += 1
                     continue
 
-            # split only if necessary
+            # split and count only if necessary
             if any([rule for rule in args.rules if rule != RULE_LID]):
                 src_tokens = src_line.strip().split(" ")
                 trg_tokens = trg_line.strip().split(" ")
 
-            # count only if necessary
-            if RULE_LENGTH in args.rules or RULE_RATIO in args.rules:
                 src_len = len(src_tokens)
                 trg_len = len(trg_tokens)
 
