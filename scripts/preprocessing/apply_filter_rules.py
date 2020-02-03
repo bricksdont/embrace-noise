@@ -142,7 +142,7 @@ def main():
                     continue
 
             # split only if necessary
-            if len(args.rules) > 1:
+            if any([rule for rule in args.rules if rule != RULE_LID]):
                 src_tokens = src_line.strip().split(" ")
                 trg_tokens = trg_line.strip().split(" ")
 
