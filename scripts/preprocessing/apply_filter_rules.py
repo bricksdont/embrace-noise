@@ -4,6 +4,8 @@ import fasttext
 import argparse
 import logging
 
+from collections import defaultdict
+
 
 RULE_LID = "language-identification"
 RULE_RATIO = "ratio"
@@ -142,6 +144,7 @@ def main():
 
         language_identifier = LanguageIdentifier(args.fasttext_model_path)
 
+    stats = defaultdict(int)
 
     lines_seen = 0
     lines_kept = 0
@@ -154,6 +157,7 @@ def main():
 
             if RULE_LID in args.rules:
                 if not rule_lid_ok(src_line, trg_line, args.src_lang, args.trg_lang, language_identifier):
+                    stats[RULE_LID] += 1
                     continue
 
             # split only if necessary
@@ -168,14 +172,17 @@ def main():
 
             if RULE_LENGTH in args.rules:
                 if not rule_length_ok(src_len, trg_len, args.threshold_length):
+                    stats[RULE_LENGTH] += 1
                     continue
 
             if RULE_RATIO in args.rules:
                 if not rule_ratio_ok(src_len, trg_len, args.threshold_ratio):
+                    stats[RULE_RATIO] += 1
                     continue
 
             if RULE_OVERLAP in args.rules:
                 if not rule_overlap_ok(src_tokens, trg_tokens, src_len, trg_len, args.threshold_overlap):
+                    stats[RULE_OVERLAP] += 1
                     continue
 
             # keep this sentence pair if it reaches this point
@@ -186,6 +193,8 @@ def main():
             handle_output_trg.write(trg_line)
 
     logging.debug("Lines kept/seen: %d / %d" % (lines_kept, lines_seen))
+    logging.debug("Reasons for skipping:")
+    logging.debug(str(stats))
 
 
 if __name__ == '__main__':
