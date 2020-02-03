@@ -19,7 +19,7 @@ RULES = [RULE_LID,
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--threshold-length-ratio", type=float, help="Threshold for diverging number of tokens in source and target",
+    parser.add_argument("--threshold-ratio", type=float, help="Threshold for diverging number of tokens in source and target",
                         default=2.0, required=False)
     parser.add_argument("--threshold-length", type=float,
                         help="Threshold for absolute number of tokens in either source or target",
