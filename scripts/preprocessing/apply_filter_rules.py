@@ -53,6 +53,9 @@ class LanguageIdentifier(object):
         self.model = fasttext.load_model(model_path)
 
     def predict(self, line):
+
+        line = line.strip()
+
         labels, probs = self.model.predict(line)
         label = labels[0].split("__")[-1]
 
@@ -170,7 +173,7 @@ def main():
             handle_output_src.write(src_line)
             handle_output_trg.write(trg_line)
 
-    logging.debug("Lines seen: %d / lines kept: %d" % (lines_seen, lines_kept))
+    logging.debug("Lines kept/seen: %d / %d" % (lines_kept, lines_seen))
 
 
 if __name__ == '__main__':
