@@ -39,7 +39,7 @@ def parse_args():
     parser.add_argument("--output-src", type=str, required=True, help="Source language output file")
     parser.add_argument("--output-trg", type=str, required=True, help="Target language output file")
 
-    parser.add_argument("--rules", nargs="+", choices=RULES, required=True)
+    parser.add_argument("--rules", nargs="+", choices=RULES + ["all"], required=True)
 
     args = parser.parse_args()
 
@@ -124,6 +124,9 @@ def main():
     logging.debug(args)
 
     language_identifier = None
+
+    if args.rules == ["all"]:
+        args.rules = RULES
 
     if RULE_LID in args.rules:
         assert args.fasttext_model_path is not None, "If --rules %s, then --fasttext-model-path must be specified." % RULE_LID
