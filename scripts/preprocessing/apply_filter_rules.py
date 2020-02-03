@@ -170,6 +170,8 @@ def main():
             handle_output_src.write(src_line)
             handle_output_trg.write(trg_line)
 
+    logging.debug("Lines seen: %d / lines kept: %d" % (lines_seen, lines_kept))
+
 
 if __name__ == '__main__':
     main()
