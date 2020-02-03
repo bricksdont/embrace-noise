@@ -64,6 +64,9 @@ class LanguageIdentifier(object):
 
 def rule_ratio_ok(src_len, trg_len, ratio_threshold):
 
+    if src_len == 0 or trg_len == 0:
+        return False
+
     if src_len > trg_len:
         ratio = src_len / trg_len
     else:
@@ -102,13 +105,19 @@ def rule_overlap_ok(src_tokens, trg_tokens, src_len, trg_len, threshold_overlap)
 
     if src_len > trg_len:
         src_set = set(src_tokens)
-        overlap = src_len / len(src_set.intersection(trg_tokens))
+        try:
+            overlap = src_len / len(src_set.intersection(trg_tokens))
+        except ZeroDivisionError:
+            overlap = 0.0
 
         if overlap > threshold_overlap:
             return False
     else:
         trg_set = set(trg_tokens)
-        overlap = trg_len / len(trg_set.intersection(src_tokens))
+        try:
+            overlap = trg_len / len(trg_set.intersection(src_tokens))
+        except ZeroDivisionError:
+            overlap = 0.0
 
         if overlap > threshold_overlap:
             return False
