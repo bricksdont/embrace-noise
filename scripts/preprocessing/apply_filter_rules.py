@@ -108,7 +108,7 @@ def rule_overlap_ok(src_tokens, trg_tokens, src_len, trg_len, threshold_overlap)
     if src_len > trg_len:
         src_set = set(src_tokens)
         try:
-            overlap = src_len / len(src_set.intersection(trg_tokens))
+            overlap = len(src_set.intersection(trg_tokens)) / trg_len
         except ZeroDivisionError:
             overlap = 0.0
 
@@ -117,7 +117,7 @@ def rule_overlap_ok(src_tokens, trg_tokens, src_len, trg_len, threshold_overlap)
     else:
         trg_set = set(trg_tokens)
         try:
-            overlap = trg_len / len(trg_set.intersection(src_tokens))
+            overlap = len(trg_set.intersection(src_tokens)) / src_len
         except ZeroDivisionError:
             overlap = 0.0
 
