@@ -44,12 +44,12 @@ mkdir -p $data_sub
 
 # link data sets (no need to concat for baseline)
 
-ln -s $data/raw/train/baseline.tok.$src $data_sub/train.tok.$src
-ln -s $data/raw/train/baseline.tok.$trg $data_sub/train.tok.$trg
+ln -snf $data/raw/train/baseline.tok.$src $data_sub/train.tok.$src
+ln -snf $data/raw/train/baseline.tok.$trg $data_sub/train.tok.$trg
 
 for corpus in dev test; do
-  ln -s $data/raw/$corpus/$corpus.tok.$src $data_sub/$corpus.tok.$src
-  ln -s $data/raw/$corpus/$corpus.tok.$trg $data_sub/$corpus.tok.$trg
+  ln -snf $data/raw/$corpus/$corpus.tok.$src $data_sub/$corpus.tok.$src
+  ln -snf $data/raw/$corpus/$corpus.tok.$trg $data_sub/$corpus.tok.$trg
 done
 
 shared_models_sub=$shared_models/baseline
@@ -88,8 +88,8 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
       # link dev and test tokenized files
 
       for corpus in dev test; do
-        ln -s $data/raw/$corpus/$corpus.tok.$src $data_sub/$corpus.tok.$src
-        ln -s $data/raw/$corpus/$corpus.tok.$trg $data_sub/$corpus.tok.$trg
+        ln -snf $data/raw/$corpus/$corpus.tok.$src $data_sub/$corpus.tok.$src
+        ln -snf $data/raw/$corpus/$corpus.tok.$trg $data_sub/$corpus.tok.$trg
       done
 
       # folder for BPE model: do NOT train new BPE models, always use baseline model
