@@ -13,6 +13,10 @@ trg=en
 scripts=$base/scripts
 data=$base/data
 models=$base/models
+shared_models=$base/shared_models
+distilled=$base/distilled
+
+mkdir -p $distilled
 
 batch_size=64
 chunk_size=25000
@@ -20,30 +24,40 @@ chunk_size=25000
 # distill baseline
 
 data_sub=$data/baseline
-distill_sub=$data/baseline_distilled
+distill_sub=$distilled/baseline_distilled
 
 model_path=$models/baseline
 
 if [[ -d $distill_sub ]]; then
-  echo "Distill exists: $distill_sub"
-  echo "Skipping."
-else
-  mkdir -p $distill_sub
+    echo "Folder exists: $distill_sub"
+    if [[ -f $distill_sub/train.bpe.$trg ]]; then
+      echo "Distilled train data exists: $distill_sub/train.bpe.$trg"
 
-  . $scripts/translation/decode_parallel_generic.sh &
+      num_lines_train_src=`cat $distill_sub/train.bpe.$src | wc -l`
+      num_lines_train_trg=`cat $distill_sub/train.bpe.$trg | wc -l`
 
-  # link dev and test without modifying them
+      if [[ $num_lines_train_src == $num_lines_train_trg ]]; then
+        echo "Same number of lines in training source and target:"
+        echo "$num_lines_train_src == $num_lines_train_trg"
+        echo "Skipping."
+      else
+        # link source side of training data
 
-  for corpus in dev test; do
-    ln -s $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
-    ln -s $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
-  done
+        ln -sfn $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
 
-  # link source side of training data
+        . $scripts/translation/decode_parallel_generic.sh &
 
-  ln -s $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
+        # link dev and test without modifying them
 
+        for corpus in dev test; do
+          ln -s $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
+          ln -s $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
+        done
+
+      fi
+    fi
 fi
+
 
 # subset of data sets that should be distilled
 
@@ -60,7 +74,8 @@ function contains() {
     return 1
 }
 
-noise_types_subset=("untranslated_de_trg" "raw_paracrawl")
+noise_types_subset=("raw_paracrawl")
+noise_amounts_subset=("100")
 
 for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
   for noise_amount in 05 10 20 50 100; do
@@ -68,8 +83,8 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     echo "noise_type: $noise_type"
     echo "noise_amount: $noise_amount"
 
-    data_sub=$data/$noise_type.$noise_amount
-    distill_sub=$data/$noise_type"_distilled".$noise_amount
+    data_sub=$data/"$noise_type.$noise_amount"
+    distill_sub=$distilled//"$noise_type.$noise_amount"
 
     model_path=$models/baseline
 
@@ -96,7 +111,21 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
         continue
     fi
 
+    if [ $(contains "${noise_amounts_subset[@]}" $noise_amount) == "n" ]; then
+        echo "noise_amount not in subset that should be distilled"
+        echo "Skipping."
+        continue
+    fi
+
     mkdir -p $distill_sub
+
+    # extract noise-only source training data
+
+    num_noise_lines=`cat $data/raw/train/$noise_type.$noise_amount.tok.$src | wc -l`
+
+    tail -n $num_noise_lines $data_sub/train.bpe.$src > $distill_sub/train.bpe.$src
+
+    # translate training data with baseline model
 
     . $scripts/translation/decode_parallel_generic.sh &
 
@@ -106,10 +135,6 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
       ln -sfn $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
       ln -sfn $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
     done
-
-    # link source side of training data
-
-    ln -sfn $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
 
   done
 done

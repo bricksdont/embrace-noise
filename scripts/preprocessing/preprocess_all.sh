@@ -26,8 +26,8 @@ mkdir -p $shared_models
 # normalize dev and test
 
 for corpus in dev test; do
-  cat $data/raw/$corpus/$corpus.$src | perl $MOSES/tokenizer/normalize-punctuation.perl > $data/raw/$corpus/$corpus.normalized.$src
-  cat $data/raw/$corpus/$corpus.$trg | perl $MOSES/tokenizer/normalize-punctuation.perl > $data/raw/$corpus/$corpus.normalized.$trg
+  cat $data/raw/$corpus/$corpus.$src | perl $MOSES/tokenizer/normalize-punctuation.perl $src > $data/raw/$corpus/$corpus.normalized.$src
+  cat $data/raw/$corpus/$corpus.$trg | perl $MOSES/tokenizer/normalize-punctuation.perl $trg > $data/raw/$corpus/$corpus.normalized.$trg
 done
 
 # tokenize dev and test
@@ -57,7 +57,7 @@ mkdir -p $shared_models_sub
 
 sbatch --cpus-per-task=4 --time=12:00:00 --mem=64G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
 
-# individual training data + BPE model for each experiment
+# individual training data for each experiment
 
 for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
     for noise_amount in 05 10 20 50 100; do
@@ -91,10 +91,8 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
         ln -s $data/raw/$corpus/$corpus.tok.$trg $data_sub/$corpus.tok.$trg
       done
 
-      # folder for BPE model
-
-      shared_models_sub=$shared_models/$noise_type.$noise_amount
-      mkdir -p $shared_models_sub
+      # folder for BPE model: do NOT train new BPE models, always use baseline model
+      shared_models_sub=baseline
 
       sbatch --cpus-per-task=4 --time=12:00:00 --mem=64G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
     done

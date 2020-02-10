@@ -21,7 +21,7 @@ mkdir -p $chunk_log_dir
 
 # splitting input file into chunks
 
-zless $data_sub/train.bpe.$src | split -d -l $chunk_size -a 3 - $chunk_input_dir/$chunk_prefix
+zless $distill_sub/train.bpe.$src | split -d -l $chunk_size -a 3 - $chunk_input_dir/$chunk_prefix
 
 # get number of chunk files generated
 

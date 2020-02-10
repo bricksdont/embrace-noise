@@ -36,9 +36,9 @@ pip install sacrebleu
 
 git clone https://github.com/bricksdont/moses-scripts $tools/moses-scripts
 
-# install sentencepiece for subword regularization
+# install fasttext for language identification
 
-pip install sentencepiece
+pip install fasttext
 
 ###########################################
 
@@ -67,6 +67,12 @@ pip install subword-nmt
 
 pip install sacrebleu
 
-# install sentencepiece for subword regularization
+# install fasttext for language identification
 
-pip install sentencepiece
+pip install fasttext
+
+# download fasttext model
+
+mkdir -p $tools/fasttext
+
+wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P $tools/fasttext
