@@ -86,13 +86,15 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
       done
 
       # link dev and test tokenized files
+      
       for corpus in dev test; do
         ln -s $data/raw/$corpus/$corpus.tok.$src $data_sub/$corpus.tok.$src
         ln -s $data/raw/$corpus/$corpus.tok.$trg $data_sub/$corpus.tok.$trg
       done
 
       # folder for BPE model: do NOT train new BPE models, always use baseline model
-      shared_models_sub=baseline
+
+      shared_models_sub=$shared_models/baseline
 
       sbatch --cpus-per-task=4 --time=12:00:00 --mem=64G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
     done
