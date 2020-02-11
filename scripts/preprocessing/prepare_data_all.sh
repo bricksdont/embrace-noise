@@ -15,7 +15,7 @@ prepared=$base/prepared
 
 mkdir -p $prepared
 
-# subset of models that should be trained
+# subset of models that should be prepared
 
 PREPARE_SUBSET=(
   "baseline"
@@ -61,6 +61,6 @@ for data_sub in $data/*; do
 
     mkdir -p $prepared_sub
 
-    sbatch --cpus-per-task=4 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
   done
 done
