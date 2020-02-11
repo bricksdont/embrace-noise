@@ -18,8 +18,9 @@ bpe_total_symbols=32000
 bpe_vocab_threshold=50
 
 shared_models=$base/shared_models
+preprocessed=$base/preprocessed
 
-mkdir -p $shared_models
+mkdir -p $shared_models $preprocessed
 
 # normalization and tokenization of dev and test, only do that once
 
@@ -39,10 +40,10 @@ done
 
 # call for baseline without noise
 
-data_sub=$data/baseline
+data_sub=$preprocessed/baseline
 mkdir -p $data_sub
 
-# link data sets (no need to concat for baseline)
+# link data sets
 
 ln -snf $data/raw/train/baseline.tok.$src $data_sub/train.tok.$src
 ln -snf $data/raw/train/baseline.tok.$trg $data_sub/train.tok.$trg
@@ -69,7 +70,7 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
       # folder for preprocessed data
 
-      data_sub=$data/$noise_type.$noise_amount
+      data_sub=$preprocessed/$noise_type.$noise_amount
 
       if [[ -d $data_sub ]]; then
         echo "Folder exists: $data_sub"
@@ -79,10 +80,10 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
       mkdir -p $data_sub
 
-      # concatenate training data
+      # link training data
 
       for lang in $src $trg; do
-        cat $data/raw/train/baseline.tok.$lang $data/raw/train/$noise_type.$noise_amount.tok.$lang > $data_sub/train.tok.$lang
+        ln -snf $data/raw/train/$noise_type.$noise_amount.tok.$lang $data_sub/train.tok.$lang
       done
 
       # link dev and test tokenized files

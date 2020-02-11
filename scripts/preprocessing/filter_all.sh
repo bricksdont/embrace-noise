@@ -11,7 +11,7 @@ src=de
 trg=en
 
 scripts=$base/scripts
-data=$base/data
+preprocessed=$base/preprocessed
 filtered=$base/filtered
 tools=$base/tools
 
@@ -19,18 +19,20 @@ mkdir -p $filtered
 
 # filter baseline
 
-data_sub=$data/baseline_distilled
-filter_sub=$distilled/baseline_distilled
+preprocessed_sub=$preprocessed/baseline_distilled
+filter_sub=$filtered/baseline_distilled
 
 mkdir -p $filter_sub
 
-input_src=$data_sub/train.bpe.$src
-input_trg=$data_sub/train.bpe.$trg
+input_src=$preprocessed_sub/train.bpe.$src
+input_trg=$preprocessed_sub/train.bpe.$trg
 
 output_src=$filter_sub/train.bpe.$src
 output_trg=$filter_sub/train.bpe.$trg
 
-. $scripts/preprocessing/filter_generic.sh
+logfile=$filter_sub/log
+
+. $scripts/preprocessing/filter_generic.sh 2> $logfile
 
 
 # baseline data combined with noise
@@ -41,26 +43,31 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     echo "noise_type: $noise_type"
     echo "noise_amount: $noise_amount"
 
-    distill_sub=$distilled/$noise_type.$noise_amount
-    data_sub=$data/$noise_type"_distilled".$noise_amount
+    preprocessed_sub=$preprocessed/$noise_type.$noise_amount
+    filter_sub=$filtered/$noise_type.$noise_amount
 
     if [[ -d $filter_sub ]]; then
-        echo "Folder exists: $data_sub"
+        echo "Folder exists: $filter_sub"
         echo "Skipping."
         continue
     fi
 
     mkdir -p $filter_sub
 
-    input_src=$data_sub/train.bpe.$src
-    input_trg=$data_sub/train.bpe.$trg
+    input_src=$preprocessed_sub/train.bpe.$src
+    input_trg=$preprocessed_sub/train.bpe.$trg
 
     output_src=$filter_sub/train.bpe.$src
     output_trg=$filter_sub/train.bpe.$trg
 
-    . $scripts/preprocessing/filter_generic.sh
+    logfile=$filter_sub/log
+
+    . $scripts/preprocessing/filter_generic.sh 2> $logfile
 
     done
 
   done
 done
+
+echo "Size of all files:"
+wc -l $filtered/*/*

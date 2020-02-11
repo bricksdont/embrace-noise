@@ -11,7 +11,8 @@ src=de
 trg=en
 
 scripts=$base/scripts
-data=$base/data
+preprocessed=$base/preprocessed
+filtered=$base/data
 models=$base/models
 shared_models=$base/shared_models
 distilled=$base/distilled
@@ -21,9 +22,9 @@ mkdir -p $distilled
 batch_size=64
 chunk_size=25000
 
-# distill baseline
+# distill baseline (without filtering!)
 
-data_sub=$data/baseline
+data_sub=$preprocessed/baseline
 distill_sub=$distilled/baseline_distilled
 
 model_path=$models/baseline
@@ -82,7 +83,7 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     echo "noise_type: $noise_type"
     echo "noise_amount: $noise_amount"
 
-    data_sub=$data/$noise_type.$noise_amount
+    data_sub=$filtered/$noise_type.$noise_amount
     distill_sub=$distilled/$noise_type.$noise_amount
 
     model_path=$models/baseline
@@ -118,18 +119,9 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     mkdir -p $distill_sub
 
-    # extract noise-only source training data
+    # link source side of training data
 
-    num_noise_lines=`cat $data/raw/train/$noise_type.$noise_amount.tok.$src | wc -l`
-
-    tail -n $num_noise_lines $data_sub/train.bpe.$src > $distill_sub/train.bpe.$src
-
-    # link dev and test without modifying them
-
-    for corpus in dev test; do
-      ln -sfn $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
-      ln -sfn $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
-    done
+    ln -sfn $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
 
     # translate training data with baseline model
 
