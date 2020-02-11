@@ -32,10 +32,10 @@ output_trg=$filter_sub/train.bpe.$trg
 
 logfile=$filter_sub/log
 
-. $scripts/preprocessing/filter_generic.sh 2> $logfile
+. $scripts/preprocessing/filter_generic.sh 2>&1 | tee -a $logfile
 
 
-# noise data sets (noisy only, not combined with baseline data)
+# noise data sets (noise only, not combined with baseline data)
 
 for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
   for noise_amount in 05 10 20 50 100; do
@@ -62,7 +62,7 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     logfile=$filter_sub/log
 
-    . $scripts/preprocessing/filter_generic.sh 2> $logfile
+    . $scripts/preprocessing/filter_generic.sh 2>&1 | tee -a $logfile
 
   done
 done
