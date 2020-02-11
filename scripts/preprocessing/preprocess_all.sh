@@ -56,7 +56,7 @@ done
 shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
-sbatch --cpus-per-task=4 --time=01:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
+sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
 
 # individual training data for each experiment
 
@@ -97,6 +97,6 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
       shared_models_sub=$shared_models/baseline
 
-      sbatch --cpus-per-task=4 --time=01:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
+      sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
     done
 done
