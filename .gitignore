@@ -1,6 +1,8 @@
 venvs
 shared_models
 tools
+filtered
+preprocessed
 distilled
 models
 data

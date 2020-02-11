@@ -25,7 +25,7 @@ chunk_size=25000
 # distill baseline (without filtering!)
 
 data_sub=$preprocessed/baseline
-distill_sub=$distilled/baseline_distilled
+distill_sub=$distilled/baseline
 
 model_path=$models/baseline
 
