@@ -69,7 +69,7 @@ ln -s $data/raw/test/newstest2017-$src$trg-ref.$trg.sgm.txt $data/raw/test/test.
 # sizes
 echo "Sizes of all files:"
 
-wc -l $data/*/*/*
+wc -l $data/raw/*/*
 
 # sanity checks
 echo "At this point, please make sure that 1) number of lines are as expected, 2) language suffixes are correct and 3) files are parallel"
