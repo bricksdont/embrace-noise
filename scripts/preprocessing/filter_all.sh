@@ -37,7 +37,9 @@ logfile=$filter_sub/log
 
 # noise data sets (noise only, not combined with baseline data)
 
-for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
+# for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
+
+for noise_type in raw_paracrawl; do
   for noise_amount in 05 10 20 50 100; do
 
     echo "noise_type: $noise_type"
