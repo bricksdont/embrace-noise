@@ -64,8 +64,6 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
     . $scripts/preprocessing/filter_generic.sh 2> $logfile
 
-    done
-
   done
 done
 
