@@ -12,7 +12,7 @@ trg=en
 
 scripts=$base/scripts
 preprocessed=$base/preprocessed
-filtered=$base/data
+filtered=$base/filtered
 models=$base/models
 shared_models=$base/shared_models
 distilled=$base/distilled
