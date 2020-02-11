@@ -40,7 +40,7 @@ for origin_sub in $preprocessed/*; do
   . $scripts/preprocessing/concat_with_baseline_generic.sh
 done
 
-# assemble training data for: $noise_type.$noise_amount filtered
+# assemble training data for: $noise_type.$noise_amount.filtered
 # (this includes filtered baseline)
 
 for origin_sub in $filtered/*; do
@@ -50,7 +50,7 @@ for origin_sub in $filtered/*; do
   . $scripts/preprocessing/concat_with_baseline_generic.sh
 done
 
-# assemble training data for: $noise_type.$noise_amount distilled
+# assemble training data for: $noise_type.$noise_amount.distilled
 # (this includes distilled baseline)
 
 for origin_sub in $distilled/*; do

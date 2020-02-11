@@ -19,8 +19,8 @@ mkdir -p $filtered
 
 # filter baseline
 
-preprocessed_sub=$preprocessed/baseline_distilled
-filter_sub=$filtered/baseline_distilled
+preprocessed_sub=$preprocessed/baseline
+filter_sub=$filtered/baseline
 
 mkdir -p $filter_sub
 
