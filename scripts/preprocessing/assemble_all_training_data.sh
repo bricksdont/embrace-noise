@@ -50,6 +50,7 @@ for origin_sub in $preprocessed/*; do
   if [[ -d $data_sub ]]; then
     echo "data_sub exists: $data_sub"
     echo "Skipping."
+    continue
   fi
 
   . $scripts/preprocessing/concat_with_baseline_generic.sh
@@ -67,6 +68,7 @@ for origin_sub in $filtered/*; do
   if [[ -d $data_sub ]]; then
     echo "data_sub exists: $data_sub"
     echo "Skipping."
+    continue
   fi
 
   . $scripts/preprocessing/concat_with_baseline_generic.sh
@@ -84,6 +86,7 @@ for origin_sub in $distilled/*; do
   if [[ -d $data_sub ]]; then
     echo "data_sub exists: $data_sub"
     echo "Skipping."
+    continue
   fi
 
   . $scripts/preprocessing/concat_with_baseline_generic.sh
