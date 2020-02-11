@@ -29,7 +29,6 @@ distilled=$base/distilled
 
 # . $scripts/preprocessing/distill_all.sh
 
-
 # assemble training data for: $noise_type.$noise_amount
 # (this includes vanilla baseline)
 
@@ -59,6 +58,10 @@ for origin_sub in $distilled/*; do
 
   . $scripts/preprocessing/concat_with_baseline_generic.sh
 done
+
+# assemble training data for: reverse baseline model (custom)
+
+#TODO
 
 echo "Sizes of all files:"
 
