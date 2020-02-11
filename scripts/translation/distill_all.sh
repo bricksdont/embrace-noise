@@ -50,6 +50,11 @@ if [[ -d $distill_sub ]]; then
 fi
 
 if [ "$distill_baseline" = true ]; then
+
+    # debug
+    echo "about to distill baseline, exiting"
+    exit
+
     mkdir -p $distill_sub
 
     # link source side of training data
