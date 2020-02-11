@@ -2,33 +2,36 @@
 
 base=/net/cephfs/home/mathmu/scratch/noise-distill
 
-source $base/venvs/sockeye3/bin/activate
+source $base/venvs/sockeye3-cpu/bin/activate
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
-module load volta cuda/10.0
+module load hydra
 
 src=de
 trg=en
 
+scripts=$base/scripts
 data=$base/data
-distilled=$base/distilled
+filtered=$base/filtered
+tools=$base/tools
 
-# baseline distill data
+mkdir -p $filtered
 
-distill_sub=$distilled/baseline_distilled
+# filter baseline
+
 data_sub=$data/baseline_distilled
+filter_sub=$distilled/baseline_distilled
 
-mkdir -p $data_sub
+mkdir -p $filter_sub
 
-cat $data/baseline/train.bpe.$src $distill_sub/train.bpe.$src > $data_sub/train.bpe.$src
-cat $data/baseline/train.bpe.$trg $distill_sub/train.bpe.$trg > $data_sub/train.bpe.$trg
+input_src=$data_sub/train.bpe.$src
+input_trg=$data_sub/train.bpe.$trg
 
-# link dev and test without modifying them
+output_src=$filter_sub/train.bpe.$src
+output_trg=$filter_sub/train.bpe.$trg
 
-for corpus in dev test; do
-  ln -sfn $distill_sub/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
-  ln -sfn $distill_sub/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
-done
+. $scripts/preprocessing/filter_generic.sh
+
 
 # baseline data combined with noise
 
@@ -41,28 +44,22 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     distill_sub=$distilled/$noise_type.$noise_amount
     data_sub=$data/$noise_type"_distilled".$noise_amount
 
-    if [[ ! -d $distill_sub ]]; then
-        echo "Folder does not exist: $distill_sub"
-        echo "Skipping."
-        continue
-    fi
-
-    if [[ -d $data_sub ]]; then
+    if [[ -d $filter_sub ]]; then
         echo "Folder exists: $data_sub"
         echo "Skipping."
         continue
     fi
 
-    mkdir -p $data_sub
+    mkdir -p $filter_sub
 
-    cat $data/baseline/train.bpe.$src $distill_sub/train.bpe.$src > $data_sub/train.bpe.$src
-    cat $data/baseline/train.bpe.$trg $distill_sub/train.bpe.$trg > $data_sub/train.bpe.$trg
+    input_src=$data_sub/train.bpe.$src
+    input_trg=$data_sub/train.bpe.$trg
 
-    # link dev and test without modifying them
+    output_src=$filter_sub/train.bpe.$src
+    output_trg=$filter_sub/train.bpe.$trg
 
-    for corpus in dev test; do
-      ln -sfn $distill_sub/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
-      ln -sfn $distill_sub/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
+    . $scripts/preprocessing/filter_generic.sh
+
     done
 
   done
