@@ -28,6 +28,8 @@ distill_sub=$distilled/baseline_distilled
 
 model_path=$models/baseline
 
+distill_baseline=true
+
 if [[ -d $distill_sub ]]; then
     echo "Folder exists: $distill_sub"
     if [[ -f $distill_sub/train.bpe.$trg ]]; then
@@ -40,27 +42,21 @@ if [[ -d $distill_sub ]]; then
         echo "Same number of lines in training source and target:"
         echo "$num_lines_train_src == $num_lines_train_trg"
         echo "Skipping."
-      else
 
-        mkdir -p $distill_sub
-
-        # link source side of training data
-
-        ln -sfn $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
-
-        . $scripts/translation/decode_parallel_generic.sh &
-
-        # link dev and test without modifying them
-
-        for corpus in dev test; do
-          ln -sfn $data_sub/$corpus.bpe.$src $distill_sub/$corpus.bpe.$src
-          ln -sfn $data_sub/$corpus.bpe.$trg $distill_sub/$corpus.bpe.$trg
-        done
-
+        distill_baseline=false
       fi
     fi
 fi
 
+if [ "$distill_baseline" = true ]; then
+    mkdir -p $distill_sub
+
+    # link source side of training data
+
+    ln -sfn $data_sub/train.bpe.$src $distill_sub/train.bpe.$src
+
+    . $scripts/translation/decode_parallel_generic.sh &
+fi
 
 # subset of data sets that should be distilled
 

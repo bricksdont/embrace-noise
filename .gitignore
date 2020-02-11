@@ -1,6 +1,7 @@
 venvs
 shared_models
 tools
+distilled
 models
 data
 .idea
