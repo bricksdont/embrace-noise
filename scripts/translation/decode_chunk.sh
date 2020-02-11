@@ -8,7 +8,7 @@ chunk_index=$4
 model_path=$5
 batch_size=$6
 
-OMP_NUM_THREADS=3 python -m sockeye.translate \
+OMP_NUM_THREADS=1 python -m sockeye.translate \
             -i $chunk_input_dir/$chunk_prefix"$chunk_index" \
             -o $chunk_output_dir/$chunk_prefix"$chunk_index" \
             -m $model_path \
