@@ -11,7 +11,7 @@
 # $output_trg
 # $tools
 
-python $scripts/filtering/apply_filter_rules.py \
+python $scripts/preprocessing/apply_filter_rules.py \
           --src-lang $src \
           --trg-lang $trg \
           --input-src $input_src \
