@@ -20,6 +20,7 @@ mkdir -p models
 
 TRAIN_SUBSET=(
   "baseline"
+  "baseline.reverse"
   "baseline.filtered"
   "baseline.distilled"
   "raw_paracrawl.100"
@@ -57,7 +58,7 @@ for prepared_sub in $prepared/*; do
     fi
 
     if [ $(contains "${TRAIN_SUBSET[@]}" $name) == "n" ]; then
-        echo "noise_type not in subset that should be trained"
+        echo "name: $name not in subset that should be trained"
         echo "Skipping."
         continue
     fi

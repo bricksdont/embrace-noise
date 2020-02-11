@@ -11,7 +11,7 @@
 
 echo "model_name: $model_name"
 
-baseline_sub=$preprocessed/baseline
+baseline_sub=$data/baseline
 data_sub=$data/$model_name
 
 mkdir -p $data_sub

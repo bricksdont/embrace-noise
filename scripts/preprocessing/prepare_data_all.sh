@@ -15,45 +15,46 @@ prepared=$base/prepared
 
 mkdir -p $prepared
 
-# custom prepare for baseline without noise
+# subset of models that should be trained
 
-data_sub=$data/baseline
-prepared_sub=$prepared/baseline
+PREPARE_SUBSET=(
+  "baseline"
+  "baseline.reverse"
+  "baseline.filtered"
+  "baseline.distilled"
+  "raw_paracrawl.100"
+  "raw_paracrawl.100.filtered"
+  "raw_paracrawl.100.distilled"
+)
 
-if [[ -d $prepared_sub ]]; then
-    echo "Folder exists: $prepared_sub"
-    echo "Skipping."
-else
-    mkdir -p $prepared_sub
+function contains() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            echo "y"
+            return 0
+        fi
+    }
+    echo "n"
+    return 1
+}
 
-    sbatch --cpus-per-task=4 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
-fi
+for data_sub in $data/*; do
 
-# custom prepare for baseline_distilled without noise
+    echo "data_sub: $data_sub"
+    name=$(basename $prepared_sub)
 
-data_sub=$data/baseline_distilled
-prepared_sub=$prepared/baseline_distilled
-
-if [[ -d $prepared_sub ]]; then
-    echo "Folder exists: $prepared_sub"
-    echo "Skipping."
-else
-    mkdir -p $prepared_sub
-
-    sbatch --cpus-per-task=4 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
-fi
-
-for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg untranslated_de_trg_distilled short_max2 short_max5 raw_paracrawl raw_paracrawl_distilled; do
-  for noise_amount in 05 10 20 50 100; do
-
-    echo "noise_type: $noise_type"
-    echo "noise_amount: $noise_amount"
-
-    data_sub=$data/$noise_type.$noise_amount
-    prepared_sub=$prepared/$noise_type.$noise_amount
+    prepared_sub=$prepared/$name
 
     if [[ -d $prepared_sub ]]; then
         echo "Folder exists: $prepared_sub"
+        echo "Skipping."
+        continue
+    fi
+
+    if [ $(contains "${PREPARE_SUBSET[@]}" $name) == "n" ]; then
+        echo "name: $name not in subset that should be prepared"
         echo "Skipping."
         continue
     fi
