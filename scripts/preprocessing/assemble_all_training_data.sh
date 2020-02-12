@@ -56,8 +56,18 @@ for origin_sub in $preprocessed/*; do
   . $scripts/preprocessing/concat_with_baseline_generic.sh
 done
 
+# custom assemble for baseline.filtered (do not concat with unfiltered baseline)
+
+data_sub=$data/baseline.filtered
+mkdir -p $data_sub
+
+for corpus in train dev test; do
+  ln -snf $filtered/baseline/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
+  ln -snf $filtered/baseline/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
+done
+
 # assemble training data for: $noise_type.$noise_amount.filtered
-# (this includes filtered baseline)
+# (without filtered baseline, should be skipped)
 
 for origin_sub in $filtered/*; do
   model_name=$(basename $origin_sub)
