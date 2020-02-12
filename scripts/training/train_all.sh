@@ -48,7 +48,6 @@ for prepared_sub in $prepared/*; do
     name=$(basename $prepared_sub)
 
     data_sub=$data/$name
-    prepared_sub=$prepared/$name
     model_path=$models/$name
 
     if [[ -d $model_path ]]; then
