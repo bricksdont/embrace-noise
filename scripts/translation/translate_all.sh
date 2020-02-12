@@ -16,46 +16,39 @@ translations=$base/translations
 
 mkdir -p $translations
 
-# custom translate for baseline without noise
+# subset of models for translation
 
-data_sub=$data/baseline
-translations_sub=$translations/baseline
-models_sub=$models/baseline
+TRANSLATE_SUBSET=(
+  "baseline"
+  "baseline.reverse"
+  "baseline.filtered"
+  "baseline.distilled"
+  "raw_paracrawl.100"
+  "raw_paracrawl.100.filtered"
+  "raw_paracrawl.100.distilled"
+)
 
-if [[ -d $translations_sub ]]; then
-    echo "Folder exists: $translations_sub"
-    echo "Skipping."
-else
-    mkdir -p $translations_sub
+function contains() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            echo "y"
+            return 0
+        fi
+    }
+    echo "n"
+    return 1
+}
 
-    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $models_sub
-fi
+for models_sub in $models/*; do
 
-# custom translate for baseline_distilled without noise
+    echo "models_sub: $models_sub"
 
-data_sub=$data/baseline_distilled
-translations_sub=$translations/baseline_distilled
-models_sub=$models/baseline_distilled
+    name=$(basename $models_sub)
 
-if [[ -d $translations_sub ]]; then
-    echo "Folder exists: $translations_sub"
-    echo "Skipping."
-else
-    mkdir -p $translations_sub
-
-    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $models_sub
-fi
-
-for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg untranslated_de_trg_distilled short_max2 short_max5 raw_paracrawl raw_paracrawl_distilled; do
-  for noise_amount in 05 10 20 50 100; do
-
-    echo "noise_type: $noise_type"
-    echo "noise_amount: $noise_amount"
-
-    data_sub=$data/$noise_type.$noise_amount
-    translations_sub=$translations/$noise_type.$noise_amount
-
-    models_sub=$models/$noise_type.$noise_amount
+    data_sub=$data/$name
+    translations_sub=$translations/$name
 
     if [[ -d $translations_sub ]]; then
         echo "Folder exists: $translations_sub"
@@ -63,8 +56,8 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
         continue
     fi
 
-    if [[ ! -d $models_sub ]]; then
-        echo "Folder does not exist: $models_sub"
+    if [ $(contains "${TRANSLATE_SUBSET[@]}" $name) == "n" ]; then
+        echo "name: $name not in subset that should be trained"
         echo "Skipping."
         continue
     fi
@@ -72,5 +65,5 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     mkdir -p $translations_sub
 
     sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $models_sub
-  done
+
 done
