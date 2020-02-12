@@ -11,7 +11,7 @@ src=de
 trg=en
 
 data=$base/data
-prepared=$data/prepared
+prepared=$base/prepared
 models=$base/models
 
 mkdir -p models
