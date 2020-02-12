@@ -61,9 +61,12 @@ done
 data_sub=$data/baseline.filtered
 mkdir -p $data_sub
 
-for corpus in train dev test; do
-  ln -snf $filtered/baseline/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
-  ln -snf $filtered/baseline/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
+ln -snf $filtered/baseline/train.bpe.$src $data_sub/train.bpe.$src
+ln -snf $filtered/baseline/train.bpe.$trg $data_sub/train.bpe.$trg
+
+for corpus in dev test; do
+  ln -snf $preprocessed/baseline/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
+  ln -snf $preprocessed/baseline/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
 done
 
 # assemble training data for: $noise_type.$noise_amount.filtered
