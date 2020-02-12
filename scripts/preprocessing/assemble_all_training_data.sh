@@ -119,6 +119,8 @@ done
 
 # assemble training data for: DCCE score filtering
 
+shopt -s nullglob
+
 for origin_sub in $scores/*; do
   model_name=$(basename $origin_sub)
 
