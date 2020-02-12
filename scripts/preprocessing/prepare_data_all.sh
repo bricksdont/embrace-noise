@@ -43,7 +43,7 @@ function contains() {
 for data_sub in $data/*; do
 
     echo "data_sub: $data_sub"
-    name=$(basename $prepared_sub)
+    name=$(basename $data_sub)
 
     prepared_sub=$prepared/$name
 
@@ -62,5 +62,5 @@ for data_sub in $data/*; do
     mkdir -p $prepared_sub
 
     sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
-  done
+
 done
