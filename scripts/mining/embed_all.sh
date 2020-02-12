@@ -47,6 +47,6 @@ for filtered_sub in $filtered/*; do
         echo "Skipping."
         continue
       fi
-      sbatch --qos=vesta --time=01:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $scripts/laser/embed_generic.sh $LASER $encoder $bpe_codes $raw_file $embedded_file $lang
+      sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $scripts/laser/embed_generic.sh $LASER $encoder $bpe_codes $raw_file $embedded_file $lang
   done
 done

@@ -47,13 +47,15 @@ for embedded_sub in $embedded/*; do
       continue
     fi
 
+    mkdir -p $mined_sub
+
     raw_src=$filtered_sub/train.$src
     raw_trg=$filtered_sub/train.$trg
 
     embeddings_src=$embedded_sub/train.embedded.$src
     embeddings_trg=$embedded_sub/train.embedded.$trg
 
-    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $scripts/laser/mine_generic.sh $LASER $raw_src \
+    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $scripts/laser/mine_generic.sh $LASER $raw_src \
       $raw_trg $src $trg $embeddings_src $embeddings_trg $mined_file $mining_threshold $device_arg
 
 done
