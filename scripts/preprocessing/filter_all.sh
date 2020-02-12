@@ -24,11 +24,11 @@ filter_sub=$filtered/baseline
 
 mkdir -p $filter_sub
 
-input_src=$preprocessed_sub/train.bpe.$src
-input_trg=$preprocessed_sub/train.bpe.$trg
+input_src=$preprocessed_sub/train.tok.$src
+input_trg=$preprocessed_sub/train.tok.$trg
 
-output_src=$filter_sub/train.bpe.$src
-output_trg=$filter_sub/train.bpe.$trg
+output_src=$filter_sub/train.tok.$src
+output_trg=$filter_sub/train.tok.$trg
 
 logfile=$filter_sub/log
 
@@ -56,11 +56,11 @@ for noise_type in raw_paracrawl; do
 
     mkdir -p $filter_sub
 
-    input_src=$preprocessed_sub/train.bpe.$src
-    input_trg=$preprocessed_sub/train.bpe.$trg
+    input_src=$preprocessed_sub/train.tok.$src
+    input_trg=$preprocessed_sub/train.tok.$trg
 
-    output_src=$filter_sub/train.bpe.$src
-    output_trg=$filter_sub/train.bpe.$trg
+    output_src=$filter_sub/train.tok.$src
+    output_trg=$filter_sub/train.tok.$trg
 
     logfile=$filter_sub/log
 

@@ -11,13 +11,14 @@ src=de
 trg=en
 
 data=$base/data
+filtered=$base/filtered
+shared_models=$base/shared_models
 
 MOSES=$base/tools/moses-scripts/scripts
 
 bpe_total_symbols=32000
 bpe_vocab_threshold=50
 
-shared_models=$base/shared_models
 preprocessed=$base/preprocessed
 
 mkdir -p $shared_models $preprocessed
@@ -99,4 +100,26 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
 
       sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
     done
+done
+
+for filter_sub in $filtered/*; do
+
+    echo "filter_sub: $filter_sub"
+
+    # folder for preprocessed data
+
+    data_sub=$filter_sub
+
+    # link dev and test tokenized files
+
+    for corpus in dev test; do
+      ln -snf $data/raw/$corpus/$corpus.tok.$src $data_sub/$corpus.tok.$src
+      ln -snf $data/raw/$corpus/$corpus.tok.$trg $data_sub/$corpus.tok.$trg
+    done
+
+    # folder for BPE model: do NOT train new BPE models, always use baseline model
+
+    shared_models_sub=$shared_models/baseline
+
+    sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
 done
