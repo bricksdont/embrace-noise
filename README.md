@@ -37,6 +37,10 @@ Score data sets with DCCE (this only works _after training the baseline and reve
     ./scripts/scoring/score_all.sh
     ./scripts/scoring/dual_conditional_cross_entropy_scoring.sh
 
+Mine bitext with LASER:
+
+    ./scripts/mining/mine_all.sh
+
 Assemble all kinds of training data (noise types,
 rule-based filtering, distillation, combined in different ways):
 

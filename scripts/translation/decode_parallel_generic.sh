@@ -65,3 +65,5 @@ mv $chunk_output_dir/*.log $chunk_log_dir/
 # concatenating results
 
 cat $chunk_output_dir/$chunk_prefix* > $distill_sub/train.bpe.$trg
+
+echo "Parallel decoding finished!"
