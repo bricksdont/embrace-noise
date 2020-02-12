@@ -16,6 +16,10 @@ Download and rearrange data:
 
 ## Prepare data
 
+Individual steps involved, they are not necessarily listed in the correct order as some
+scripts need to be run several times. For instance, baseline models need to be trained before scoring,
+and after scoring, prepare needs to run again.
+
 Filter tokenized training sets:
 
     ./scripts/preprocessing/filter_all.sh
@@ -27,6 +31,11 @@ Apply BPE to all data sets:
 Distill some data sets:
 
     ./scripts/translation/distill_all.sh
+    
+Score data sets with DCCE (this only works _after training the baseline and reverse baseline):
+
+    ./scripts/scoring/score_all.sh
+    ./scripts/scoring/dual_conditional_cross_entropy_scoring.sh
 
 Assemble all kinds of training data (noise types,
 rule-based filtering, distillation, combined in different ways):
