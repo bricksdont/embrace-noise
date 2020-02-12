@@ -16,7 +16,19 @@ Download and rearrange data:
 
 ## Prepare data
 
-Assemble all kinds of training data (applying BPE,
+Filter tokenized training sets:
+
+    ./scripts/preprocessing/filter_all.sh
+
+Apply BPE to all data sets:
+
+    ./scripts/preprocessing/preprocess_all.sh
+
+Distill some data sets:
+
+    ./scripts/translation/distill_all.sh
+
+Assemble all kinds of training data (noise types,
 rule-based filtering, distillation, combined in different ways):
 
     ./scripts/preprocessing/assemble_all_training_data.sh
