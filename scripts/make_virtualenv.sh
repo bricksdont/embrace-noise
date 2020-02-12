@@ -16,5 +16,9 @@ virtualenv -p python3 $base/venvs/sockeye3
 
 virtualenv -p python3 $base/venvs/sockeye3-cpu
 
-echo "To activate your environment:"
+# third one for LASER
+
+virtualenv -p python3 $base/venvs/laser3
+
+echo "To activate your environment, e.g.:"
 echo "    source $base/venvs/sockeye3/bin/activate"
