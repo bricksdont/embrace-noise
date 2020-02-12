@@ -129,10 +129,7 @@ def main():
                                                                                 "--scores-lm-indomain/--scores-lm-outdomain " \
                                                                                 "cannot be None" % METHOD_ADQ_DOM
 
-    files = [args.scores_nmt_forward, args.scores_nmt_backward]
-
-    if args.method == METHOD_ADQ_DOM:
-        files.extend([args.scores_lm_indomain, args.scores_lm_outdomain])
+    files = [args.scores_nmt_forward, args.scores_nmt_backward, args.scores_lm_indomain, args.scores_lm_outdomain]
 
     input_handles = [open(file, "r") for file in files]
 
@@ -142,11 +139,7 @@ def main():
 
             scores = [float(score) for score in scores]
 
-            if len(scores) == 4:
-                score_nmt_forward, score_nmt_backward, score_lm_indomain, score_lm_outdomain = scores
-            else:
-                score_nmt_forward, score_nmt_backward = scores
-                score_lm_indomain, score_lm_outdomain = None, None
+            score_nmt_forward, score_nmt_backward, score_lm_indomain, score_lm_outdomain = scores
 
             score = dual_conditional_cross_entropy(score_nmt_forward,
                                                    score_nmt_backward,
