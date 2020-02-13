@@ -15,11 +15,11 @@ prepared=$base/prepared
 
 mkdir -p $prepared
 
+
 # subset of models that should be prepared
 
 PREPARE_SUBSET=(
   "baseline"
-  "baseline.tagged"
   "baseline.reverse"
   "baseline.filtered"
   "baseline.distilled"
