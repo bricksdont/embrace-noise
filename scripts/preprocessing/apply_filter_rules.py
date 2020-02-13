@@ -26,10 +26,10 @@ def parse_args():
     parser.add_argument("--threshold-ratio", type=float, help="Threshold for diverging number of tokens in source and target",
                         default=2.0, required=False)
     parser.add_argument("--threshold-min-length", type=float,
-                        help="Threshold for absolute number of tokens in either source or target",
+                        help="Threshold for minimum absolute number of tokens in either source or target",
                         default=3, required=False)
     parser.add_argument("--threshold-max-length", type=float,
-                        help="Threshold for absolute number of tokens in either source or target",
+                        help="Threshold for maxmimum absolute number of tokens in either source or target",
                         default=100, required=False)
     parser.add_argument("--threshold-overlap", type=float,
                         help="Threshold for overlap in percent between tokens of source and target",

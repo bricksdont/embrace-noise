@@ -178,6 +178,8 @@ for origin_sub in $preprocessed/*; do
     data_sub_old=$data/$name
     data_sub_new=$data/$name.tagged
 
+    echo "Considering: $data_sub_new"
+
     if [[ -d $data_sub_new ]]; then
       echo "Folder exists: $data_sub_new"
       echo "Skipping."
@@ -209,6 +211,8 @@ for origin_sub in $filtered/*; do
 
     data_sub_old=$data/$name.filtered
     data_sub_new=$data/$name.filtered.tagged
+  
+    echo "Considering: $data_sub_new"
 
     if [[ -d $data_sub_new ]]; then
       echo "Folder exists: $data_sub_new"
