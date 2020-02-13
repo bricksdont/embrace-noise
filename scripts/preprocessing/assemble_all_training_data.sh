@@ -181,7 +181,7 @@ for preprocessed_sub in $preprocessed/*; do
       continue
     fi
 
-    origin_sub=$data/$model_name.tagged
+    origin_sub=$preprocessed/$model_name.tagged
 
     mkdir -p $origin_sub
 
@@ -214,7 +214,7 @@ for filtered_sub in $filtered/*; do
       continue
     fi
 
-    origin_sub=$data/$model_name.tagged
+    origin_sub=$preprocessed/$model_name.tagged
 
     mkdir -p $origin_sub
 
