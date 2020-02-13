@@ -24,7 +24,7 @@ for scores_sub in $scores/*; do
     continue
   fi
 
-  python $scripts/scoring/dual_conditional_cross_entropy.py \
+  python $scripts/scoring/dual_conditional_cross_entropy_scoring.py \
     --scores-nmt-forward $scores_sub/scores.nmt.forward \
     --scores-nmt-backward $scores_sub/scores.nmt.backward \
     --method adq \

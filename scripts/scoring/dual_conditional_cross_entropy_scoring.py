@@ -131,7 +131,7 @@ def main():
 
     files = [args.scores_nmt_forward, args.scores_nmt_backward, args.scores_lm_indomain, args.scores_lm_outdomain]
 
-    input_handles = [open(file, "r") for file in files]
+    input_handles = [open(file, "r") if file is not None else file for file in files ]
 
     with open(args.output, "w") as handle_output:
 
