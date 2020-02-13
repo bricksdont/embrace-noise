@@ -15,6 +15,7 @@ output=$3
 batch_size=$4
 model_path=$5
 max_seq_len=$6
+score_type=$7
 
 OMP_NUM_THREADS=1 python -m sockeye.score \
         --source $input_src \
@@ -25,5 +26,5 @@ OMP_NUM_THREADS=1 python -m sockeye.score \
         --batch-size $batch_size \
         --disable-device-locking \
         --max-seq-len $max_seq_len:$max_seq_len \
-        --score-type logprob \
+        --score-type $score_type \
         --output $output

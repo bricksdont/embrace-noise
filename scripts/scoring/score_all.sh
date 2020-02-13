@@ -20,6 +20,7 @@ mkdir -p $scores
 
 batch_size=512
 max_seq_len=128
+score_type="neglogprob"
 
 # basic approach: score all filtered data sets
 
@@ -73,7 +74,7 @@ for filtered_sub in $filtered/*; do
 
     output=$scores_sub/scores.nmt.forward
 
-    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/scoring/score_generic.sh $input_src $input_trg $output $batch_size $model_path $max_seq_len
+    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/scoring/score_generic.sh $input_src $input_trg $output $batch_size $model_path $max_seq_len $score_type
 
     # backward scoring
 
@@ -84,6 +85,6 @@ for filtered_sub in $filtered/*; do
 
     output=$scores_sub/scores.nmt.backward
 
-    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/scoring/score_generic.sh $input_src $input_trg $output $batch_size $model_path $max_seq_len
+    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/scoring/score_generic.sh $input_src $input_trg $output $batch_size $model_path $max_seq_len $score_type
 
 done
