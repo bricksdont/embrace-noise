@@ -22,6 +22,6 @@ OMP_NUM_THREADS=1 python -m sockeye.score \
         --device-ids 0 \
         --batch-size $batch_size \
         --disable-device-locking \
-        --max-seq-len 512:512 \
+        --max-seq-len 128:128 \
         --score-type logprob \
         --output $output

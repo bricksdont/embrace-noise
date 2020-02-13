@@ -3,6 +3,9 @@
 base=/net/cephfs/home/mathmu/scratch/noise-distill
 
 source $base/venvs/laser3/bin/activate
+module unuse /apps/etc/modules/start/
+module use /sapps/etc/modules/start/
+module load volta cuda/10.0
 
 src=de
 trg=en
@@ -47,6 +50,6 @@ for filtered_sub in $filtered/*; do
         echo "Skipping."
         continue
       fi
-      sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $scripts/mining/embed_generic.sh $LASER $encoder $bpe_codes $raw_file $embedded_file $lang
+      sbatch --qos=vesta --time=06:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $scripts/mining/embed_generic.sh $LASER $encoder $bpe_codes $raw_file $embedded_file $lang
   done
 done

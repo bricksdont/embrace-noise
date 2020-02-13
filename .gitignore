@@ -3,6 +3,8 @@ shared_models
 tools
 filtered
 preprocessed
+prepared
+debug
 distilled
 models
 data
