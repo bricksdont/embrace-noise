@@ -6,6 +6,7 @@
 import argparse
 import logging
 import numpy as np
+import itertools
 
 
 METHOD_ADQ = "adq"
@@ -131,11 +132,11 @@ def main():
 
     files = [args.scores_nmt_forward, args.scores_nmt_backward, args.scores_lm_indomain, args.scores_lm_outdomain]
 
-    input_handles = [open(file, "r") if file is not None else file for file in files ]
+    input_handles = [open(file, "r") if file is not None else [None] for file in files ]
 
     with open(args.output, "w") as handle_output:
 
-        for scores in zip(*input_handles):
+        for scores in itertools.zip_longest(*input_handles):
 
             scores = [float(score) for score in scores]
 
