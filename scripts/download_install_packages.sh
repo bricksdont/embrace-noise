@@ -123,3 +123,7 @@ pip install fasttext
 mkdir -p $tools/fasttext
 
 wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P $tools/fasttext
+
+# install fairseq for language models
+
+pip install fairseq

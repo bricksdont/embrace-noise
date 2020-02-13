@@ -19,11 +19,14 @@ mkdir -p $prepared
 
 PREPARE_SUBSET=(
   "baseline"
+  "baseline.tagged"
   "baseline.reverse"
   "baseline.filtered"
   "baseline.distilled"
   "raw_paracrawl.100"
+  "raw_paracrawl.100.tagged"
   "raw_paracrawl.100.filtered"
+  "raw_paracrawl.100.filtered.tagged"
   "raw_paracrawl.100.distilled"
 )
 

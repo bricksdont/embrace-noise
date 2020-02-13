@@ -129,6 +129,8 @@ for origin_sub in $scores/*; do
     model_name=$model_name.dcce.$fraction
     data_sub=$data/model_name
 
+    num_lines=`cat $origin_sub/scores.all.sorted | wc -l`
+
     cat $origin_sub/scores.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
     cat $origin_sub/scores.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
 
@@ -152,6 +154,8 @@ for origin_sub in $mined/*; do
     model_name=$model_name.mined.$fraction
     data_sub=$data/model_name
 
+    num_lines=`cat $origin_sub/mined | wc -l`
+
     cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
     cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
 
@@ -163,6 +167,70 @@ for origin_sub in $mined/*; do
 
     . $scripts/preprocessing/concat_with_baseline_generic.sh
   done
+done
+
+# tagged versions of noise_type.noise_amount
+
+for origin_sub in $preprocessed/*; do
+
+    name=$(basename $origin_sub)
+
+    data_sub_old=$data/$name
+    data_sub_new=$data/$name.tagged
+
+    if [[ -d $data_sub_new ]]; then
+      echo "Folder exists: $data_sub_new"
+      echo "Skipping."
+      continue
+    fi
+
+    mkdir -p $data_sub_new
+
+    # add tag to training data
+
+    for lang in $src $trg; do
+      cat $data_sub_old/train.bpe.$lang | python $scripts/preprocessing/add_tag_to_lines.py --tag "<N>" > $data_sub_new/train.bpe.$lang
+    done
+
+    # link dev and test BPE files
+
+    for corpus in dev test; do
+      ln -snf $data_sub_old/$corpus.bpe.$src $data_sub_new/$corpus.bpe.$src
+      ln -snf $data_sub_old/$corpus.bpe.$trg $data_sub_new/$corpus.bpe.$trg
+    done
+
+done
+
+# tagged version of filtered data sets
+
+for origin_sub in $filtered/*; do
+
+    name=$(basename $origin_sub)
+
+    data_sub_old=$data/$name.filtered
+    data_sub_new=$data/$name.filtered.tagged
+
+    if [[ -d $data_sub_new ]]; then
+      echo "Folder exists: $data_sub_new"
+      echo "Skipping."
+      continue
+    fi
+
+    mkdir -p $data_sub_new
+
+    # add tag to training data
+
+    for lang in $src $trg; do
+      cat $data_sub_old/train.bpe.$lang | python $scripts/preprocessing/add_tag_to_lines.py --tag "<N>" > $data_sub_new/train.bpe.$lang
+    done
+
+    # link dev and test BPE files
+
+    for corpus in dev test; do
+      ln -snf $data_sub_old/$corpus.bpe.$src $data_sub_new/$corpus.bpe.$src
+      ln -snf $data_sub_old/$corpus.bpe.$trg $data_sub_new/$corpus.bpe.$trg
+    done
+
 done
 
 echo "Sizes of all files:"

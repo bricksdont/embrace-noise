@@ -61,8 +61,10 @@ sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra $base/script
 
 # individual training data for each experiment
 
-for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
-    for noise_amount in 05 10 20 50 100; do
+# for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
+for noise_type in raw_paracrawl; do
+    # for noise_amount in 05 10 20 50 100; do
+    for noise_amount in 100; do
 
       echo "#######################################"
 
@@ -102,6 +104,8 @@ for noise_type in misaligned_sent misordered_words_src misordered_words_trg wron
     done
 done
 
+shopt -s nullglob
+
 for filter_sub in $filtered/*; do
 
     echo "filter_sub: $filter_sub"
@@ -116,6 +120,12 @@ for filter_sub in $filtered/*; do
       ln -snf $data/raw/$corpus/$corpus.tok.$src $data_sub/$corpus.tok.$src
       ln -snf $data/raw/$corpus/$corpus.tok.$trg $data_sub/$corpus.tok.$trg
     done
+
+    if [[ -f $data_sub/$corpus.bpe.$src ]]; then
+        echo "File exists: $data_sub/$corpus.bpe.$src"
+        echo "Skipping."
+        continue
+    fi
 
     # folder for BPE model: do NOT train new BPE models, always use baseline model
 
