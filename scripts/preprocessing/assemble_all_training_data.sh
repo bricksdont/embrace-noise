@@ -171,79 +171,66 @@ done
 
 # tagged versions of noise_type.noise_amount
 
-for origin_sub in $preprocessed/*; do
+for preprocessed_sub in $preprocessed/*; do
 
-    name=$(basename $origin_sub)
+    model_name=$(basename $preprocessed_sub)
 
-    if [[ $name == "baseline" ]]; then
-      # tagging filtered baseline does not make sense
+    if [[ $model_name == "baseline" ]]; then
+      # tagging baseline does not make sense
+      echo "Skipping baseline.tagged"
       continue
     fi
 
-    data_sub_old=$data/$name
-    data_sub_new=$data/$name.tagged
+    origin_sub=$data/$model_name.tagged
 
-    echo "Considering: $data_sub_new"
-
-    if [[ -d $data_sub_new ]]; then
-      echo "Folder exists: $data_sub_new"
-      echo "Skipping."
-      continue
-    fi
-
-    mkdir -p $data_sub_new
+    mkdir -p $origin_sub
 
     # add tag to training data
 
     for lang in $src $trg; do
-      cat $data_sub_old/train.bpe.$lang | python $scripts/preprocessing/add_tag_to_lines.py --tag "<N>" > $data_sub_new/train.bpe.$lang
+      cat $preprocessed_sub/train.bpe.$lang | python $scripts/preprocessing/add_tag_to_lines.py --tag "<N>" > $origin_sub/train.bpe.$lang
     done
 
-    # link dev and test BPE files
+    if [[ -d $data_sub ]]; then
+    echo "data_sub exists: $data_sub"
+    echo "Skipping."
+    continue
+    fi
 
-    for corpus in dev test; do
-      ln -snf $data_sub_old/$corpus.bpe.$src $data_sub_new/$corpus.bpe.$src
-      ln -snf $data_sub_old/$corpus.bpe.$trg $data_sub_new/$corpus.bpe.$trg
-    done
+    . $scripts/preprocessing/concat_with_baseline_generic.sh
 
 done
 
 # tagged version of filtered data sets
 
-for origin_sub in $filtered/*; do
+for filtered_sub in $filtered/*; do
 
-    name=$(basename $origin_sub)
+    model_name=$(basename $filtered_sub)
+    model_name=$model_name."filtered"
 
-    if [[ $name == "baseline" ]]; then
+    if [[ $model_name == "baseline" ]]; then
       # tagging filtered baseline does not make sense
+      echo "Skipping baseline.filtered.tagged"
       continue
     fi
 
-    data_sub_old=$data/$name.filtered
-    data_sub_new=$data/$name.filtered.tagged
+    origin_sub=$data/$model_name.tagged
 
-    echo "Considering: $data_sub_new"
-
-    if [[ -d $data_sub_new ]]; then
-      echo "Folder exists: $data_sub_new"
-      echo "Skipping."
-      continue
-    fi
-
-    mkdir -p $data_sub_new
+    mkdir -p $origin_sub
 
     # add tag to training data
 
     for lang in $src $trg; do
-      cat $data_sub_old/train.bpe.$lang | python $scripts/preprocessing/add_tag_to_lines.py --tag "<N>" > $data_sub_new/train.bpe.$lang
+      cat $filtered_sub/train.bpe.$lang | python $scripts/preprocessing/add_tag_to_lines.py --tag "<N>" > $origin_sub/train.bpe.$lang
     done
 
-    # link dev and test BPE files
+    if [[ -d $data_sub ]]; then
+    echo "data_sub exists: $data_sub"
+    echo "Skipping."
+    continue
+    fi
 
-    for corpus in dev test; do
-      ln -snf $data_sub_old/$corpus.bpe.$src $data_sub_new/$corpus.bpe.$src
-      ln -snf $data_sub_old/$corpus.bpe.$trg $data_sub_new/$corpus.bpe.$trg
-    done
+    . $scripts/preprocessing/concat_with_baseline_generic.sh
 
 done
 
