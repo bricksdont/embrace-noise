@@ -175,6 +175,11 @@ for origin_sub in $preprocessed/*; do
 
     name=$(basename $origin_sub)
 
+    if [[ $name == "baseline" ]]; then
+      # tagging filtered baseline does not make sense
+      continue
+    fi
+
     data_sub_old=$data/$name
     data_sub_new=$data/$name.tagged
 
