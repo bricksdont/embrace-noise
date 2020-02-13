@@ -181,7 +181,10 @@ for preprocessed_sub in $preprocessed/*; do
       continue
     fi
 
-    origin_sub=$preprocessed/$model_name.tagged
+    model_name=$model_name.tagged
+
+    origin_sub=$preprocessed/$model_name
+    data_sub=$data/$model_name
 
     mkdir -p $origin_sub
 
@@ -206,7 +209,6 @@ done
 for filtered_sub in $filtered/*; do
 
     model_name=$(basename $filtered_sub)
-    model_name=$model_name."filtered"
 
     if [[ $model_name == "baseline" ]]; then
       # tagging filtered baseline does not make sense
@@ -214,7 +216,10 @@ for filtered_sub in $filtered/*; do
       continue
     fi
 
-    origin_sub=$preprocessed/$model_name.tagged
+    model_name=$model_name.filtered.tagged
+
+    origin_sub=$preprocessed/$model_name
+    data_sub=$data/$model_name
 
     mkdir -p $origin_sub
 
