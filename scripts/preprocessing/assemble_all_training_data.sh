@@ -209,6 +209,11 @@ for origin_sub in $filtered/*; do
 
     name=$(basename $origin_sub)
 
+    if [[ $name == "baseline" ]]; then
+      # tagging filtered baseline does not make sense
+      continue
+    fi
+
     data_sub_old=$data/$name.filtered
     data_sub_new=$data/$name.filtered.tagged
 

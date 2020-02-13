@@ -32,7 +32,8 @@ def main():
         line = line.strip()
 
         if line == "":
-            logging.error("Line %d is empty" % seen)
+            print(args.tag)
+            continue
 
         tokens = line.split(" ")
 

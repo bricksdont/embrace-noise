@@ -20,7 +20,6 @@ mkdir -p models
 
 TRAIN_SUBSET=(
   "baseline"
-  "baseline.tagged"
   "baseline.reverse"
   "baseline.filtered"
   "baseline.distilled"
