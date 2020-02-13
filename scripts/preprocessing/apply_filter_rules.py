@@ -10,12 +10,14 @@ from collections import defaultdict
 RULE_LID = "language-identification"
 RULE_RATIO = "ratio"
 RULE_OVERLAP = "overlap"
-RULE_LENGTH = "length"
+RULE_MIN_LENGTH = "min-length"
+RULE_MAX_LENGTH = "max-length"
 
 RULES = [RULE_LID,
          RULE_RATIO,
          RULE_OVERLAP,
-         RULE_LENGTH]
+         RULE_MIN_LENGTH,
+         RULE_MAX_LENGTH]
 
 
 def parse_args():
@@ -23,7 +25,10 @@ def parse_args():
 
     parser.add_argument("--threshold-ratio", type=float, help="Threshold for diverging number of tokens in source and target",
                         default=2.0, required=False)
-    parser.add_argument("--threshold-length", type=float,
+    parser.add_argument("--threshold-min-length", type=float,
+                        help="Threshold for absolute number of tokens in either source or target",
+                        default=3, required=False)
+    parser.add_argument("--threshold-max-length", type=float,
                         help="Threshold for absolute number of tokens in either source or target",
                         default=100, required=False)
     parser.add_argument("--threshold-overlap", type=float,
@@ -93,12 +98,22 @@ def rule_lid_ok(src_line, trg_line, src_lang, trg_lang, language_identifier):
 
     return True
 
-def rule_length_ok(src_len, trg_len, threshold_length):
+def rule_max_length_ok(src_len, trg_len, threshold_max_length):
 
-    if src_len > threshold_length:
+    if src_len > threshold_max_length:
         return False
 
-    if trg_len > threshold_length:
+    if trg_len > threshold_max_length:
+        return False
+
+    return True
+
+def rule_min_length_ok(src_len, trg_len, threshold_min_length):
+
+    if src_len < threshold_min_length:
+        return False
+
+    if trg_len < threshold_min_length:
         return False
 
     return True
@@ -168,9 +183,14 @@ def main():
                 src_len = len(src_tokens)
                 trg_len = len(trg_tokens)
 
-            if RULE_LENGTH in args.rules:
-                if not rule_length_ok(src_len, trg_len, args.threshold_length):
-                    stats[RULE_LENGTH] += 1
+            if RULE_MIN_LENGTH in args.rules:
+                if not rule_min_length_ok(src_len, trg_len, args.threshold_min_length):
+                    stats[RULE_MIN_LENGTH] += 1
+                    continue
+
+            if RULE_MAX_LENGTH in args.rules:
+                if not rule_max_length_ok(src_len, trg_len, args.threshold_max_length):
+                    stats[RULE_MAX_LENGTH] += 1
                     continue
 
             if RULE_RATIO in args.rules:
