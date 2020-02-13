@@ -211,7 +211,7 @@ for origin_sub in $filtered/*; do
 
     data_sub_old=$data/$name.filtered
     data_sub_new=$data/$name.filtered.tagged
-  
+
     echo "Considering: $data_sub_new"
 
     if [[ -d $data_sub_new ]]; then

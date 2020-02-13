@@ -23,10 +23,18 @@ def main():
     logging.debug(args)
 
     num_bad = 0
+    seen = 0
 
     for line in sys.stdin:
 
-        tokens = line.strip().split(" ")
+        seen += 1
+
+        line = line.strip()
+
+        if line == "":
+            logging.error("Line %d is empty" % seen)
+
+        tokens = line.split(" ")
 
         if tokens[0][0] == "<" and tokens[0][-1] == ">":
             logging.warning("First token of sentence already seems to be a special indicator tag: '%s'." % tokens[0])
