@@ -138,7 +138,7 @@ def main():
 
         for scores in itertools.zip_longest(*input_handles):
 
-            scores = [float(score) for score in scores]
+            scores = [float(score) if score is not None else None for score in scores]
 
             score_nmt_forward, score_nmt_backward, score_lm_indomain, score_lm_outdomain = scores
 
