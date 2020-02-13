@@ -22,11 +22,7 @@ def main():
     logging.basicConfig(level=logging.DEBUG)
     logging.debug(args)
 
-    seen = 0
-
     for line in sys.stdin:
-
-        seen += 1
 
         line = line.strip()
 
