@@ -151,4 +151,6 @@ pip install Cython numpy
 
 # install fairseq for language models
 
-pip install fairseq
+# specific version newer than latest release
+
+pip install git+git://github.com/pytorch/fairseq.git@c1848270723fa4be7cfb0bc92a5d14546a80d879

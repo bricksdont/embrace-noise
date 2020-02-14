@@ -17,7 +17,7 @@ scores_lm=$base/scores_lm
 
 mkdir -p $scores_lm
 
-score_type="neglogprob"
+score_type="logprob"
 
 # basic approach: score all filtered data sets
 
