@@ -40,6 +40,10 @@ git clone https://github.com/bricksdont/moses-scripts $tools/moses-scripts
 
 pip install fasttext
 
+# fix reload for continued training bug
+
+pip install --upgrade numpy==1.16.1
+
 ###########################################
 
 # THEN source CPU env and do the same again

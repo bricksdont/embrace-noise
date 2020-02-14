@@ -54,8 +54,17 @@ for prepared_sub in $prepared/*; do
 
     if [[ -d $model_path ]]; then
         echo "Folder exists: $model_path"
-        echo "Skipping."
-        continue
+
+        training_finished=`grep "Training finished" $model_path/log | wc -l`
+
+        if [[ $training_finished == 0 ]]; then
+            echo "Training not finished"
+            echo "Will continue training."
+        else
+            echo "Training is finished"
+            echo "Skipping."
+            continue
+        fi
     fi
 
     if [ $(contains "${TRAIN_SUBSET[@]}" $name) == "n" ]; then
