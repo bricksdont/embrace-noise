@@ -56,7 +56,7 @@ def main():
 
             score = lm.score(line)['positional_scores'].mean()
 
-            if args.score_type in [SCORE_TYPE_PPL, SCORE_TYPE_LOGPROB]:
+            if args.score_type in [SCORE_TYPE_PPL, SCORE_TYPE_NEGLOGPROB]:
                 score = score.neg()
 
             if args.score_type == SCORE_TYPE_PPL:
