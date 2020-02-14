@@ -9,6 +9,7 @@ module load hydra
 
 trg=en
 
+data=$base/data
 scripts=$base/scripts
 preprocessed=$base/preprocessed
 
@@ -41,7 +42,7 @@ for name in baseline raw_paracrawl.100; do
   # link dev and test BPE files
 
   for corpus in dev test; do
-    ln -snf $preprocessed_sub/$corpus/$corpus.bpe.$trg $preprocessed_lm_sub/$corpus.bpe.$trg
+    ln -snf $data/baseline/$corpus.bpe.$trg $preprocessed_lm_sub/$corpus.bpe.$trg
   done
 
   sbatch --cpus-per-task=$num_workers --time=01:00:00 --mem=4G --partition=hydra $scripts/preprocessing/preprocess_lm_generic.sh $preprocessed_lm_sub $preprocessed_lm_sub $trg $num_workers
