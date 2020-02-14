@@ -19,7 +19,7 @@ for preprocessed_lm_sub in $preprocessed_lm/*; do
 
   name=$(basename $preprocessed_lm_sub)
 
-  echo "$name"
+  echo "preprocessed_lm_sub: $preprocessed_lm_sub"
 
   models_lm_sub=$models_lm/$name
 

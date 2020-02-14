@@ -33,4 +33,3 @@ for translations_sub in $translations/*; do
     . $base/scripts/evaluation/evaluate_generic.sh
 
 done
-

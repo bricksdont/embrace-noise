@@ -21,6 +21,8 @@ num_workers=32
 
 for name in baseline raw_paracrawl.100; do
 
+  echo "LM model: $name"
+
   preprocessed_sub=$preprocessed/$name
   preprocessed_lm_sub=$preprocessed_lm/$name
 
