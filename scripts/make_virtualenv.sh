@@ -22,7 +22,15 @@ virtualenv -p python3 $base/venvs/laser3
 
 # fourth one for fairseq
 
-pyenv local 3.6.0
+echo "pyenv known versions before:"
+
+pyenv install 3.6.1
+
+echo "pyenv known versions after:"
+
+pyenv versions
+
+pyenv local 3.6.1
 
 virtualenv -p python3 $base/venvs/fairseq3
 

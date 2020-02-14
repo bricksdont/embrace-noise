@@ -45,6 +45,6 @@ for name in baseline raw_paracrawl.100; do
     ln -snf $data/baseline/$corpus.bpe.$trg $preprocessed_lm_sub/$corpus.bpe.$trg
   done
 
-  sbatch --cpus-per-task=$num_workers --time=01:00:00 --mem=4G --partition=hydra $scripts/preprocessing/preprocess_lm_generic.sh $preprocessed_lm_sub $preprocessed_lm_sub $trg $num_workers
+  sbatch --cpus-per-task=$num_workers --time=00:30:00 --mem=4G --partition=hydra $scripts/preprocessing/preprocess_lm_generic.sh $preprocessed_lm_sub $preprocessed_lm_sub $trg $num_workers
 
 done

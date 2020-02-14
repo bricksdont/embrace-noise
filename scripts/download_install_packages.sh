@@ -136,7 +136,7 @@ which python
 
 source $base/venvs/fairseq3/bin/activate
 
-echo "check current python after sourcing LASER env:"
+echo "check current python after sourcing fairseq env:"
 which python
 
 # install torch
