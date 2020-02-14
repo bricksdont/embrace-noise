@@ -20,7 +20,6 @@ mkdir -p $translations
 
 TRANSLATE_SUBSET=(
   "baseline"
-  "baseline.tagged"
   "baseline.reverse"
   "baseline.filtered"
   "baseline.distilled"
@@ -61,6 +60,14 @@ for models_sub in $models/*; do
 
     if [ $(contains "${TRANSLATE_SUBSET[@]}" $name) == "n" ]; then
         echo "name: $name not in subset that should be trained"
+        echo "Skipping."
+        continue
+    fi
+
+    training_finished=`grep "Training finished" $models_sub/log | wc -l`
+
+    if [[ $training_finished == 0 ]]; then
+        echo "Training not finished"
         echo "Skipping."
         continue
     fi

@@ -2,12 +2,17 @@
 
 # calling script needs to set
 
+# $name
 # $data
 # $data_sub
 # $translations_sub
 # $evaluations_sub
 
 trg=en
+
+if [[ $name == "baseline.reverse" ]]; then
+  trg=de
+fi
 
 for corpus in dev test; do
 
