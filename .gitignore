@@ -3,10 +3,14 @@ shared_models
 tools
 filtered
 preprocessed
+preprocessed_lm
 prepared
 debug
+scores
+scores_lm
 distilled
 models
+models_lm
 data
 .idea
 translations
