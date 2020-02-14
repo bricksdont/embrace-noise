@@ -17,7 +17,7 @@ preprocessed_lm=$base/preprocessed_lm
 mkdir -p $preprocessed_lm
 
 num_lines=1000000
-num_workers=32
+num_workers=8
 
 for name in baseline raw_paracrawl.100; do
 
