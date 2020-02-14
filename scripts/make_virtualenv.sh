@@ -20,5 +20,11 @@ virtualenv -p python3 $base/venvs/sockeye3-cpu
 
 virtualenv -p python3 $base/venvs/laser3
 
+# fourth one for fairseq
+
+pyenv local 3.6.0
+
+virtualenv -p python3 $base/venvs/fairseq3
+
 echo "To activate your environment, e.g.:"
 echo "    source $base/venvs/sockeye3/bin/activate"

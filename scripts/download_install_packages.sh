@@ -124,6 +124,31 @@ mkdir -p $tools/fasttext
 
 wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P $tools/fasttext
 
+##############################
+
+# third VM for fairseq (needs Python 3.6)
+
+# source fairseq env and do the same again
+
+deactivate
+echo "check current python after deactivate:"
+which python
+
+source $base/venvs/fairseq3/bin/activate
+
+echo "check current python after sourcing LASER env:"
+which python
+
+# install torch
+
+wget https://download.pytorch.org/whl/cu100/torch-1.3.0%2Bcu100-cp36-cp36m-linux_x86_64.whl
+
+pip install torch-1.3.0+cu100-cp36-cp36m-linux_x86_64.whl
+
+rm torch-1.3.0+cu100-cp36-cp36m-linux_x86_64.whl
+
+pip install Cython numpy
+
 # install fairseq for language models
 
 pip install fairseq
