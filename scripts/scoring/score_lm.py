@@ -41,7 +41,7 @@ def main():
     logging.basicConfig(level=logging.DEBUG)
     logging.debug(args)
 
-    lm = TransformerLanguageModel.from_pretrained(args.model_dir, 'checkpoint_best.pt')
+    lm = TransformerLanguageModel.from_pretrained(args.model, 'checkpoint_best.pt')
 
     # disable dropout
 
