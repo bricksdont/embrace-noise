@@ -32,6 +32,8 @@ for name in baseline raw_paracrawl.100; do
       continue
   fi
 
+  mkdir -p $preprocessed_lm_sub
+
   # take first $num_lines lines from target BPE training data
 
   head -n $num_lines $preprocessed_sub/train.bpe.$trg > $preprocessed_lm_sub/train.bpe.$trg
