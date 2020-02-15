@@ -124,9 +124,10 @@ dcce_method="adq-dom"
 shopt -s nullglob
 
 for origin_sub in $scores/*; do
-  model_name=$(basename $origin_sub)
 
   for fraction in 0.25 0.5 0.75; do
+
+    model_name=$(basename $origin_sub)
 
     model_name=$model_name.dcce.$fraction
     data_sub=$data/model_name
