@@ -27,6 +27,22 @@ embedded=$base/embedded
 
 mkdir -p $embedded
 
+EMBED_SUBSET=(
+  "raw_paracrawl.100"
+)
+
+function contains() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            echo "y"
+            return 0
+        fi
+    }
+    echo "n"
+    return 1
+}
 
 for filtered_sub in $filtered/*; do
 
@@ -35,6 +51,14 @@ for filtered_sub in $filtered/*; do
   name=$(basename $filtered_sub)
 
   embedded_sub=$embedded/$name
+
+  if [ $(contains "${EMBED_SUBSET[@]}" $name) == "n" ]; then
+      echo "name: $name not in subset that should be embedded"
+      echo "Skipping."
+      continue
+  fi
+
+  mkdir -p $embedded_sub
 
   for lang in $src $trg; do
 
