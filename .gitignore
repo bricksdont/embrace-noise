@@ -3,6 +3,9 @@ shared_models
 tools
 filtered
 preprocessed
+embedded
+evaluation
+evaluations_lm
 preprocessed_lm
 prepared
 debug
