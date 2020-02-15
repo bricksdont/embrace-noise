@@ -29,14 +29,20 @@ def main():
 
     seen = 0
 
+    reached_desired_size = False
+
     for line in sys.stdin:
 
         if seen >= desired_size:
+            reached_desired_size = True
             break
 
         sys.stdout.write(line)
 
         seen += 1
+
+    if not reached_desired_size:
+        logging.warning("Did not reach desired size (%d): input file number of lines (%d) too low." % (desired_size, seen))
 
 if __name__ == '__main__':
     main()
