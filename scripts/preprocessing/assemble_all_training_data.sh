@@ -154,11 +154,12 @@ for origin_sub in $mined/*; do
   for fraction in 0.25 0.5 0.75; do
 
     model_name=$(basename $origin_sub)
+    original_name=$model_name
 
     model_name=$model_name.mined.$fraction
     data_sub=$data/model_name
 
-    num_lines=`cat $origin_sub/mined | wc -l`
+    num_lines=`cat $filtered/$original_name/train.bpe.$src | wc -l`
 
     cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
     cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
