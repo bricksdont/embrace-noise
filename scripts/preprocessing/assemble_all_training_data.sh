@@ -191,17 +191,17 @@ for preprocessed_sub in $preprocessed/*; do
 
     mkdir -p $origin_sub
 
+    if [[ -d $data_sub ]]; then
+      echo "data_sub exists: $data_sub"
+      echo "Skipping."
+      continue
+    fi
+
     # add tag to training data
 
     for lang in $src $trg; do
       cat $preprocessed_sub/train.bpe.$lang | python $scripts/preprocessing/add_tag_to_lines.py --tag "<N>" > $origin_sub/train.bpe.$lang
     done
-
-    if [[ -d $data_sub ]]; then
-    echo "data_sub exists: $data_sub"
-    echo "Skipping."
-    continue
-    fi
 
     . $scripts/preprocessing/concat_with_baseline_generic.sh
 
@@ -226,17 +226,17 @@ for filtered_sub in $filtered/*; do
 
     mkdir -p $origin_sub
 
+    if [[ -d $data_sub ]]; then
+      echo "data_sub exists: $data_sub"
+      echo "Skipping."
+      continue
+    fi
+
     # add tag to training data
 
     for lang in $src $trg; do
       cat $filtered_sub/train.bpe.$lang | python $scripts/preprocessing/add_tag_to_lines.py --tag "<N>" > $origin_sub/train.bpe.$lang
     done
-
-    if [[ -d $data_sub ]]; then
-    echo "data_sub exists: $data_sub"
-    echo "Skipping."
-    continue
-    fi
 
     . $scripts/preprocessing/concat_with_baseline_generic.sh
 
