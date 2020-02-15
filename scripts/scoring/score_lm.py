@@ -54,6 +54,7 @@ def main():
 
     with open(args.input, "r") as infile:
         num_lines = sum(1 for line in infile)
+        logging.debug("Number of lines in input file: %d" % num_lines)
 
     seen = 0
 
