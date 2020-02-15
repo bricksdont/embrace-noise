@@ -28,6 +28,9 @@ PREPARE_SUBSET=(
   "raw_paracrawl.100.filtered"
   "raw_paracrawl.100.filtered.tagged"
   "raw_paracrawl.100.distilled"
+  "raw_paracrawl.100.dcce.0.25"
+  "raw_paracrawl.100.dcce.0.50"
+  "raw_paracrawl.100.dcce.0.75"
 )
 
 function contains() {
