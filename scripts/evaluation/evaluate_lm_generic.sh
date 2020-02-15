@@ -6,6 +6,10 @@
 # $preprocessed_lm_sub
 # $models_lm_sub
 
+evaluations_lm_sub=$1
+preprocessed_lm_sub=$2
+models_lm_sub=$3
+
 log_file=$evaluations_lm_sub/log
 
 fairseq-eval-lm $preprocessed_lm_sub \

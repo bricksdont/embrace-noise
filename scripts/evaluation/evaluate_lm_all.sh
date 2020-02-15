@@ -27,6 +27,6 @@ for models_lm_sub in $models_lm/*; do
 
     mkdir -p $evaluations_lm_sub
 
-    . $base/scripts/evaluation/evaluate_lm_generic.sh
+    sbatch --qos=vesta --time=00:30:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/evaluation/evaluate_lm_generic.sh $evaluations_lm_sub $preprocessed_lm_sub $models_lm_sub
 
 done
