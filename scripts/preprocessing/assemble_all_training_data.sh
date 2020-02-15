@@ -132,16 +132,16 @@ for origin_sub in $scores/*; do
     model_name=$model_name.dcce.$fraction
     data_sub=$data/model_name
 
-    num_lines=`cat $origin_sub/scores.$dcce_method.all.sorted | wc -l`
-
-    cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
-    cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
-
     if [[ -d $data_sub ]]; then
       echo "data_sub exists: $data_sub"
       echo "Skipping."
       continue
     fi
+
+    num_lines=`cat $origin_sub/scores.$dcce_method.all.sorted | wc -l`
+
+    cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
+    cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
 
     . $scripts/preprocessing/concat_with_baseline_generic.sh
   done
@@ -159,20 +159,23 @@ for origin_sub in $mined/*; do
     model_name=$model_name.mined.$fraction
     data_sub=$data/model_name
 
-    num_lines=`cat $filtered/$original_name/train.bpe.$src | wc -l`
-
-    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
-    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
-
     if [[ -d $data_sub ]]; then
       echo "data_sub exists: $data_sub"
       echo "Skipping."
       continue
     fi
 
+    num_lines=`cat $filtered/$original_name/train.bpe.$src | wc -l`
+
+    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
+    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
+
     . $scripts/preprocessing/concat_with_baseline_generic.sh
   done
 done
+
+# debug: stop here t not overwrite
+exit
 
 # tagged versions of noise_type.noise_amount
 
