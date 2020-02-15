@@ -62,9 +62,11 @@ for filtered_sub in $filtered/*; do
 
   for lang in $src $trg; do
 
-      # detokenize data (LASER has its own specific tokenization)
+      if [[ ! -f $filtered_sub/train.$lang ]]; then
+        # detokenize data (LASER has its own specific tokenization)
 
-      cat $filtered_sub/train.tok.$lang | $MOSES/tokenizer/detokenizer.perl -l $lang > $filtered_sub/train.$lang
+        cat $filtered_sub/train.tok.$lang | $MOSES/tokenizer/detokenizer.perl -l $lang > $filtered_sub/train.$lang
+      fi
 
       raw_file=$filtered_sub/train.$lang
       embedded_file=$embedded_sub/train.embedded.$lang
