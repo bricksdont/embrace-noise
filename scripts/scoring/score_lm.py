@@ -7,6 +7,8 @@ import torch
 from fairseq.models.transformer_lm import TransformerLanguageModel
 
 
+LOG_INTERVAL = 10000
+
 SCORE_TYPE_PPL="perplexity"
 SCORE_TYPE_LOGPROB="logprob"
 SCORE_TYPE_NEGLOGPROB="neglogprob"
@@ -50,6 +52,11 @@ def main():
     if args.cuda:
         lm.cuda()
 
+    with open(args.input, "r") as infile:
+        num_lines = sum(1 for line in infile)
+
+    seen = 0
+
     with open(args.input, "r") as infile, open(args.output, "w") as outfile:
         for line in infile:
             line = line.strip()
@@ -63,6 +70,11 @@ def main():
                 score = score.exp()
 
             outfile.write("%f\n" % score)
+
+            seen += 1
+
+            if seen % LOG_INTERVAL == 0:
+                logging.debug("Processed lines: %d / %d" % (seen, num_lines))
 
 
 if __name__ == '__main__':
