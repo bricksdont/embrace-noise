@@ -9,6 +9,7 @@ trg=en
 
 scripts=$base/scripts
 scores=$base/scores
+filtered=$base/filtered
 scores_lm=$base/scores_lm
 
 dcce_method="adq-dom"
@@ -19,7 +20,7 @@ for scores_sub in $scores/*; do
 
   name=$(basename $scores_sub)
 
-  filtered_sub=$scores/$name
+  filtered_sub=$filtered/$name
   scores_lm_sub=$scores_lm/$name
 
   if [[ -f $scores_sub/scores.$dcce_method.dcce ]]; then
