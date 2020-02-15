@@ -26,6 +26,8 @@ device_arg=${10}
 
 export LASER=$LASER
 
+log_file=$mined_file.log
+
 python ${LASER}/source/mine_bitexts.py \
           ${raw_src} \
           ${raw_trg} \
@@ -34,4 +36,4 @@ python ${LASER}/source/mine_bitexts.py \
           --trg-embeddings ${embeddings_trg} \
           --unify --mode mine --retrieval max --margin ratio -k 4  \
           --output ${mined_file} --threshold ${mining_threshold} \
-          --verbose ${device_arg}
+          --verbose ${device_arg} 2>&1 | tee -a $log_file
