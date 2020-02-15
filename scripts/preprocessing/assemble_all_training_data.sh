@@ -138,9 +138,9 @@ for origin_sub in $scores/*; do
     cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
 
     if [[ -d $data_sub ]]; then
-    echo "data_sub exists: $data_sub"
-    echo "Skipping."
-    continue
+      echo "data_sub exists: $data_sub"
+      echo "Skipping."
+      continue
     fi
 
     . $scripts/preprocessing/concat_with_baseline_generic.sh
@@ -150,9 +150,10 @@ done
 # assemble training data for: laser mining
 
 for origin_sub in $mined/*; do
-  model_name=$(basename $origin_sub)
 
   for fraction in 0.25 0.5 0.75; do
+
+    model_name=$(basename $origin_sub)
 
     model_name=$model_name.mined.$fraction
     data_sub=$data/model_name
@@ -163,9 +164,9 @@ for origin_sub in $mined/*; do
     cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
 
     if [[ -d $data_sub ]]; then
-    echo "data_sub exists: $data_sub"
-    echo "Skipping."
-    continue
+      echo "data_sub exists: $data_sub"
+      echo "Skipping."
+      continue
     fi
 
     . $scripts/preprocessing/concat_with_baseline_generic.sh

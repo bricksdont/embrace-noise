@@ -31,6 +31,9 @@ TRAIN_SUBSET=(
   "raw_paracrawl.100.dcce.0.25"
   "raw_paracrawl.100.dcce.0.5"
   "raw_paracrawl.100.dcce.0.75"
+  "raw_paracrawl.100.mined.0.25"
+  "raw_paracrawl.100.mined.0.5"
+  "raw_paracrawl.100.mined.0.75"
 )
 
 function contains() {
