@@ -119,6 +119,8 @@ done
 
 # assemble training data for: DCCE score filtering
 
+dcce_method="adq-dom"
+
 shopt -s nullglob
 
 for origin_sub in $scores/*; do
@@ -129,10 +131,10 @@ for origin_sub in $scores/*; do
     model_name=$model_name.dcce.$fraction
     data_sub=$data/model_name
 
-    num_lines=`cat $origin_sub/scores.all.sorted | wc -l`
+    num_lines=`cat $origin_sub/scores.$dcce_method.all.sorted | wc -l`
 
-    cat $origin_sub/scores.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
-    cat $origin_sub/scores.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
+    cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
+    cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
 
     if [[ -d $data_sub ]]; then
     echo "data_sub exists: $data_sub"
