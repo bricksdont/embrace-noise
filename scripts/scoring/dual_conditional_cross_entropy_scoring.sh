@@ -22,8 +22,8 @@ for scores_sub in $scores/*; do
   filtered_sub=$scores/$name
   scores_lm_sub=$scores_lm/$name
 
-  if [[ -f $scores_sub/scores.dcce ]]; then
-    echo "File exists: $scores_sub/scores.dcce"
+  if [[ -f $scores_sub/scores.$dcce_method.dcce ]]; then
+    echo "File exists: $scores_sub/scores.$dcce_method.dcce"
     echo "Skipping"
     continue
   fi
