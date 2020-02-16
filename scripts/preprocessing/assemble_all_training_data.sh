@@ -138,7 +138,7 @@ for origin_sub in $scores/*; do
     model_name=$(basename $origin_sub)
 
     model_name=$model_name.dcce.$fraction
-    data_sub=$data/model_name
+    data_sub=$data/$model_name
 
     if [[ -d $data_sub ]]; then
       echo "data_sub exists: $data_sub"
@@ -165,7 +165,7 @@ for origin_sub in $mined/*; do
     original_name=$model_name
 
     model_name=$model_name.mined.$fraction
-    data_sub=$data/model_name
+    data_sub=$data/$model_name
 
     if [[ -d $data_sub ]]; then
       echo "data_sub exists: $data_sub"
