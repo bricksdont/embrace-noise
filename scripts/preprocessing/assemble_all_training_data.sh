@@ -2,6 +2,8 @@
 
 base=/net/cephfs/home/mathmu/scratch/noise-distill
 
+source $base/venvs/sockeye3-cpu/bin/activate
+
 src=de
 trg=en
 
@@ -13,6 +15,12 @@ filtered=$base/filtered
 distilled=$base/distilled
 scores=$base/scores
 mined=$base/mined
+
+shared_models=$base/shared_models
+
+MOSES=$base/tools/moses-scripts/scripts
+
+bpe_vocab_threshold=50
 
 # preconditions: first run the following:
 
@@ -167,8 +175,17 @@ for origin_sub in $mined/*; do
 
     num_lines=`cat $filtered/$original_name/train.bpe.$src | wc -l`
 
-    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
-    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
+    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.$src
+    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.$trg
+
+    for lang in $src $trg; do
+      cat $origin_sub/train.$lang | perl $MOSES/tokenizer/normalize-punctuation.perl $lang > $origin_sub/train.normalized.$lang
+      cat $origin_sub/train.normalized.$lang | perl $MOSES/tokenizer/tokenizer.perl -a -q -l $lang > $origin_sub/train.tok.$lang
+
+      subword-nmt apply-bpe -c $shared_models/baseline/$src$trg.bpe \
+      --vocabulary $shared_models/baseline/vocab.$lang \
+      --vocabulary-threshold $bpe_vocab_threshold < $origin_sub/train.tok.$lang > $origin_sub/train.bpe.$lang
+    done
 
     . $scripts/preprocessing/concat_with_baseline_generic.sh
   done
