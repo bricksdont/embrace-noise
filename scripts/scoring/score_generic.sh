@@ -17,6 +17,8 @@ model_path=$5
 max_seq_len=$6
 score_type=$7
 
+log_file=$output.log
+
 OMP_NUM_THREADS=1 python -m sockeye.score \
         --source $input_src \
         --target $input_trg \
@@ -27,4 +29,4 @@ OMP_NUM_THREADS=1 python -m sockeye.score \
         --disable-device-locking \
         --max-seq-len $max_seq_len:$max_seq_len \
         --score-type $score_type \
-        --output $output
+        --output $output 2>&1 | tee -a $log_file
