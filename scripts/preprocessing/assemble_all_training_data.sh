@@ -201,7 +201,7 @@ for mined_sub in $mined/*; do
 
           num_lines=`cat $filtered/$original_name/train.bpe.$src | wc -l`
 
-          origin_sub2=$(mktemp -d)
+          origin_sub=$(mktemp -d)
 
           cat $mined_sub/mined.$mining_method.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.$src
           cat $mined_sub/mined.$mining_method.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.$trg
