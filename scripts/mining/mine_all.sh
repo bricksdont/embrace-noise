@@ -50,7 +50,7 @@ for embedded_sub in $embedded/*; do
         mined_file=$mined_sub/mined.$mining_method
 
         if [[ -f $mined_file ]] ; then
-          echo "File exists: $mined_sub"
+          echo "File exists: $mined_file"
           echo "Skipping."
           continue
         fi
