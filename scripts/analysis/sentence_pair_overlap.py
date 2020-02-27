@@ -44,7 +44,7 @@ def main():
 
     assert num_lines == len(lines[1]), "Files must have the same number of lines"
 
-    num_intersecting = intersection(*lines)
+    num_intersecting = len(intersection(*lines))
 
     logging.debug("Number of intersecting lines / total: %d / %d" % (num_intersecting, num_lines))
 
