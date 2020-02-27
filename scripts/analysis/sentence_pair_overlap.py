@@ -6,8 +6,8 @@ import logging
 
 
 COMMON = "common"
-ONLY_A = "a-only"
-ONLY_B = "b-only"
+ONLY_A = "only-a"
+ONLY_B = "only-b"
 NOOUT = "no-out"
 
 OUTPUT_OPTIONS = [COMMON,
