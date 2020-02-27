@@ -8,7 +8,7 @@ import logging
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("inputs", type=str, nargs="+", help="Two files to be compared", required=True)
+    parser.add_argument("--inputs", type=str, nargs="+", help="Two files to be compared", required=True)
 
     args = parser.parse_args()
 
