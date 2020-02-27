@@ -71,15 +71,15 @@ def main():
         if args.output == COMMON:
             for line in lines[0]:
                 if line in lines[1]:
-                    print(line)
+                    print(line, end='')
         elif args.output == ONLY_A:
             for line in lines[0]:
                 if line not in lines[1]:
-                    print(line)
+                    print(line, end='')
         elif args.output == ONLY_B:
             for line in lines[1]:
                 if line not in lines[0]:
-                    print(line)
+                    print(line, end='')
 
     logging.debug("Overlap\t: %d" % num_intersecting)
 
