@@ -27,15 +27,15 @@ for scores_sub in $scores/*; do
 
   dcce_sub=$dcce/$name
 
-  if [[ -d $dcce_sub ]]; then
-    echo "Folder exists: $dcce_sub"
-    echo "Skipping"
-    continue
-  fi
-
   mkdir -p $dcce_sub
 
   for dcce_method in adq adq-dom; do
+
+      if [[ -d $dcce_sub/scores.$dcce_method ]]; then
+        echo "File exists: $dcce_sub/scores.$dcce_method"
+        echo "Skipping"
+        continue
+      fi
 
       python $scripts/scoring/dual_conditional_cross_entropy_scoring.py \
         --scores-nmt-forward $scores_sub/scores.nmt.forward \
