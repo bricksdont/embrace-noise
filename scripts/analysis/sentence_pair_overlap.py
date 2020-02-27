@@ -42,11 +42,13 @@ def main():
 
     num_lines = len(lines[0])
 
+    num_unique_lines = len(set(lines[0]))
+
     assert num_lines == len(lines[1]), "Files must have the same number of lines"
 
     num_intersecting = len(intersection(*lines))
 
-    logging.debug("Number of intersecting lines / total: %d / %d" % (num_intersecting, num_lines))
+    logging.debug("Number of intersecting lines / total unique lines / total: %d / %d / %d" % (num_intersecting, num_unique_lines, num_lines))
 
 if __name__ == '__main__':
     main()
