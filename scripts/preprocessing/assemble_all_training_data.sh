@@ -43,12 +43,18 @@ bpe_vocab_threshold=50
 # vanilla baseline custom assemble
 
 data_sub=$data/baseline
-mkdir -p $data_sub
 
-for corpus in train dev test; do
-  ln -snf $preprocessed/baseline/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
-  ln -snf $preprocessed/baseline/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
-done
+if [[ ! -d  $data_sub ]]; then
+    mkdir -p $data_sub
+
+    for corpus in train dev test; do
+      ln -snf $preprocessed/baseline/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
+      ln -snf $preprocessed/baseline/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
+    done
+else
+    echo "data_sub exists: $data_sub"
+    echo "Skipping."
+fi
 
 # assemble training data for: $noise_type.$noise_amount
 # (without vanilla baseline, should be skipped)
@@ -70,15 +76,22 @@ done
 # custom assemble for baseline.filtered (do not concat with unfiltered baseline)
 
 data_sub=$data/baseline.filtered
-mkdir -p $data_sub
 
-ln -snf $filtered/baseline/train.bpe.$src $data_sub/train.bpe.$src
-ln -snf $filtered/baseline/train.bpe.$trg $data_sub/train.bpe.$trg
+if [[ ! -d  $data_sub ]]; then
+    mkdir -p $data_sub
 
-for corpus in dev test; do
-  ln -snf $preprocessed/baseline/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
-  ln -snf $preprocessed/baseline/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
-done
+    ln -snf $filtered/baseline/train.bpe.$src $data_sub/train.bpe.$src
+    ln -snf $filtered/baseline/train.bpe.$trg $data_sub/train.bpe.$trg
+
+    for corpus in dev test; do
+      ln -snf $preprocessed/baseline/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
+      ln -snf $preprocessed/baseline/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
+    done
+else
+    echo "data_sub exists: $data_sub"
+    echo "Skipping."
+fi
+
 
 # assemble training data for: $noise_type.$noise_amount.filtered
 # (without filtered baseline, should be skipped)
@@ -119,12 +132,18 @@ done
 # assemble training data for: reverse baseline model (custom)
 
 data_sub=$data/baseline.reverse
-mkdir -p $data_sub
 
-for corpus in train dev test; do
-  ln -snf $data/baseline/$corpus.bpe.$src $data_sub/$corpus.bpe.$trg
-  ln -snf $data/baseline/$corpus.bpe.$trg $data_sub/$corpus.bpe.$src
-done
+if [[ ! -d  $data_sub ]]; then
+    mkdir -p $data_sub
+
+    for corpus in train dev test; do
+      ln -snf $data/baseline/$corpus.bpe.$src $data_sub/$corpus.bpe.$trg
+      ln -snf $data/baseline/$corpus.bpe.$trg $data_sub/$corpus.bpe.$src
+    done
+else
+    echo "data_sub exists: $data_sub"
+    echo "Skipping."
+fi
 
 # assemble training data for: DCCE score filtering
 
