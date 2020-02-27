@@ -1,6 +1,5 @@
 #! /usr/bin/python3
 
-import sys
 import argparse
 import logging
 
@@ -11,6 +10,11 @@ def parse_args():
     parser.add_argument("--inputs", type=str, nargs="+", help="Two files to be compared", required=True)
     parser.add_argument("--strict", action="store_true", help="Require files to have same number of lines", required=False,
                         default=False)
+    parser.add_argument("--fast", action="store_true", help="Simply compute number of overlapping lines without enumerating them",
+                        required=False, default=False)
+    parser.add_argument("--output", type=str,
+                        help="Print to STDOUT overlapping lines, or ones that don't",
+                        required=False, default="overlap", choices=["overlap", "no-overlap"])
 
     args = parser.parse_args()
 
@@ -49,7 +53,16 @@ def main():
     if args.strict:
         assert num_lines[0] == num_lines[1], "Files must have the same number of lines"
 
-    num_intersecting = len(intersection(*lines))
+    if args.fast:
+        num_intersecting = len(intersection(*lines))
+    else:
+        for line in lines[0]:
+            if line in lines[1]:
+                if args.output == "overlap":
+                    print(line)
+            else:
+                if args.output == "no-overlap":
+                    print(line)
 
     logging.debug("Overlap lines: %d" % num_intersecting)
 
