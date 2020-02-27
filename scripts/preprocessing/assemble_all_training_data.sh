@@ -149,13 +149,13 @@ fi
 
 shopt -s nullglob
 
-for origin_sub in $dcce/*; do
+for dcce_sub in $dcce/*; do
 
   for fraction in 0.25 0.5 0.75; do
 
       for dcce_method in adq adq-dom; do
 
-          model_name=$(basename $origin_sub)
+          model_name=$(basename $dcce_sub)
 
           model_name=$model_name.dcce.$dcce_method.$fraction
           data_sub=$data/$model_name
@@ -166,14 +166,12 @@ for origin_sub in $dcce/*; do
             continue
           fi
 
-          num_lines=`cat $origin_sub/scores.$dcce_method.all.sorted | wc -l`
+          num_lines=`cat $dcce_sub/scores.$dcce_method.all.sorted | wc -l`
 
-          origin_sub2=$(mktemp -d)
+          origin_sub=$(mktemp -d)
 
-          cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub2/train.bpe.$src
-          cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub2/train.bpe.$trg
-
-          origin_sub=$origin_sub2
+          cat $dcce_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
+          cat $dcce_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
 
           . $scripts/preprocessing/concat_with_baseline_generic.sh
 
@@ -183,13 +181,13 @@ done
 
 # assemble training data for: laser mining
 
-for origin_sub in $mined/*; do
+for mined_sub in $mined/*; do
 
   for fraction in 0.25 0.5 0.75; do
 
       for mining_method in mine score; do
 
-          model_name=$(basename $origin_sub)
+          model_name=$(basename $mined_sub)
           original_name=$model_name
 
           model_name=$model_name.mined.$mining_method.$fraction
@@ -205,10 +203,8 @@ for origin_sub in $mined/*; do
 
           origin_sub2=$(mktemp -d)
 
-          cat $origin_sub/mined.$mining_method.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub2/train.$src
-          cat $origin_sub/mined.$mining_method.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub2/train.$trg
-
-          origin_sub=$origin_sub2
+          cat $mined_sub/mined.$mining_method.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.$src
+          cat $mined_sub/mined.$mining_method.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.$trg
 
           for lang in $src $trg; do
             cat $origin_sub/train.$lang | perl $MOSES/tokenizer/normalize-punctuation.perl $lang > $origin_sub/train.normalized.$lang
