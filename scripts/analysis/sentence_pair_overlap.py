@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 
+import time
 import argparse
 import logging
 
@@ -35,6 +36,8 @@ def intersection(a, b):
 
 def main():
 
+    tic = time.time()
+
     args = parse_args()
 
     logging.basicConfig(level=logging.DEBUG)
@@ -56,8 +59,11 @@ def main():
     if args.fast:
         num_intersecting = len(intersection(*lines))
     else:
+        num_intersecting = 0
+
         for line in lines[0]:
             if line in lines[1]:
+                num_intersecting += 1
                 if args.output == "overlap":
                     print(line)
             else:
@@ -68,6 +74,10 @@ def main():
 
     for name, nl, nlu in zip(["File A", "File B"], num_lines, num_unique_lines):
         logging.debug("%s\tUnique lines / total lines: %d / %d" % (name, nlu, nl))
+
+    toc = time.time() - tic
+
+    logging.debug("Time taken: %f seconds" % toc)
 
 if __name__ == '__main__':
     main()
