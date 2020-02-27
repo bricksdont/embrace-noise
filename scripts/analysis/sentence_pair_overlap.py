@@ -9,6 +9,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--inputs", type=str, nargs="+", help="Two files to be compared", required=True)
+    parser.add_argument("--strict", action="store_true", help="Require files to have same number of lines", required=False,
+                        default=False)
 
     args = parser.parse_args()
 
@@ -44,7 +46,8 @@ def main():
 
     num_unique_lines = len(set(lines[0]))
 
-    assert num_lines == len(lines[1]), "Files must have the same number of lines"
+    if args.strict:
+        assert num_lines == len(lines[1]), "Files must have the same number of lines"
 
     num_intersecting = len(intersection(*lines))
 
