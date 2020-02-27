@@ -77,7 +77,7 @@ def main():
             if seen % 50000 == 0:
                 logging.debug("%d / %d" % (seen, num_lines[0]))
 
-    logging.debug("Overlap lines: %d" % num_intersecting)
+    logging.debug("Overlap\t: %d" % num_intersecting)
 
     for name, nl, nlu in zip(["File A", "File B"], num_lines, num_unique_lines):
         logging.debug("%s\tUnique lines / total lines: %d / %d" % (name, nlu, nl))
