@@ -42,16 +42,19 @@ def main():
 
     lines = [handle.readlines() for handle in handles]
 
-    num_lines = len(lines[0])
+    num_lines = [len(l) for l in lines]
 
-    num_unique_lines = len(set(lines[0]))
+    num_unique_lines = [len(set(l)) for l in lines]
 
     if args.strict:
-        assert num_lines == len(lines[1]), "Files must have the same number of lines"
+        assert num_lines[0] == num_lines[1], "Files must have the same number of lines"
 
     num_intersecting = len(intersection(*lines))
 
-    logging.debug("Number of intersecting lines / total unique lines / total: %d / %d / %d" % (num_intersecting, num_unique_lines, num_lines))
+    logging.debug("Overlap lines: %d" % num_intersecting)
+
+    for name, nl, nlu in zip(["File A", "File B"], num_lines, num_unique_lines):
+        logging.debug("%s\tUnique lines / total lines: %d / %d" % (name, nlu, nl))
 
 if __name__ == '__main__':
     main()
