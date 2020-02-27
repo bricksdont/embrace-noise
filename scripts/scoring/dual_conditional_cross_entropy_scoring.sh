@@ -12,7 +12,9 @@ scores=$base/scores
 filtered=$base/filtered
 scores_lm=$base/scores_lm
 
-dcce_method="adq-dom"
+dcce=$base/dcce
+
+mkdir -p $dcce
 
 for scores_sub in $scores/*; do
 
@@ -23,28 +25,35 @@ for scores_sub in $scores/*; do
   filtered_sub=$filtered/$name
   scores_lm_sub=$scores_lm/$name
 
-  if [[ -f $scores_sub/scores.$dcce_method.dcce ]]; then
-    echo "File exists: $scores_sub/scores.$dcce_method.dcce"
+  dcce_sub=$dcce/$name
+
+  if [[ -d $dcce_sub ]]; then
+    echo "Folder exists: $dcce_sub"
     echo "Skipping"
     continue
   fi
 
-  python $scripts/scoring/dual_conditional_cross_entropy_scoring.py \
-    --scores-nmt-forward $scores_sub/scores.nmt.forward \
-    --scores-nmt-backward $scores_sub/scores.nmt.backward \
-    --scores-lm-indomain $scores_lm_sub/scores.lm.indomain \
-    --scores-lm-outdomain $scores_lm_sub/scores.lm.outdomain \
-    --method $dcce_method \
-    --output $scores_sub/scores.$dcce_method.dcce \
-    --src-lang $src \
-    --trg-lang $trg
+  mkdir -p $dcce_sub
 
-    # create better view of the data
+  for dcce_method in adq adq-dom; do
 
-    paste $scores_sub/scores.$dcce_method.dcce $filtered_sub/train.bpe.$src $filtered_sub/train.bpe.$trg > $scores_sub/scores.$dcce_method.all
+      python $scripts/scoring/dual_conditional_cross_entropy_scoring.py \
+        --scores-nmt-forward $scores_sub/scores.nmt.forward \
+        --scores-nmt-backward $scores_sub/scores.nmt.backward \
+        --scores-lm-indomain $scores_lm_sub/scores.lm.indomain \
+        --scores-lm-outdomain $scores_lm_sub/scores.lm.outdomain \
+        --method $dcce_method \
+        --output $dcce_sub/scores.$dcce_method \
+        --src-lang $src \
+        --trg-lang $trg
 
-    # reverse numerical sort
+        # create better view of the data
 
-    cat $scores_sub/scores.$dcce_method.all | sort -rn > $scores_sub/scores.$dcce_method.all.sorted
+        paste $dcce_sub/scores.$dcce_method $filtered_sub/train.bpe.$src $filtered_sub/train.bpe.$trg > $dcce_sub/scores.$dcce_method.all
 
+        # reverse numerical sort
+
+        cat $dcce_sub/scores.$dcce_method.all | sort -rn > $dcce_sub/scores.$dcce_method.all.sorted
+
+    done
 done

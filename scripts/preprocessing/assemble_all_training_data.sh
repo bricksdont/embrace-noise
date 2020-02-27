@@ -15,6 +15,7 @@ filtered=$base/filtered
 distilled=$base/distilled
 scores=$base/scores
 mined=$base/mined
+dcce=$base/dcce
 
 shared_models=$base/shared_models
 
@@ -127,31 +128,37 @@ done
 
 # assemble training data for: DCCE score filtering
 
-dcce_method="adq-dom"
-
 shopt -s nullglob
 
-for origin_sub in $scores/*; do
+for origin_sub in $dcce/*; do
 
   for fraction in 0.25 0.5 0.75; do
 
-    model_name=$(basename $origin_sub)
+      for dcce_method in adq adq-dom; do
 
-    model_name=$model_name.dcce.$fraction
-    data_sub=$data/$model_name
+          model_name=$(basename $origin_sub)
 
-    if [[ -d $data_sub ]]; then
-      echo "data_sub exists: $data_sub"
-      echo "Skipping."
-      continue
-    fi
+          model_name=$model_name.dcce.$dcce_method.$fraction
+          data_sub=$data/$model_name
 
-    num_lines=`cat $origin_sub/scores.$dcce_method.all.sorted | wc -l`
+          if [[ -d $data_sub ]]; then
+            echo "data_sub exists: $data_sub"
+            echo "Skipping."
+            continue
+          fi
 
-    cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.bpe.$src
-    cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.bpe.$trg
+          num_lines=`cat $origin_sub/scores.$dcce_method.all.sorted | wc -l`
 
-    . $scripts/preprocessing/concat_with_baseline_generic.sh
+          origin_sub2=$(mktemp -d)
+
+          cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub2/train.bpe.$src
+          cat $origin_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub2/train.bpe.$trg
+
+          origin_sub=$origin_sub2
+
+          . $scripts/preprocessing/concat_with_baseline_generic.sh
+
+      done
   done
 done
 
@@ -161,38 +168,44 @@ for origin_sub in $mined/*; do
 
   for fraction in 0.25 0.5 0.75; do
 
-    model_name=$(basename $origin_sub)
-    original_name=$model_name
+      for mining_method in mine score; do
 
-    model_name=$model_name.mined.$fraction
-    data_sub=$data/$model_name
+          model_name=$(basename $origin_sub)
+          original_name=$model_name
 
-    if [[ -d $data_sub ]]; then
-      echo "data_sub exists: $data_sub"
-      echo "Skipping."
-      continue
-    fi
+          model_name=$model_name.mined.$mining_method.$fraction
+          data_sub=$data/$model_name
 
-    num_lines=`cat $filtered/$original_name/train.bpe.$src | wc -l`
+          if [[ -d $data_sub ]]; then
+            echo "data_sub exists: $data_sub"
+            echo "Skipping."
+            continue
+          fi
 
-    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub/train.$src
-    cat $origin_sub/mined | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub/train.$trg
+          num_lines=`cat $filtered/$original_name/train.bpe.$src | wc -l`
 
-    for lang in $src $trg; do
-      cat $origin_sub/train.$lang | perl $MOSES/tokenizer/normalize-punctuation.perl $lang > $origin_sub/train.normalized.$lang
-      cat $origin_sub/train.normalized.$lang | perl $MOSES/tokenizer/tokenizer.perl -a -q -l $lang > $origin_sub/train.tok.$lang
+          origin_sub2=$(mktemp -d)
 
-      subword-nmt apply-bpe -c $shared_models/baseline/$src$trg.bpe \
-      --vocabulary $shared_models/baseline/vocab.$lang \
-      --vocabulary-threshold $bpe_vocab_threshold < $origin_sub/train.tok.$lang > $origin_sub/train.bpe.$lang
-    done
+          cat $origin_sub/mined.$mining_method | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub2/train.$src
+          cat $origin_sub/mined.$mining_method | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub2/train.$trg
 
-    . $scripts/preprocessing/concat_with_baseline_generic.sh
+          origin_sub=$origin_sub2
+
+          for lang in $src $trg; do
+            cat $origin_sub/train.$lang | perl $MOSES/tokenizer/normalize-punctuation.perl $lang > $origin_sub/train.normalized.$lang
+            cat $origin_sub/train.normalized.$lang | perl $MOSES/tokenizer/tokenizer.perl -a -q -l $lang > $origin_sub/train.tok.$lang
+
+            subword-nmt apply-bpe -c $shared_models/baseline/$src$trg.bpe \
+            --vocabulary $shared_models/baseline/vocab.$lang \
+            --vocabulary-threshold $bpe_vocab_threshold < $origin_sub/train.tok.$lang > $origin_sub/train.bpe.$lang
+          done
+
+        . $scripts/preprocessing/concat_with_baseline_generic.sh
+
+      done
   done
 done
 
-# debug: stop here t not overwrite
-exit
 
 # tagged versions of noise_type.noise_amount
 
@@ -203,6 +216,15 @@ for preprocessed_sub in $preprocessed/*; do
     if [[ $model_name == "baseline" ]]; then
       # tagging baseline does not make sense
       echo "Skipping baseline.tagged"
+      continue
+    fi
+
+    substring=".tagged"
+
+    if [[ $model_name =~ $substring ]]; then
+      # do not retag tagged data
+      echo "Data tagged already: $model_name"
+      echo "Skipping."
       continue
     fi
 
@@ -238,6 +260,15 @@ for filtered_sub in $filtered/*; do
     if [[ $model_name == "baseline" ]]; then
       # tagging filtered baseline does not make sense
       echo "Skipping baseline.filtered.tagged"
+      continue
+    fi
+
+    substring=".tagged"
+
+    if [[ $model_name =~ $substring ]]; then
+      # do not retag tagged data
+      echo "Data tagged already: $model_name"
+      echo "Skipping."
       continue
     fi
 

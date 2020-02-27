@@ -4,6 +4,8 @@ tools
 filtered
 preprocessed
 embedded
+mined
+dcce
 evaluation
 evaluations_lm
 preprocessed_lm
