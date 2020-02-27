@@ -31,7 +31,7 @@ for scores_sub in $scores/*; do
 
   for dcce_method in adq adq-dom; do
 
-      if [[ -d $dcce_sub/scores.$dcce_method ]]; then
+      if [[ -f $dcce_sub/scores.$dcce_method ]]; then
         echo "File exists: $dcce_sub/scores.$dcce_method"
         echo "Skipping"
         continue
