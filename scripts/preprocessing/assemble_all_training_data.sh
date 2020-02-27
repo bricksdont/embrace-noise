@@ -186,8 +186,8 @@ for origin_sub in $mined/*; do
 
           origin_sub2=$(mktemp -d)
 
-          cat $origin_sub/mined.$mining_method | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub2/train.$src
-          cat $origin_sub/mined.$mining_method | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub2/train.$trg
+          cat $origin_sub/mined.$mining_method.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f2 > $origin_sub2/train.$src
+          cat $origin_sub/mined.$mining_method.sorted | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines | cut -f3 > $origin_sub2/train.$trg
 
           origin_sub=$origin_sub2
 

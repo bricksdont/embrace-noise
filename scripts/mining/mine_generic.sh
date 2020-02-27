@@ -39,3 +39,7 @@ python ${LASER}/source/mine_bitexts.py \
           --unify --mode ${mining_method} --retrieval max --margin ratio -k 4  \
           --output ${mined_file} --threshold ${mining_threshold} \
           --verbose ${device_arg} 2>&1 | tee -a $log_file
+
+# reverse numerical sort
+
+cat $mined_file | sort -rn > $mined_file.sorted
