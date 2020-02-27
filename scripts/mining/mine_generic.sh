@@ -14,6 +14,8 @@
 # $device_arg
 # $mining_method
 
+SECONDS=0
+
 LASER=$1
 raw_src=$2
 raw_trg=$3
@@ -43,3 +45,6 @@ python ${LASER}/source/mine_bitexts.py \
 # reverse numerical sort
 
 cat $mined_file | sort -rn > $mined_file.sorted
+
+echo "time taken:"
+echo "$SECONDS seconds"

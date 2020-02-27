@@ -29,8 +29,6 @@ TRAIN_SUBSET=(
   "raw_paracrawl.100.filtered.tagged"
   "raw_paracrawl.100.distilled"
   "raw_paracrawl.100.dcce.adq.0.25"
-  "raw_paracrawl.100.dcce.adq.0.5"
-  "raw_paracrawl.100.dcce.adq.0.75"
   "raw_paracrawl.100.dcce.adq-dom.0.25"
   "raw_paracrawl.100.dcce.adq-dom.0.5"
   "raw_paracrawl.100.dcce.adq-dom.0.75"
@@ -38,8 +36,6 @@ TRAIN_SUBSET=(
   "raw_paracrawl.100.mined.mine.0.5"
   "raw_paracrawl.100.mined.mine.0.75"
   "raw_paracrawl.100.mined.score.0.25"
-  "raw_paracrawl.100.mined.score.0.5"
-  "raw_paracrawl.100.mined.score.0.75"
 )
 
 function contains() {
