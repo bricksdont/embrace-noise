@@ -5,17 +5,25 @@ import argparse
 import logging
 
 
+COMMON = "common"
+ONLY_A = "a-only"
+ONLY_B = "b-only"
+NOOUT = "no-out"
+
+OUTPUT_OPTIONS = [COMMON,
+                  ONLY_A,
+                  ONLY_B,
+                  NOOUT]
+
 def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--inputs", type=str, nargs="+", help="Two files to be compared", required=True)
     parser.add_argument("--strict", action="store_true", help="Require files to have same number of lines", required=False,
                         default=False)
-    parser.add_argument("--fast", action="store_true", help="Simply compute number of overlapping lines without enumerating them",
-                        required=False, default=False)
     parser.add_argument("--output", type=str,
-                        help="Print to STDOUT overlapping lines, or ones that don't",
-                        required=False, default="overlap", choices=["overlap", "no-overlap"])
+                        help="Print to STDOUT common lines, or only appearing in A or B",
+                        required=False, default=NOOUT, choices=OUTPUT_OPTIONS)
 
     args = parser.parse_args()
 
@@ -53,29 +61,25 @@ def main():
 
     num_unique_lines = [len(set(l)) for l in lines]
 
-    seen = 0
-
     if args.strict:
         assert num_lines[0] == num_lines[1], "Files must have the same number of lines"
 
-    if args.fast:
-        num_intersecting = len(intersection(*lines))
-    else:
-        num_intersecting = 0
+    num_intersecting = len(intersection(*lines))
 
-        for line in lines[0]:
-            if line in lines[1]:
-                num_intersecting += 1
-                if args.output == "overlap":
+    if args.output != NOOUT:
+
+        if args.output == COMMON:
+            for line in lines[0]:
+                if line in lines[1]:
                     print(line)
-            else:
-                if args.output == "no-overlap":
+        elif args.output == ONLY_A:
+            for line in lines[0]:
+                if line not in lines[1]:
                     print(line)
-
-            seen += 1
-
-            if seen % 50000 == 0:
-                logging.debug("%d / %d" % (seen, num_lines[0]))
+        elif args.output == ONLY_B:
+            for line in lines[1]:
+                if line not in lines[0]:
+                    print(line)
 
     logging.debug("Overlap\t: %d" % num_intersecting)
 
