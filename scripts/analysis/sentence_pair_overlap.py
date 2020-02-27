@@ -53,6 +53,8 @@ def main():
 
     num_unique_lines = [len(set(l)) for l in lines]
 
+    seen = 0
+
     if args.strict:
         assert num_lines[0] == num_lines[1], "Files must have the same number of lines"
 
@@ -69,6 +71,11 @@ def main():
             else:
                 if args.output == "no-overlap":
                     print(line)
+
+            seen += 1
+
+            if seen % 50000 == 0:
+                logging.debug("%d / %d" % (seen, num_lines[0]))
 
     logging.debug("Overlap lines: %d" % num_intersecting)
 
