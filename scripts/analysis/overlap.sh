@@ -29,7 +29,7 @@ for dcce_method in adq adq-dom; do
     for mining_method in mine score; do
         for fraction in 0.25 0.5 0.75; do
             name_a=dcce.$dcce_method.$fraction
-            name_b=mined_bpe/mined.$mining_method.$fraction
+            name_b=mined.$mining_method.$fraction
 
             file_a=$analysis/$name_a
             file_b=$analysis/mined_bpe/$name_b
