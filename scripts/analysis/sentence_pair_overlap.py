@@ -4,6 +4,8 @@ import time
 import argparse
 import logging
 
+import numpy as np
+
 
 COMMON = "common"
 ONLY_A = "only-a"
@@ -32,14 +34,27 @@ def parse_args():
 
 def intersection(a, b):
     """
+    Returns elements common to a and b.
+
     https://stackoverflow.com/questions/3697432/how-to-find-list-intersection
 
     :param a:
     :param b:
     :return:
     """
-
     return list(set(a) & set(b))
+
+def set_difference(a, b):
+    """
+    Returns all elements only in list a, but not b.
+
+    https://stackoverflow.com/a/41127279/1987598
+
+    :param a:
+    :param b:
+    :return:
+    """
+    return np.setdiff1d(a, b, assume_unique=True).tolist()
 
 
 def main():
@@ -64,22 +79,21 @@ def main():
     if args.strict:
         assert num_lines[0] == num_lines[1], "Files must have the same number of lines"
 
-    num_intersecting = len(intersection(*lines))
+    intersecting = intersection(*lines)
 
-    if args.output != NOOUT:
+    num_intersecting = len(intersecting)
 
-        if args.output == COMMON:
-            for line in lines[0]:
-                if line in lines[1]:
-                    print(line, end='')
-        elif args.output == ONLY_A:
-            for line in lines[0]:
-                if line not in lines[1]:
-                    print(line, end='')
-        elif args.output == ONLY_B:
-            for line in lines[1]:
-                if line not in lines[0]:
-                    print(line, end='')
+    if args.output == COMMON:
+        for line in intersecting:
+                print(line, end='')
+    elif args.output == ONLY_A:
+        difference = set_difference(lines[0], lines[1])
+        for line in difference:
+                print(line, end='')
+    elif args.output == ONLY_B:
+        difference = set_difference(lines[1], lines[0])
+        for line in difference:
+            print(line, end='')
 
     logging.debug("Overlap\t: %d" % num_intersecting)
 
