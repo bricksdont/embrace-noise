@@ -19,6 +19,7 @@ bpe_vocab_threshold=50
 
 for lang in $src $trg; do
     ln -snf $filtered/raw_paracrawl.100/train.$lang $analysis_sub/train.$lang
+    ln -snf $filtered/raw_paracrawl.100/train.tok.$lang $analysis_sub/train.tok.$lang
     ln -snf $filtered/raw_paracrawl.100/train.bpe.$lang $analysis_sub/train.bpe.$lang
 done
 
