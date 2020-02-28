@@ -95,7 +95,7 @@ def main():
         for line in difference:
             print(line, end='')
 
-    logging.debug("Overlap:\t %d" % num_intersecting)
+    logging.debug("Overlap:\t%d" % num_intersecting)
 
     for name, nl, nlu in zip(["File A", "File B"], num_lines, num_unique_lines):
         logging.debug("%s\tUnique lines / total lines: %d / %d" % (name, nlu, nl))
