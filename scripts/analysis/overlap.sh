@@ -16,11 +16,13 @@ file_b=$analysis/mined_raw/mined.mine.100
 
 log_file=$overlap/filtered+mined.mine.100.no-out.log
 
-python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b 2>&1 | tee -a $log_file
+python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b 2> $log_file
+cat $log_file
 
 for output_method in common only-a only-b; do
   log_file=$overlap/filtered+mined.mine.100.$output_method.log
-  python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b --output $output_method > $overlap/filtered+mined.mine.100.$output_method 2>&1 | tee -a $log_file
+  python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b --output $output_method > $overlap/filtered+mined.mine.100.$output_method 2> $log_file
+  cat $log_file
 done
 
 # dcce vs mined
@@ -36,11 +38,13 @@ for dcce_method in adq adq-dom; do
 
             log_file=$overlap/$name_a+$name_b.no-out.log
 
-            python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b 2>&1 | tee -a $log_file
+            python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b 2> $log_file
+            cat $log_file
 
             for output_method in common only-a only-b; do
               log_file=$overlap/$name_a+$name_b.$output_method.log
-              python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b --output $output_method > $overlap/$name_a+$name_b.$output_method 2>&1 | tee -a $log_file
+              python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b --output $output_method > $overlap/$name_a+$name_b.$output_method 2> $log_file
+              cat $log_file
             done
         done
     done
