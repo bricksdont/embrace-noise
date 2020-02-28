@@ -14,10 +14,10 @@ mkdir -p $overlap
 file_a=$analysis/filtered
 file_b=$analysis/mined_raw/mined.mine.100
 
-python scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b
+python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b
 
 for output_method in common only-a only-b; do
-  python scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b --output $output_method > $overlap/$file_a.$file_b.$output_method
+  python $scripts/analysis/sentence_pair_overlap.py --inputs $file_a $file_b --output $output_method > $overlap/filtered.mined.mine.100.$output_method
 done
 
 # dcce vs mined
