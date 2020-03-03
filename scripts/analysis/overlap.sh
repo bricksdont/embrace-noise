@@ -33,7 +33,7 @@ for dcce_method in adq adq-dom; do
             name_a=dcce.$dcce_method.$fraction
             name_b=mined.$mining_method.$fraction
 
-            file_a=$analysis/$name_a
+            file_a=$analysis/dcce_raw/$name_a
             file_b=$analysis/mined_raw/$name_b
 
             log_file=$overlap/$name_a+$name_b.no-out.log
