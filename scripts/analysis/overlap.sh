@@ -2,6 +2,8 @@
 
 base=/net/cephfs/home/mathmu/scratch/noise-distill
 
+source $base/venvs/sockeye3-cpu/bin/activate
+
 scripts=$base/scripts
 analysis=$base/analysis
 
