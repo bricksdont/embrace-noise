@@ -11,6 +11,7 @@ src=de
 trg=en
 
 data=$base/data
+scripts=$base/scripts
 models=$base/models
 translations=$base/analysis/translations_tagged
 
