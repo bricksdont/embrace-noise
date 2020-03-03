@@ -21,24 +21,25 @@ paste $filtered/raw_paracrawl.100/train.$src $filtered/raw_paracrawl.100/train.$
 
 offset=3520019
 
+analysis_sub=$analysis/dcce_raw
+
+mkdir -p $analysis_sub
+
 for method in adq adq-dom; do
     for fraction in 0.25 0.5 0.75; do
-        paste $data/raw_paracrawl.100.dcce.$method.$fraction/train.bpe.$src $data/raw_paracrawl.100.dcce.$method.$fraction/train.bpe.$trg > $analysis/dcce.$method.$fraction.bpe.all
 
-        sed -n "$offset,$ p" $analysis/dcce.$method.$fraction.bpe.all > $analysis/dcce.$method.$fraction.bpe
+        sed -n "$offset,$ p" $data/raw_paracrawl.100.dcce.$method.$fraction/train.bpe.$src > $analysis_sub/dcce.$method.$fraction.bpe.$src
+        sed -n "$offset,$ p" $data/raw_paracrawl.100.dcce.$method.$fraction/train.bpe.$trg > $analysis_sub/dcce.$method.$fraction.bpe.$trg
 
-        # postprocess DCCE to compare against
-
-        cut -f2 $analysis/dcce.$method.$fraction.bpe > $analysis/dcce.$method.$fraction.bpe.$src
-        cut -f3 $analysis/dcce.$method.$fraction.bpe > $analysis/dcce.$method.$fraction.bpe.$trg
+        # postprocess DCCE to compare against LASER
 
         for lang in $src $trg; do
-            cat $analysis/dcce.$method.$fraction.bpe.$lang | sed -r 's/@@( |$)//g' > $analysis/dcce.$method.$fraction.tok.$lang
+            cat $analysis_sub/dcce.$method.$fraction.bpe.$lang | sed -r 's/@@( |$)//g' > $analysis_sub/dcce.$method.$fraction.tok.$lang
 
-            cat $analysis/dcce.$method.$fraction.tok.$lang | $MOSES/tokenizer/detokenizer.perl -l $lang > $analysis/dcce.$method.$fraction.$lang
+            cat $analysis_sub/dcce.$method.$fraction.tok.$lang | $MOSES/tokenizer/detokenizer.perl -l $lang > $analysis_sub/dcce.$method.$fraction.$lang
         done
 
-        paste $analysis/dcce.$method.$fraction.$src $analysis/dcce.$method.$fraction.$trg > $analysis/dcce.$method.$fraction
+        paste $analysis_sub/dcce.$method.$fraction.$src $analysis_sub/dcce.$method.$fraction.$trg > $analysis_sub/dcce.$method.$fraction
     done
 done
 

@@ -67,7 +67,7 @@ for models_sub in $models/*; do
     fi
 
     if [ $(contains "${TRANSLATE_SUBSET[@]}" $name) == "n" ]; then
-        echo "name: $name not in subset that should be trained"
+        echo "name: $name not in subset that should be translated"
         echo "Skipping."
         continue
     fi
