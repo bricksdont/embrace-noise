@@ -310,6 +310,60 @@ for filtered_sub in $filtered/*; do
 
 done
 
+# tagged fraction versions of filtered data sets
+
+for filtered_sub in $filtered/*; do
+
+    for fraction in 0.25 0.5 0.75; do
+
+        model_name=$(basename $filtered_sub)
+
+        if [[ $model_name == "baseline" ]]; then
+          # tagging filtered baseline does not make sense
+          echo "Skipping baseline.filtered.tagged"
+          continue
+        fi
+
+        substring=".tagged"
+
+        if [[ $model_name =~ $substring ]]; then
+          # do not retag tagged data
+          echo "Data tagged already: $model_name"
+          echo "Skipping."
+          continue
+        fi
+
+        model_name=$model_name.filtered.tagged.$fraction
+
+        origin_sub=$preprocessed/$model_name
+        data_sub=$data/$model_name
+
+        mkdir -p $origin_sub
+
+        if [[ -d $data_sub ]]; then
+          echo "data_sub exists: $data_sub"
+          echo "Skipping."
+          continue
+        fi
+
+        # subsample training data
+
+        num_lines=`cat $filtered_sub/train.bpe.$src | wc -l`
+
+        cat $filtered_sub/train.bpe.$src | python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines > $origin_sub/train.bpe_no_tag.$src
+        cat $filtered_sub/train.bpe.$trg| python $scripts/preprocessing/head_fraction.py --fraction $fraction --size $num_lines > $origin_sub/train.bpe_no_tag.$trg
+
+        # add tag to training data
+
+        for lang in $src $trg; do
+          cat $origin_sub/train.bpe_no_tag.$lang | python $scripts/preprocessing/add_tag_to_lines.py --tag "<N>" > $origin_sub/train.bpe.$lang
+        done
+
+        . $scripts/preprocessing/concat_with_baseline_generic.sh
+
+    done
+done
+
 echo "Sizes of all files:"
 
 wc -l $data/*/*
