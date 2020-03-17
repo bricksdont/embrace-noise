@@ -20,7 +20,13 @@ virtualenv -p python3 $base/venvs/sockeye3-cpu
 
 virtualenv -p python3 $base/venvs/laser3
 
-# fourth one for fairseq
+# fourth one for custom sockeye
+
+virtualenv -p python3 $base/venvs/sockeye3-custom
+
+virtualenv -p python3 $base/venvs/sockeye3-custom-cpu
+
+# fifth one for fairseq
 
 echo "pyenv known versions before:"
 

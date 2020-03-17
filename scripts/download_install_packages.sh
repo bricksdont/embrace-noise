@@ -83,6 +83,41 @@ wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P $t
 
 ###########################################
 
+# source sockeye custom env
+
+deactivate
+echo "check current python after deactivate:"
+which python
+
+source $base/venvs/sockeye3-custom/bin/activate
+
+echo "check current python after sourcing CPU env:"
+which python
+
+source
+
+git clone https://github.com/ZurichNLP/sockeye $tools/sockeye-custom
+
+(cd $tools/sockeye-custom && git checkout instance_weighting)
+
+pip install --no-deps -r $tools/sockeye-custom/requirements/requirements.gpu-cu${CUDA_VERSION}.txt $tools/sockeye-custom
+
+pip install matplotlib mxboard
+
+# install BPE library
+
+pip install subword-nmt
+
+# install sacrebleu for evaluation
+
+pip install sacrebleu
+
+# fix reload for continued training bug
+
+pip install --upgrade numpy==1.16.1
+
+###########################################
+
 # THEN source LASER env and do the same again
 
 deactivate
