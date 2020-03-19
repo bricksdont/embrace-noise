@@ -36,6 +36,9 @@ TRAIN_SUBSET=(
   "raw_paracrawl.100.mined.mine.0.5"
   "raw_paracrawl.100.mined.mine.0.75"
   "raw_paracrawl.100.mined.score.0.25"
+  "raw_paracrawl.100.mined.score.instance_weighting"
+  "raw_paracrawl.100.dcce.adq.instance_weighting"
+  "raw_paracrawl.100.dcce.adq-dom.instance_weighting"
 )
 
 function contains() {
