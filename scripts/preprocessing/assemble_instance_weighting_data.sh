@@ -29,7 +29,6 @@ for mined_sub in $mined/*; do
     mining_method=score
 
     model_name=$(basename $mined_sub)
-    original_name=$model_name
 
     model_name=$model_name.mined.$mining_method.instance_weighting
     data_sub=$data/$model_name
@@ -51,7 +50,9 @@ for mined_sub in $mined/*; do
 
     cut -f1 $mined_sub/mined.$mining_method.sorted > $origin_sub/scores.2
 
-    cat $origin_sub/scores.1 $origin_sub/scores.2 > $origin_sub/train.weights
+    mkdir -p $data_sub
+
+    cat $origin_sub/scores.1 $origin_sub/scores.2 > $data_sub/train.weights
 
     for lang in $src $trg; do
       cat $origin_sub/train.$lang | perl $MOSES/tokenizer/normalize-punctuation.perl $lang > $origin_sub/train.normalized.$lang
@@ -71,7 +72,6 @@ for dcce_sub in $dcce/*; do
   for dcce_method in adq adq-dom; do
 
       model_name=$(basename $dcce_sub)
-      original_name=$model_name
 
       model_name=$model_name.dcce.$dcce_method.instance_weighting
       data_sub=$data/$model_name
@@ -93,7 +93,9 @@ for dcce_sub in $dcce/*; do
 
       cut -f1 $dcce_sub/scores.$dcce_method.all.sorted > $origin_sub/scores.2
 
-      cat $origin_sub/scores.1 $origin_sub/scores.2 > $origin_sub/train.weights
+      mkdir -p $data_sub
+
+      cat $origin_sub/scores.1 $origin_sub/scores.2 > $data_sub/train.weights
 
       . $scripts/preprocessing/concat_with_baseline_generic.sh
 
