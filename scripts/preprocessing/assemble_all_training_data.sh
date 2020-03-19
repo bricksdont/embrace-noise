@@ -364,6 +364,8 @@ for filtered_sub in $filtered/*; do
     done
 done
 
+
+
 echo "Sizes of all files:"
 
 wc -l $data/*/*

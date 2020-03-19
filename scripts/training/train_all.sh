@@ -83,5 +83,6 @@ for prepared_sub in $prepared/*; do
 
     mkdir -p $model_path
 
-    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_generic.sh $prepared_sub $data_sub $model_path
+    # used to be: 'gpu:Tesla-V100:1'
+    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_generic.sh $prepared_sub $data_sub $model_path
 done
