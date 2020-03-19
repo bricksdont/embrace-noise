@@ -67,4 +67,5 @@ python -m sockeye.train \
 --gradient-clipping-type abs \
 --gradient-clipping-threshold 1 \
 --disable-device-locking \
---instance-weighting
+--instance-weighting \
+--loss weighted-cross-entropy
