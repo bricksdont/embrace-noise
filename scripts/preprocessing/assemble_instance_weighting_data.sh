@@ -48,7 +48,7 @@ for mined_sub in $mined/*; do
 
     python $scripts/preprocessing/create_weights.py --method ones --size $num_lines_baseline > $origin_sub/scores.1
 
-    cut -f1 $mined_sub/mined.$mining_method.sorted > $origin_sub/scores.2
+    cut -f1 $mined_sub/mined.$mining_method.sorted | python $scripts/preprocessing/min_max_scaling.py > $origin_sub/scores.2
 
     mkdir -p $data_sub
 
@@ -91,7 +91,7 @@ for dcce_sub in $dcce/*; do
 
       python $scripts/preprocessing/create_weights.py --method ones --size $num_lines_baseline > $origin_sub/scores.1
 
-      cut -f1 $dcce_sub/scores.$dcce_method.all.sorted > $origin_sub/scores.2
+      cut -f1 $dcce_sub/scores.$dcce_method.all.sorted | python $scripts/preprocessing/min_max_scaling.py > $origin_sub/scores.2
 
       mkdir -p $data_sub
 
