@@ -36,6 +36,9 @@ TRAIN_SUBSET=(
   "raw_paracrawl.100.mined.mine.0.5"
   "raw_paracrawl.100.mined.mine.0.75"
   "raw_paracrawl.100.mined.score.0.25"
+)
+
+TRAIN_SUBSET_INSTANCE_WEIGHTING=(
   "raw_paracrawl.100.mined.score.instance_weighting"
   "raw_paracrawl.100.dcce.adq.instance_weighting"
   "raw_paracrawl.100.dcce.adq-dom.instance_weighting"
@@ -79,6 +82,44 @@ for prepared_sub in $prepared/*; do
     fi
 
     if [ $(contains "${TRAIN_SUBSET[@]}" $name) == "n" ]; then
+        echo "name: $name not in subset that should be trained"
+        echo "Skipping."
+        continue
+    fi
+
+    mkdir -p $model_path
+
+    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_generic.sh $prepared_sub $data_sub $model_path
+done
+
+deactivate
+source $base/venvs/sockeye3-custom/bin/activate
+
+for prepared_sub in $prepared/*instance_weighting; do
+
+    echo "prepared_sub: $prepared_sub"
+
+    name=$(basename $prepared_sub)
+
+    data_sub=$data/$name
+    model_path=$models/$name
+
+    if [[ -d $model_path ]]; then
+        echo "Folder exists: $model_path"
+
+        training_finished=`grep "Training finished" $model_path/log | wc -l`
+
+        if [[ $training_finished == 0 ]]; then
+            echo "Training not finished"
+            echo "Will continue training."
+        else
+            echo "Training is finished"
+            echo "Skipping."
+            continue
+        fi
+    fi
+
+    if [ $(contains "${TRAIN_SUBSET_INSTANCE_WEIGHTING[@]}" $name) == "n" ]; then
         echo "name: $name not in subset that should be trained"
         echo "Skipping."
         continue
