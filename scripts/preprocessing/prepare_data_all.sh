@@ -86,7 +86,11 @@ for data_sub in $data/*; do
 
 done
 
-for data_sub in $data/*instance_weighting*; do
+deactivate
+
+source $base/venvs/sockeye3-custom-cpu/bin/activate
+
+for data_sub in $data/*instance_weighting; do
 
     echo "data_sub: $data_sub"
     name=$(basename $data_sub)
