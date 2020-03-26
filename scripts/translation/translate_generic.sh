@@ -27,7 +27,13 @@ MOSES=$base/tools/moses-scripts/scripts
 num_threads=3
 device_arg="--device-ids 0"
 
-for corpus in dev test; do
+for corpus in dev test test_ood; do
+
+    if [[ -s $translations_sub/$corpus.bpe.$trg ]]; then
+      echo "File exists: $translations_sub/$corpus.bpe.$trg"
+      echo "Skipping"
+      continue
+    fi
 
     # produce nbest list, desired beam size, desired batch size
 

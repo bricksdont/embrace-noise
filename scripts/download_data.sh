@@ -66,6 +66,16 @@ ln -s $data/raw/dev/newstest2016-$src$trg-ref.$trg.sgm.txt $data/raw/dev/dev.$tr
 ln -s $data/raw/test/newstest2017-$src$trg-src.$src.sgm.txt $data/raw/test/test.$src
 ln -s $data/raw/test/newstest2017-$src$trg-ref.$trg.sgm.txt $data/raw/test/test.$trg
 
+# look for test in different domain
+
+if [[ -f /net/cephfs/scratch/mathmu/laser-contra/filtered/cs-bulletin.filtered.de-en ]]; then
+
+  head -n 3000 /net/cephfs/scratch/mathmu/laser-contra/filtered/cs-bulletin.filtered.de-en > $data/raw/test_ood/test_ood.both
+
+  cut -f1 $data/raw/test_ood/test_ood.both > $data/raw/test_ood/test_ood.$src
+  cut -f2 $data/raw/test_ood/test_ood.both > $data/raw/test_ood/test_ood.$trg
+fi
+
 # sizes
 echo "Sizes of all files:"
 
