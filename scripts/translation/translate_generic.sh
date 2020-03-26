@@ -24,7 +24,7 @@ fi
 
 MOSES=$base/tools/moses-scripts/scripts
 
-num_threads=3
+num_threads=1
 device_arg="--device-ids 0"
 
 for corpus in dev test test_ood; do

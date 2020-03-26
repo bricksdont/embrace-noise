@@ -22,11 +22,11 @@ for translations_sub in $translations/*; do
     data_sub=$data/$name
     evaluations_sub=$evaluations/$name
 
-    if [[ -d $evaluations_sub ]]; then
-        echo "Folder exists: $evaluations_sub"
-        echo "Skipping."
-        continue
-    fi
+    #if [[ -d $evaluations_sub ]]; then
+    #    echo "Folder exists: $evaluations_sub"
+    #    echo "Skipping."
+    #    continue
+    #fi
 
     mkdir -p $evaluations_sub
 

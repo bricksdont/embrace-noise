@@ -14,7 +14,13 @@ if [[ $name == "baseline.reverse" ]]; then
   trg=de
 fi
 
-for corpus in dev test; do
+for corpus in dev test test_ood; do
+
+    if [[ -s $evaluations_sub/$corpus.bleu ]]; then
+      echo "File exists: $evaluations_sub/$corpus.bleu"
+      echo "Skipping."
+      continue
+    fi
 
     # compute case-sensitive BLEU on detokenized data
 

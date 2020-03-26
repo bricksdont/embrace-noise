@@ -2,7 +2,6 @@
 
 MODEL_LIST=(
   "baseline"
-  "baseline.reverse"
   "baseline.filtered"
   "baseline.distilled"
   "raw_paracrawl.100"
@@ -49,6 +48,6 @@ else
   source $base/env/bin/activate
 fi
 
-tensorboard --port 6007 --logdir $base
+open -a firefox http://localhost:6007
 
-# open -a firefox localhost
+tensorboard --port 6007 --logdir $base

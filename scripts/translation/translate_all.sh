@@ -85,6 +85,6 @@ for models_sub in $models/*; do
 
     mkdir -p $translations_sub
 
-    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 3 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $models_sub
+    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $models_sub
 
 done
