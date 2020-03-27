@@ -42,6 +42,15 @@ TRAIN_SUBSET_INSTANCE_WEIGHTING=(
   "raw_paracrawl.100.mined.score.instance_weighting"
   "raw_paracrawl.100.dcce.adq.instance_weighting"
   "raw_paracrawl.100.dcce.adq-dom.instance_weighting"
+  "raw_paracrawl.100.mined.score.instance_weighting.0.0001"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.0.0001"
+  "raw_paracrawl.100.dcce.adq-dom.instance_weighting.0.0001"
+  "raw_paracrawl.100.mined.score.instance_weighting.0.00001"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.0.00001"
+  "raw_paracrawl.100.dcce.adq-dom.instance_weighting.0.00001"
+  "raw_paracrawl.100.mined.score.instance_weighting.0.000001"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.0.000001"
+  "raw_paracrawl.100.dcce.adq-dom.instance_weighting.0.000001"
 )
 
 function contains() {
@@ -99,34 +108,43 @@ for prepared_sub in $prepared/*instance_weighting; do
 
     echo "prepared_sub: $prepared_sub"
 
-    name=$(basename $prepared_sub)
+    original_name=$(basename $prepared_sub)
 
-    data_sub=$data/$name
-    model_path=$models/$name
+    for weight_decay in 0.0001 0.00001; do
 
-    if [[ -d $model_path ]]; then
-        echo "Folder exists: $model_path"
+        name=$original_name.$weight_decay
 
-        training_finished=`grep "Training finished" $model_path/log | wc -l`
+        original_data_sub=$data/$original_name
+        data_sub=$data/name
 
-        if [[ $training_finished == 0 ]]; then
-            echo "Training not finished"
-            echo "Will continue training."
-        else
-            echo "Training is finished"
+        ln -s $original_data_sub $data_sub
+
+        model_path=$models/$name
+
+        if [[ -d $model_path ]]; then
+            echo "Folder exists: $model_path"
+
+            training_finished=`grep "Training finished" $model_path/log | wc -l`
+
+            if [[ $training_finished == 0 ]]; then
+                echo "Training not finished"
+                echo "Will continue training."
+            else
+                echo "Training is finished"
+                echo "Skipping."
+                continue
+            fi
+        fi
+
+        if [ $(contains "${TRAIN_SUBSET_INSTANCE_WEIGHTING[@]}" $name) == "n" ]; then
+            echo "name: $name not in subset that should be trained"
             echo "Skipping."
             continue
         fi
-    fi
 
-    if [ $(contains "${TRAIN_SUBSET_INSTANCE_WEIGHTING[@]}" $name) == "n" ]; then
-        echo "name: $name not in subset that should be trained"
-        echo "Skipping."
-        continue
-    fi
+        mkdir -p $model_path
 
-    mkdir -p $model_path
-
-    # used to be: 'gpu:Tesla-V100:1'
-    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path
+        # used to be: 'gpu:Tesla-V100:1'
+        sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path $weight_decay
+    done
 done

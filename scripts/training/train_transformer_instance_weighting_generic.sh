@@ -5,10 +5,12 @@
 # $prepared_sub
 # $data_sub
 # $model_path
+# weight-decay
 
 prepared_sub=$1
 data_sub=$2
 model_path=$3
+weight_decay=$4
 
 src=de
 trg=en
@@ -57,6 +59,7 @@ python -m sockeye.train \
 --num-words 50000:50000 \
 --optimizer adam \
 --initial-learning-rate 0.0001 \
+--weight-decay $weight_decay \
 --learning-rate-reduce-num-not-improved 4 \
 --checkpoint-frequency 1000 \
 --keep-last-params 30 \
