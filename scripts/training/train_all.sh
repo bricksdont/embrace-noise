@@ -119,7 +119,7 @@ for prepared_sub in $prepared/*instance_weighting; do
         original_data_sub=$data/$original_name
         data_sub=$data/name
 
-        ln -s $original_data_sub $data_sub
+        ln -snf $original_data_sub $data_sub
 
         model_path=$models/$name
 
