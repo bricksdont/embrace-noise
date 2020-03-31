@@ -23,12 +23,14 @@ for model_name in raw_paracrawl.100.filtered; do
    data_sub=$data/$model_name
    alignments_sub=$alignments/$model_name
 
+   mkdir -p $alignments_sub
+
    fast_align_sub_forward=$fast_align/baseline
    fast_align_sub_reverse=$fast_align/baseline_reverse
 
    if [[ ! -s $alignments_sub/input ]]; then
     perl $base/tools/paste-files.pl $data_sub/train.bpe.$src $data_sub/train.bpe.$trg > $alignments_sub/input
-fi
+   fi
 
    sbatch --cpus-per-task=16 --time=02:00:00 --mem=16G --partition=hydra $base/scripts/fast_align/apply_fast_align_model_generic.sh $base $alignments_sub $fast_align_sub_forward $fast_align_sub_reverse
 
