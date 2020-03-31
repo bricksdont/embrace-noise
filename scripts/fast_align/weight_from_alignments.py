@@ -30,7 +30,7 @@ def read_alignments(line: str):
 
     for pair in pairs:
 
-        source_index, target_index = pair[0], pair[2]
+        source_index, target_index = int(pair[0]), int(pair[2])
 
         alignment_dict[target_index] = source_index
 
@@ -56,6 +56,8 @@ def main():
         weights = []
 
         alignment_dict = read_alignments(alignment)
+
+        print(alignment_dict)
 
         for index, token in enumerate(target_tokens):
             if index not in alignment_dict.keys():
