@@ -111,6 +111,8 @@ for data_sub in $data/*instance_weighting; do
 
     mkdir -p $prepared_sub
 
-    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub
+    instance_weighting_type="sentence"
+
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type
 
 done

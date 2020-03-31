@@ -5,12 +5,14 @@
 # $prepared_sub
 # $data_sub
 # $model_path
-# weight-decay
+# $weight-decay
+# $instance_weighting_type
 
 prepared_sub=$1
 data_sub=$2
 model_path=$3
 weight_decay=$4
+instance_weighting_type=$5
 
 src=de
 trg=en
@@ -71,4 +73,5 @@ python -m sockeye.train \
 --gradient-clipping-threshold 1 \
 --disable-device-locking \
 --instance-weighting \
+--instance-weighting-type $instance_weighting_type \
 --loss weighted-cross-entropy

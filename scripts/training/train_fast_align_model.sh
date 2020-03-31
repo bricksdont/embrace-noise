@@ -32,7 +32,7 @@ if [[ ! -s $fast_align_sub/input ]]; then
     perl $base/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input
 fi
 
-sbatch --cpus-per-task=16 --time=24:00:00 --mem=16G --partition=hydra $base/scripts/training/train_fast_align_model_generic.sh $base $fast_align_sub ""
+sbatch --cpus-per-task=16 --time=02:00:00 --mem=16G --partition=hydra $base/scripts/training/train_fast_align_model_generic.sh $base $fast_align_sub ""
 
 # reverse model
 
@@ -42,4 +42,4 @@ mkdir -p $fast_align_sub
 
 ln -snf $fast_align/baseline/input $fast_align/baseline_reverse/input
 
-sbatch --cpus-per-task=16 --time=24:00:00 --mem=16G --partition=hydra $base/scripts/training/train_fast_align_model_generic.sh $base $fast_align_sub "-r"
+sbatch --cpus-per-task=16 --time=02:00:00 --mem=16G --partition=hydra $base/scripts/training/train_fast_align_model_generic.sh $base $fast_align_sub "-r"
