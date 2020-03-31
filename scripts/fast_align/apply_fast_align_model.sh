@@ -32,6 +32,6 @@ for model_name in raw_paracrawl.100.filtered; do
     perl $base/tools/paste-files.pl $data_sub/train.bpe.$src $data_sub/train.bpe.$trg > $alignments_sub/input
    fi
 
-   sbatch --cpus-per-task=16 --time=02:00:00 --mem=16G --partition=hydra $base/scripts/fast_align/apply_fast_align_model_generic.sh $base $alignments_sub $fast_align_sub_forward $fast_align_sub_reverse
+   sbatch --cpus-per-task=16 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/fast_align/apply_fast_align_model_generic.sh $base $alignments_sub $fast_align_sub_forward $fast_align_sub_reverse
 
 done
