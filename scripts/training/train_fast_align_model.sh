@@ -24,7 +24,9 @@ fast_align_sub=$fast_align/baseline
 
 mkdir -p $fast_align_sub
 
-perl $base/tools/paste-files.pl $data_sub/train.bpe.$src $data_sub/train.bpe.$trg > $fast_align_sub/input
+perl $base/tools/paste-files.pl $data_sub/train.bpe.$src $data_sub/train.bpe.$trg > $fast_align_sub/input.raw
+
+perl $base/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input
 
 sbatch --cpus-per-task=16 --time=24:00:00 --mem=16G --partition=hydra $base/scripts/training/train_fast_align_model_generic.sh $base $fast_align_sub ""
 
@@ -34,6 +36,6 @@ fast_align_sub=$fast_align/baseline_reverse
 
 mkdir -p $fast_align_sub
 
-perl $base/tools/paste-files.pl $data_sub/train.bpe.$src $data_sub/train.bpe.$trg > $fast_align_sub/input
+ln -snf $fast_align/baseline/input $fast_align/baseline_reverse/input
 
 sbatch --cpus-per-task=16 --time=24:00:00 --mem=16G --partition=hydra $base/scripts/training/train_fast_align_model_generic.sh $base $fast_align_sub "-r"
