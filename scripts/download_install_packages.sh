@@ -193,3 +193,15 @@ pip install Cython numpy
 # specific version newer than latest release 0.9.0
 
 pip install git+git://github.com/pytorch/fairseq.git@c1848270723fa4be7cfb0bc92a5d14546a80d879
+
+# install fast_align
+
+git clone https://github.com/clab/fast_align $tools/fast_align
+(cd $tools/fast_align && mkdir build)
+(cd $tools/fast_align/build && cmake ..)
+(cd $tools/fast_align/build && make)
+
+# fast_align helper tools
+
+(cd $tools && wget https://raw.githubusercontent.com/redpony/cdec/master/corpus/paste-files.pl)
+(cd $tools && wget https://raw.githubusercontent.com/redpony/cdec/master/corpus/filter-length.pl)
