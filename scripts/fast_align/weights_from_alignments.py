@@ -62,8 +62,6 @@ def main():
 
         alignment_dict = read_alignments(alignment)
 
-        print(alignment_dict)
-
         for index, token in enumerate(target_tokens):
             if index not in alignment_dict.keys():
                 weights.append(LOW_WEIGHT)
