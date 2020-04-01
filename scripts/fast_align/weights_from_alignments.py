@@ -33,7 +33,9 @@ def read_alignments(line: str):
         if pair == "":
             return {}
 
-        source_index, target_index = int(pair[0]), int(pair[2])
+        indexes = pair.split("-")
+
+        source_index, target_index = [int(index) for index in indexes]
 
         alignment_dict[target_index] = source_index
 
