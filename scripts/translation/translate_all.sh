@@ -72,11 +72,11 @@ for models_sub in $models/*; do
     data_sub=$data/$name
     translations_sub=$translations/$name
 
-    #if [[ -d $translations_sub ]]; then
-    #    echo "Folder exists: $translations_sub"
-    #    echo "Skipping."
-    #    continue
-    #fi
+    if [[ -d $translations_sub ]]; then
+        echo "Folder exists: $translations_sub"
+        echo "Skipping."
+        continue
+    fi
 
     if [ $(contains "${TRANSLATE_SUBSET[@]}" $name) == "n" ]; then
         echo "name: $name not in subset that should be translated"
