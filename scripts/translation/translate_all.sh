@@ -39,6 +39,15 @@ TRANSLATE_SUBSET=(
   "raw_paracrawl.100.mined.score.instance_weighting"
   "raw_paracrawl.100.dcce.adq.instance_weighting"
   "raw_paracrawl.100.dcce.adq-dom.instance_weighting"
+  "raw_paracrawl.100.mined.score.instance_weighting.decay_0.0001"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.decay_0.0001"
+  "raw_paracrawl.100.dcce.adq-dom.instance_weighting.decay_0.0001"
+  "raw_paracrawl.100.mined.score.instance_weighting.decay_0.00001"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.decay_0.00001"
+  "raw_paracrawl.100.dcce.adq-dom.instance_weighting.decay_0.00001"
+  "raw_paracrawl.100.mined.score.instance_weighting.decay_0.000001"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.decay_0.000001"
+  "raw_paracrawl.100.dcce.adq-dom.instance_weighting.decay_0.000001"
 )
 
 function contains() {
@@ -85,6 +94,6 @@ for models_sub in $models/*; do
 
     mkdir -p $translations_sub
 
-    sbatch --qos=vesta --time=00:10:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 48g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $models_sub
+    sbatch --qos=vesta --time=00:12:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/translation/translate_generic.sh $base $data_sub $translations_sub $models_sub
 
 done

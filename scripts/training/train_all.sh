@@ -117,7 +117,7 @@ for prepared_sub in $prepared/*instance_weighting; do
         name=$original_name.decay_$weight_decay
 
         original_data_sub=$data/$original_name
-        data_sub=$data/name
+        data_sub=$data/$name
 
         ln -snf $original_data_sub $data_sub
 
