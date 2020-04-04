@@ -67,6 +67,41 @@ for mined_sub in $mined/*; do
 
 done
 
+# add versions with exponential smoothing
+
+for mined_sub in $mined/*; do
+
+    mining_method=score
+
+    model_name=$(basename $mined_sub)
+
+    model_name=$model_name.mined.$mining_method.instance_weighting
+    original_data_sub=$data/$model_name
+
+    for exp in 1.5 1.75 2.0 2.25 2.5 2.75 3.0; do
+
+        data_sub=$original_data_sub.exp$exp
+
+        if [[ -d $data_sub ]]; then
+          echo "data_sub exists: $data_sub"
+          echo "Skipping."
+          continue
+        fi
+
+        mkdir -p $data_sub
+
+        for lang in $src $trg; do
+            for corpus in train dev test test_ood; do
+                ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+            done
+        done
+
+        cat $original_data_sub/train.weights | python $scripts/preprocessing/exponential_smoothing.py --exp $exp > \
+            $data_sub/train.weights
+
+    done
+done
+
 for dcce_sub in $dcce/*; do
 
   for dcce_method in adq adq-dom; do
@@ -98,6 +133,43 @@ for dcce_sub in $dcce/*; do
       cat $origin_sub/scores.1 $origin_sub/scores.2 > $data_sub/train.weights
 
       . $scripts/preprocessing/concat_with_baseline_generic.sh
+
+  done
+done
+
+# add versions with exponential smoothing
+
+for dcce_sub in $dcce/*; do
+
+  # adq only for this
+
+  dcce_method=adq
+
+  model_name=$(basename $dcce_sub)
+
+  model_name=$model_name.dcce.$dcce_method.instance_weighting
+  original_data_sub=$data/$model_name
+
+  for exp in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9; do
+
+      data_sub=$original_data_sub.exp$exp
+
+      if [[ -d $data_sub ]]; then
+        echo "data_sub exists: $data_sub"
+        echo "Skipping."
+        continue
+      fi
+
+      mkdir -p $data_sub
+
+      for lang in $src $trg; do
+          for corpus in train dev test test_ood; do
+              ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+          done
+      done
+
+      cat $original_data_sub/train.weights | python $scripts/preprocessing/exponential_smoothing.py --exp $exp > \
+          $data_sub/train.weights
 
   done
 done
