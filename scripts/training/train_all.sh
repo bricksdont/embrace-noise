@@ -42,15 +42,22 @@ TRAIN_SUBSET_INSTANCE_WEIGHTING=(
   "raw_paracrawl.100.mined.score.instance_weighting"
   "raw_paracrawl.100.dcce.adq.instance_weighting"
   "raw_paracrawl.100.dcce.adq-dom.instance_weighting"
-  "raw_paracrawl.100.mined.score.instance_weighting.decay_0.0001"
-  "raw_paracrawl.100.dcce.adq.instance_weighting.decay_0.0001"
-  "raw_paracrawl.100.dcce.adq-dom.instance_weighting.decay_0.0001"
-  "raw_paracrawl.100.mined.score.instance_weighting.decay_0.00001"
-  "raw_paracrawl.100.dcce.adq.instance_weighting.decay_0.00001"
-  "raw_paracrawl.100.dcce.adq-dom.instance_weighting.decay_0.00001"
-  "raw_paracrawl.100.mined.score.instance_weighting.decay_0.000001"
-  "raw_paracrawl.100.dcce.adq.instance_weighting.decay_0.000001"
-  "raw_paracrawl.100.dcce.adq-dom.instance_weighting.decay_0.000001"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.1"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.2"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.3"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.4"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.5"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.6"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.7"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.8"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.9"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp1.5"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp1.75"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp2.0"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp2.25"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp2.5"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp2.75"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp3.0"
 )
 
 function contains() {
@@ -106,49 +113,43 @@ done
 deactivate
 source $base/venvs/sockeye3-custom/bin/activate
 
-for prepared_sub in $prepared/*instance_weighting; do
+for prepared_sub in $prepared/*instance_weighting*; do
 
     echo "prepared_sub: $prepared_sub"
 
-    original_name=$(basename $prepared_sub)
+    name=$(basename $prepared_sub)
 
-    for weight_decay in 0.00001; do
+    weight_decay=0.0
 
-        name=$original_name.decay_$weight_decay
+    data_sub=$data/$name
+    model_path=$models/$name
 
-        original_data_sub=$data/$original_name
-        data_sub=$data/$name
+    if [[ -d $model_path ]]; then
+        echo "Folder exists: $model_path"
 
-        ln -snf $original_data_sub $data_sub
+        training_finished=`grep "Training finished" $model_path/log | wc -l`
 
-        model_path=$models/$name
-
-        if [[ -d $model_path ]]; then
-            echo "Folder exists: $model_path"
-
-            training_finished=`grep "Training finished" $model_path/log | wc -l`
-
-            if [[ $training_finished == 0 ]]; then
-                echo "Training not finished"
-                echo "Will continue training."
-            else
-                echo "Training is finished"
-                echo "Skipping."
-                continue
-            fi
-        fi
-
-        if [ $(contains "${TRAIN_SUBSET_INSTANCE_WEIGHTING[@]}" $name) == "n" ]; then
-            echo "name: $name not in subset that should be trained"
+        if [[ $training_finished == 0 ]]; then
+            echo "Training not finished"
+            echo "Will continue training."
+        else
+            echo "Training is finished"
             echo "Skipping."
             continue
         fi
+    fi
 
-        mkdir -p $model_path
+    if [ $(contains "${TRAIN_SUBSET_INSTANCE_WEIGHTING[@]}" $name) == "n" ]; then
+        echo "name: $name not in subset that should be trained"
+        echo "Skipping."
+        continue
+    fi
 
-        instance_weighting_type="sentence"
+    mkdir -p $model_path
 
-        # used to be: 'gpu:Tesla-V100:1'
-        sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path $weight_decay $instance_weighting_type
-    done
+    instance_weighting_type="sentence"
+
+    # used to be: 'gpu:Tesla-V100:1'
+    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path $weight_decay $instance_weighting_type
+
 done

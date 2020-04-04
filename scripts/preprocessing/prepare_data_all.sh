@@ -46,6 +46,22 @@ PREPARE_INSTANCE_WEIGHTING_SUBSET=(
   "raw_paracrawl.100.mined.score.instance_weighting"
   "raw_paracrawl.100.dcce.adq.instance_weighting"
   "raw_paracrawl.100.dcce.adq-dom.instance_weighting"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.1"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.2"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.3"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.4"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.5"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.6"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.7"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.8"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.exp0.9"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp1.5"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp1.75"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp2.0"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp2.25"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp2.5"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp2.75"
+  "raw_paracrawl.100.mined.score.instance_weighting.exp3.0"
 )
 
 function contains() {
@@ -90,7 +106,7 @@ deactivate
 
 source $base/venvs/sockeye3-custom-cpu/bin/activate
 
-for data_sub in $data/*instance_weighting; do
+for data_sub in $data/*instance_weighting*; do
 
     echo "data_sub: $data_sub"
     name=$(basename $data_sub)
