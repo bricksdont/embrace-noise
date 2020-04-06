@@ -5,14 +5,14 @@
 # $prepared_sub
 # $data_sub
 # $model_path
-# $weight-decay
 # $instance_weighting_type
+# $additional_args
 
 prepared_sub=$1
 data_sub=$2
 model_path=$3
-weight_decay=$4
-instance_weighting_type=$5
+instance_weighting_type=$4
+additional_args=$5
 
 src=de
 trg=en
@@ -61,7 +61,7 @@ python -m sockeye.train \
 --num-words 50000:50000 \
 --optimizer adam \
 --initial-learning-rate 0.0001 \
---weight-decay $weight_decay \
+--weight-decay \
 --learning-rate-reduce-num-not-improved 4 \
 --checkpoint-frequency 1000 \
 --keep-last-params 30 \
@@ -74,4 +74,4 @@ python -m sockeye.train \
 --disable-device-locking \
 --instance-weighting \
 --instance-weighting-type $instance_weighting_type \
---loss weighted-cross-entropy
+--loss weighted-cross-entropy $additional_args

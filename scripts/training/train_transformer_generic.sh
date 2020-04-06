@@ -5,12 +5,12 @@
 # $prepared_sub
 # $data_sub
 # $model_path
-# weight_decay_arg
+# $additional_args
 
 prepared_sub=$1
 data_sub=$2
 model_path=$3
-weight_decay_arg=$4
+additional_args=$4
 
 src=de
 trg=en
@@ -58,7 +58,7 @@ python -m sockeye.train \
 --num-embed $num_embed \
 --num-words 50000:50000 \
 --optimizer adam \
---initial-learning-rate 0.0001 $weight_decay_arg \
+--initial-learning-rate 0.0001 \
 --learning-rate-reduce-num-not-improved 4 \
 --checkpoint-frequency 1000 \
 --keep-last-params 30 \
@@ -68,4 +68,4 @@ python -m sockeye.train \
 --min-num-epochs 0 \
 --gradient-clipping-type abs \
 --gradient-clipping-threshold 1 \
---disable-device-locking
+--disable-device-locking $additional_args

@@ -105,9 +105,10 @@ for prepared_sub in $prepared/*; do
 
     mkdir -p $model_path
 
-    weight_decay_arg=""
+    additional_args=""
 
-    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_generic.sh $prepared_sub $data_sub $model_path $weight_decay_arg
+    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_generic.sh \
+        $prepared_sub $data_sub $model_path $additional_args
 done
 
 deactivate
@@ -118,8 +119,6 @@ for prepared_sub in $prepared/*instance_weighting*; do
     echo "prepared_sub: $prepared_sub"
 
     name=$(basename $prepared_sub)
-
-    weight_decay=0.0
 
     data_sub=$data/$name
     model_path=$models/$name
@@ -147,9 +146,13 @@ for prepared_sub in $prepared/*instance_weighting*; do
 
     mkdir -p $model_path
 
+    additional_args=""
+
     instance_weighting_type="sentence"
 
     # used to be: 'gpu:Tesla-V100:1'
-    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path $weight_decay $instance_weighting_type
+    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g \
+        $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path $instance_weighting_type \
+        $additional_args
 
 done
