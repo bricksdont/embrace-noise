@@ -15,6 +15,9 @@ additional_args=$4
 src=de
 trg=en
 
+echo "additiona args: "
+echo "$additional_args"
+
 echo $CUDA_VISIBLE_DEVICES
 echo "Done reading visible devices."
 
@@ -68,4 +71,4 @@ python -m sockeye.train \
 --min-num-epochs 0 \
 --gradient-clipping-type abs \
 --gradient-clipping-threshold 1 \
---disable-device-locking $additional_args
+--disable-device-locking "$additional_args"
