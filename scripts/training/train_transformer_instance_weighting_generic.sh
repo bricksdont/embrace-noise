@@ -61,7 +61,6 @@ python -m sockeye.train \
 --num-words 50000:50000 \
 --optimizer adam \
 --initial-learning-rate 0.0001 \
---weight-decay \
 --learning-rate-reduce-num-not-improved 4 \
 --checkpoint-frequency 1000 \
 --keep-last-params 30 \
