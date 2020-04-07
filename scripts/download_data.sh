@@ -67,6 +67,7 @@ ln -s $data/raw/test/newstest2017-$src$trg-src.$src.sgm.txt $data/raw/test/test.
 ln -s $data/raw/test/newstest2017-$src$trg-ref.$trg.sgm.txt $data/raw/test/test.$trg
 
 # look for test in different domain
+# in-house data, cannot download at the moment
 
 if [[ -f /net/cephfs/scratch/mathmu/laser-contra/filtered/cs-bulletin.filtered.de-en ]]; then
 
@@ -74,6 +75,16 @@ if [[ -f /net/cephfs/scratch/mathmu/laser-contra/filtered/cs-bulletin.filtered.d
 
   cut -f1 $data/raw/test_ood/test_ood.both > $data/raw/test_ood/test_ood.$src
   cut -f2 $data/raw/test_ood/test_ood.both > $data/raw/test_ood/test_ood.$trg
+fi
+
+# OR: different OOD domain
+# download this with:
+# https://raw.githubusercontent.com/awslabs/sockeye/master/docs/tutorials/multilingual/prepare-iwslt17-multilingual.sh
+
+if [[ -f /net/cephfs/scratch/mathmu/iwslt_prepare/data/test.$src-$trg.$src ]]; then
+
+  cp /net/cephfs/scratch/mathmu/iwslt_prepare/data/test.$src-$trg.$src $data/raw/test_ood/test_ood.$src
+  cp /net/cephfs/scratch/mathmu/iwslt_prepare/data/test.$src-$trg.$trg $data/raw/test_ood/test_ood.$trg
 fi
 
 # sizes
