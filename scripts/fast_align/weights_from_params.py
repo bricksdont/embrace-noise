@@ -2,6 +2,7 @@
 
 import numpy as np
 
+import time
 import argparse
 import logging
 
@@ -61,9 +62,12 @@ def get_probs(target_token, source_tokens, probs):
 
 def main():
 
+    tic = time.time()
+
     args = parse_args()
 
     logging.basicConfig(level=logging.DEBUG)
+    logging.debug(args)
 
     input_paths = [args.source, args.target]
     input_handles = [open(path, "r") for path in input_paths]
@@ -71,6 +75,8 @@ def main():
     output_handle = open(args.weights, "w")
 
     probs = read_params(args.params)
+
+    lines_seen = 0
 
     for source, target in zip(*input_handles):
 
@@ -96,6 +102,16 @@ def main():
         assert len(weights) == len_target
 
         output_handle.write(" ".join(weights) + "\n")
+
+        lines_seen += 1
+
+        if lines_seen % 100000 == 0:
+            intermediate_toc = time.time() - tic
+            logging.debug("Lines seen: %d, time taken so far: %f seconds" % (lines_seen, intermediate_toc))
+
+    toc = time.time() - tic
+
+    logging.debug("Overall time taken: %f seconds" % toc)
 
 
 if __name__ == '__main__':
