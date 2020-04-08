@@ -8,6 +8,9 @@ import logging
 from collections import defaultdict
 
 
+VERY_NEGATIVE_LOGPROB = -100.0
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
 
@@ -24,7 +27,7 @@ def parse_args():
 
 def read_params(path):
 
-    probs = defaultdict(lambda: defaultdict(float))
+    probs = defaultdict(dict)
 
     with open(path, "r") as fin:
         for line in fin:
@@ -37,6 +40,23 @@ def read_params(path):
             probs[target][source] = prob
 
     return probs
+
+
+def get_probs(target_token, source_tokens, probs):
+
+    extracted_probs = []
+
+    sub_dict = probs[target_token]
+
+    for source_token in source_tokens:
+        if source_token in sub_dict.keys():
+            prob = sub_dict[source_token]
+        else:
+            prob = VERY_NEGATIVE_LOGPROB
+
+        extracted_probs.append(prob)
+
+    return extracted_probs
 
 
 def main():
@@ -52,6 +72,8 @@ def main():
 
     probs = read_params(args.params)
 
+    print(probs)
+
     for source, target in zip(*input_handles):
 
         source_tokens = source.strip().split(" ")
@@ -61,9 +83,9 @@ def main():
 
         len_target = len(target_tokens)
 
-        for target_token in enumerate(target_tokens):
+        for target_token in target_tokens:
 
-            source_probs = [probs[target_token][source_token] for source_token in source_tokens]
+            source_probs = get_probs(target_token, source_tokens, probs)
 
             assert len(source_probs) != 0
 
