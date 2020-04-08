@@ -72,8 +72,6 @@ def main():
 
     probs = read_params(args.params)
 
-    print(probs)
-
     for source, target in zip(*input_handles):
 
         source_tokens = source.strip().split(" ")
