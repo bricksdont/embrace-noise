@@ -108,7 +108,7 @@ for prepared_sub in $prepared/*; do
     additional_args=""
 
     sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_generic.sh \
-        $prepared_sub $data_sub $model_path $additional_args
+        $prepared_sub $data_sub $model_path "$additional_args"
 done
 
 deactivate
@@ -153,6 +153,6 @@ for prepared_sub in $prepared/*instance_weighting*; do
     # used to be: 'gpu:Tesla-V100:1'
     sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g \
         $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path $instance_weighting_type \
-        $additional_args
+        "$additional_args"
 
 done

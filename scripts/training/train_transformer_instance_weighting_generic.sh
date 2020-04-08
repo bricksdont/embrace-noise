@@ -14,7 +14,7 @@ model_path=$3
 instance_weighting_type=$4
 additional_args=$5
 
-echo "additiona args: "
+echo "additional args: "
 echo "$additional_args"
 
 src=de
@@ -76,4 +76,4 @@ python -m sockeye.train \
 --disable-device-locking \
 --instance-weighting \
 --instance-weighting-type $instance_weighting_type \
---loss weighted-cross-entropy "$additional_args"
+--loss weighted-cross-entropy $additional_args
