@@ -24,7 +24,7 @@ def parse_args():
 
 def read_params(path):
 
-    probs = defaultdict(defaultdict(float))
+    probs = defaultdict(lambda: defaultdict(float))
 
     with open(path, "r") as fin:
         for line in fin:
