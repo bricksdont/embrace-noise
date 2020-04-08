@@ -18,7 +18,7 @@ alignments=$base/alignments
 for model_name in raw_paracrawl.100.filtered; do
 
    data_sub=$data/$model_name
-   fast_align_sub=$fast_align/$model_name
+   fast_align_sub=$fast_align/baseline
    alignments_sub=$alignments/$model_name
 
    python $base/scripts/fast_align/weights_from_params.py \
