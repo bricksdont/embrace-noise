@@ -8,4 +8,4 @@ module use /sapps/etc/modules/start/
 module load hydra
 
 
-sbatch --cpus-per-task=1 --time=02:00:00 --mem=4G --partition=hydra $base/scripts/fast_align/weights_from_params.sh
+sbatch --cpus-per-task=1 --time=05:00:00 --mem=4G --partition=hydra $base/scripts/fast_align/weights_from_params.sh

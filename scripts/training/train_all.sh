@@ -121,7 +121,9 @@ done
 deactivate
 source $base/venvs/sockeye3-custom/bin/activate
 
-for prepared_sub in $prepared/*instance_weighting*; do
+echo "switched to custom Sockeye codebase"
+
+for prepared_sub in $prepared/*; do
 
     echo "prepared_sub: $prepared_sub"
 
