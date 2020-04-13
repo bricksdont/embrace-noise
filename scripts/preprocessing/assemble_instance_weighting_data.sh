@@ -173,3 +173,33 @@ for dcce_sub in $dcce/*; do
 
   done
 done
+
+# add 1.0 weight variants of baseline systems
+
+for original_name in baseline baseline.filtered raw_paracrawl.100.filtered.tagged raw_paracrawl.100.mined.score.0.25 raw_paracrawl.100.mined.score.instance_weighting raw_paracrawl.100.dcce.adq.0.25 raw_paracrawl.100.dcce.adq.instance_weighting; do
+
+    original_data_sub=$data/$original_name
+
+    name=$original_name.weight_ones
+    data_sub=$data/$name
+
+    if [[ -d $data_sub ]]; then
+        echo "data_sub exists: $data_sub"
+        echo "Skipping."
+        continue
+    fi
+
+    mkdir -p $data_sub
+
+    # link entire data folder
+
+    for lang in $src $trg; do
+          for corpus in train dev test test_ood; do
+              ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+          done
+    done
+
+    python $scripts/preprocessing/create_weights_like.py --like $data_sub/train.bpe.$trg --method ones --instance-weight-type sentence > \
+        $data_sub/train.weights
+
+done

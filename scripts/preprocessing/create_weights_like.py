@@ -16,7 +16,9 @@ def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--method", type=str, help="Random or 10 weight", required=True, choices=METHODS)
-    parser.add_argument("--like", type=str, help="Create one weight for each token in this file.", required=True)
+    parser.add_argument("--like", type=str, help="Create one weight for each token or sentence in this file.", required=True)
+    parser.add_argument("--instance-weight-type", type=str, help="Sentence or word-level weights.", required=True,
+                        choices=["sentence", "word"])
 
     args = parser.parse_args()
 
@@ -38,10 +40,14 @@ def main():
     with open(args.like, "r") as fin:
 
         for line in fin:
-            tokens = line.strip().split(" ")
-            values = [random_value() for _ in tokens]
 
-            print(" ".join(values))
+            if args.instance_weight_type == "word":
+                tokens = line.strip().split(" ")
+                values = [random_value() for _ in tokens]
+
+                print(" ".join(values))
+            else:
+                print(random_value())
 
 
 if __name__ == '__main__':
