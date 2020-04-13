@@ -176,7 +176,7 @@ done
 
 # add 1.0 weight variants of baseline systems
 
-for original_name in baseline baseline.filtered raw_paracrawl.100.filtered.tagged raw_paracrawl.100.mined.score.0.25 raw_paracrawl.100.mined.score.instance_weighting raw_paracrawl.100.dcce.adq.0.25 raw_paracrawl.100.dcce.adq.instance_weighting; do
+for original_name in baseline baseline.filtered raw_paracrawl.100 raw_paracrawl.100.filtered.tagged raw_paracrawl.100.mined.score.0.25 raw_paracrawl.100.mined.score.instance_weighting raw_paracrawl.100.dcce.adq.0.25 raw_paracrawl.100.dcce.adq.instance_weighting; do
 
     original_data_sub=$data/$original_name
 

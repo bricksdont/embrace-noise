@@ -62,6 +62,13 @@ PREPARE_INSTANCE_WEIGHTING_SUBSET=(
   "raw_paracrawl.100.mined.score.instance_weighting.exp2.5"
   "raw_paracrawl.100.mined.score.instance_weighting.exp2.75"
   "raw_paracrawl.100.mined.score.instance_weighting.exp3.0"
+  "baseline.filtered.weight_ones"
+  "raw_paracrawl.100.weight_ones"
+  "raw_paracrawl.100.filtered.tagged.weight_ones"
+  "raw_paracrawl.100.mined.score.0.25.weight_ones"
+  "raw_paracrawl.100.mined.score.instance_weighting.weight_ones"
+  "raw_paracrawl.100.dcce.adq.0.25.weight_ones"
+  "raw_paracrawl.100.dcce.adq.instance_weighting.weight_ones"
 )
 
 function contains() {

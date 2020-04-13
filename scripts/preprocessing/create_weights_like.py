@@ -30,6 +30,7 @@ def main():
     args = parse_args()
 
     logging.basicConfig(level=logging.DEBUG)
+    logging.debug(args)
 
     def random_value():
         if args.method == RANDOM:
