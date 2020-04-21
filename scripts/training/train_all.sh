@@ -67,6 +67,10 @@ TRAIN_SUBSET_INSTANCE_WEIGHTING=(
   "raw_paracrawl.100.dcce.adq.instance_weighting.weight_ones"
 )
 
+TRAIN_SUBSET_TOKEN_WEIGHTING=(
+  "raw_paracrawl.100.filtered.token_weighting"
+)
+
 function contains() {
     local n=$#
     local value=${!n}
@@ -158,6 +162,49 @@ for prepared_sub in $prepared/*; do
     additional_args=""
 
     instance_weighting_type="sentence"
+
+    # used to be: 'gpu:Tesla-V100:1'
+    sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g \
+        $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path $instance_weighting_type \
+        "$additional_args"
+
+done
+
+for prepared_sub in $prepared/*token_weighting; do
+
+    echo "prepared_sub: $prepared_sub"
+
+    name=$(basename $prepared_sub)
+
+    data_sub=$data/$name
+    model_path=$models/$name
+
+    if [[ -d $model_path ]]; then
+        echo "Folder exists: $model_path"
+
+        training_finished=`grep "Training finished" $model_path/log | wc -l`
+
+        if [[ $training_finished == 0 ]]; then
+            echo "Training not finished"
+            echo "Will maybe continue training."
+        else
+            echo "Training is finished"
+            echo "Skipping."
+            continue
+        fi
+    fi
+
+    if [ $(contains "${TRAIN_SUBSET_TOKEN_WEIGHTING[@]}" $name) == "n" ]; then
+        echo "name: $name not in subset that should be trained"
+        echo "Skipping."
+        continue
+    fi
+
+    mkdir -p $model_path
+
+    additional_args=""
+
+    instance_weighting_type="word"
 
     # used to be: 'gpu:Tesla-V100:1'
     sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g \

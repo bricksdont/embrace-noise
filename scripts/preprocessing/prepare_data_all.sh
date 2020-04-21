@@ -71,6 +71,10 @@ PREPARE_INSTANCE_WEIGHTING_SUBSET=(
   "raw_paracrawl.100.dcce.adq.instance_weighting.weight_ones"
 )
 
+PREPARE_TOKEN_WEIGHTING_SUBSET=(
+  "raw_paracrawl.100.filtered.token_weighting"
+)
+
 function contains() {
     local n=$#
     local value=${!n}
@@ -139,3 +143,31 @@ for data_sub in $data/*; do
     sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type
 
 done
+
+for data_sub in $data/*token_weighting; do
+
+    echo "data_sub: $data_sub"
+    name=$(basename $data_sub)
+
+    prepared_sub=$prepared/$name
+
+    if [[ -d $prepared_sub ]]; then
+        echo "Folder exists: $prepared_sub"
+        echo "Skipping."
+        continue
+    fi
+
+    if [ $(contains "${PREPARE_TOKEN_WEIGHTING_SUBSET[@]}" $name) == "n" ]; then
+        echo "name: $name not in subset that should be prepared"
+        echo "Skipping."
+        continue
+    fi
+
+    mkdir -p $prepared_sub
+
+    instance_weighting_type="word"
+
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type
+
+done
+

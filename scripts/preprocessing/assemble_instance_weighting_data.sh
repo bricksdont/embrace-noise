@@ -203,3 +203,24 @@ for original_name in baseline baseline.filtered raw_paracrawl.100 raw_paracrawl.
         $data_sub/train.weights
 
 done
+
+# then one more system with fast_align token-level weights
+
+original_data_sub=$data/raw_paracrawl.100.filtered
+
+name=$original_name.token_weighting
+data_sub=$data/$name
+
+mkdir -p $data_sub
+
+ # link entire data folder
+
+for lang in $src $trg; do
+    for corpus in train dev test test_ood; do
+        ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+    done
+done
+
+# link weights
+
+ln -snf $base/alignments/$original_name/weights $data_sub/train.weights
