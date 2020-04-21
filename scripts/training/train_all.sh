@@ -139,7 +139,7 @@ for prepared_sub in $prepared/*; do
 
         if [[ $training_finished == 0 ]]; then
             echo "Training not finished"
-            echo "Will continue training."
+            echo "Will maybe continue training."
         else
             echo "Training is finished"
             echo "Skipping."

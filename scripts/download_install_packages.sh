@@ -94,8 +94,6 @@ source $base/venvs/sockeye3-custom/bin/activate
 echo "check current python after sourcing CPU env:"
 which python
 
-source
-
 git clone https://github.com/ZurichNLP/sockeye $tools/sockeye-custom
 
 (cd $tools/sockeye-custom && git checkout instance_weighting)
