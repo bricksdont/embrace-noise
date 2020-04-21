@@ -206,7 +206,8 @@ done
 
 # then one more system with fast_align token-level weights
 
-original_data_sub=$data/raw_paracrawl.100.filtered
+original_name="raw_paracrawl.100.filtered"
+original_data_sub=$data/$original_name
 
 name=$original_name.token_weighting
 data_sub=$data/$name
