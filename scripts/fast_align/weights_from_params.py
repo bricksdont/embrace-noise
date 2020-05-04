@@ -10,6 +10,7 @@ from collections import defaultdict
 
 
 VERY_NEGATIVE_LOGPROB = -100.0
+NULL_TOKEN_STRING = "<eps>"
 
 
 def parse_args():
@@ -48,6 +49,8 @@ def get_probs(target_token, source_tokens, probs):
     extracted_probs = []
 
     inserted_default_prob = 0
+
+    source_tokens = [NULL_TOKEN_STRING] + source_tokens
 
     for source_token in source_tokens:
 
