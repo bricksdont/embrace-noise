@@ -15,9 +15,19 @@ data=$base/data
 fast_align=$base/fast_align
 alignments=$base/alignments
 
+mkdir -p $alignments
+
 for model_name in raw_paracrawl.100.filtered; do
+
+    echo "model_name: $model_name"
+
     for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
+
+         echo "fast_align_model: $fast_align_model"
+
          for reverse_method in min max mean ignore; do
+
+             echo "reverse_method: $reverse_method"
 
              data_sub=$data/$model_name
              fast_align_sub=$fast_align/$fast_align_model

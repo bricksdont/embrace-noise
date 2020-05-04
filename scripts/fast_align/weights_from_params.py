@@ -12,7 +12,7 @@ from collections import defaultdict
 VERY_NEGATIVE_LOGPROB = -100.0
 NULL_TOKEN_STRING = "<eps>"
 
-USE_REVERSE_METHODS=["min", "max", "mean", "ignore"]
+USE_REVERSE_METHODS=["min", "max", "mean", "ignore", "only"]
 
 
 def parse_args():
@@ -92,6 +92,8 @@ def combine_probs(probs_forward, probs_reverse, use_reverse_method):
 
     if use_reverse_method == "ignore":
         return probs_forward
+    if use_reverse_method == "only":
+        return probs_reverse
     elif use_reverse_method == "min":
         return np.minimum(probs_forward, probs_reverse)
     elif use_reverse_method == "max":
