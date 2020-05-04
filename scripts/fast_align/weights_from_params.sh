@@ -31,7 +31,7 @@ for model_name in raw_paracrawl.100.filtered; do
 
        mkdir -p $alignments_sub
 
-       sbatch --cpus-per-task=1 --time=05:00:00 --mem=4G --partition=hpc $base/scripts/fast_align/weights_from_params_generic.sh $base $fast_align_sub $alignments_sub $data_sub
+       sbatch --cpus-per-task=1 --time=05:00:00 --mem=32G --partition=hpc $base/scripts/fast_align/weights_from_params_generic.sh $base $fast_align_sub $alignments_sub $data_sub
 
   done
 done
