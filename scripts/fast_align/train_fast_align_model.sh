@@ -12,34 +12,50 @@ trg=en
 
 data=$base/data
 
-data_sub=$data/baseline
-
 fast_align=$base/fast_align
 
 mkdir -p $fast_align
 
-# forward model
+for model_name in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
 
-fast_align_sub=$fast_align/baseline
+    data_sub=$data/$model_name
 
-mkdir -p $fast_align_sub
+    echo "data_sub: $data_sub"
 
-if [[ ! -s $fast_align_sub/input.raw ]]; then
-    perl $base/tools/paste-files.pl $data_sub/train.bpe.$src $data_sub/train.bpe.$trg > $fast_align_sub/input.raw
-fi
+    # forward model
 
-if [[ ! -s $fast_align_sub/input ]]; then
-    perl $base/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input
-fi
+    fast_align_sub=$fast_align/baseline
 
-sbatch --cpus-per-task=32 --time=02:00:00 --mem=16G --partition=hpc $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub ""
+    if [[ -d $fast_align_sub ]]; then
+        echo "Folder exists: $fast_align_sub"
+        echo "Skipping."
+    fi
 
-# reverse model
+    mkdir -p $fast_align_sub
 
-fast_align_sub=$fast_align/baseline_reverse
+    if [[ ! -s $fast_align_sub/input.raw ]]; then
+        perl $base/tools/paste-files.pl $data_sub/train.bpe.$src $data_sub/train.bpe.$trg > $fast_align_sub/input.raw
+    fi
 
-mkdir -p $fast_align_sub
+    if [[ ! -s $fast_align_sub/input ]]; then
+        perl $base/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input
+    fi
 
-ln -snf $fast_align/baseline/input $fast_align/baseline_reverse/input
+    sbatch --cpus-per-task=32 --time=02:00:00 --mem=16G --partition=hpc $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub ""
 
-sbatch --cpus-per-task=32 --time=02:00:00 --mem=16G --partition=hpc $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub "-r"
+    # reverse model
+
+    fast_align_sub=$fast_align/"$model_name"_reverse
+
+    if [[ -d $fast_align_sub ]]; then
+        echo "Folder exists: $fast_align_sub"
+        echo "Skipping."
+    fi
+
+    mkdir -p $fast_align_sub
+
+    ln -snf $fast_align/$model_name/input $fast_align/"$model_name"_reverse/input
+
+    sbatch --cpus-per-task=32 --time=02:00:00 --mem=16G --partition=hpc $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub "-r"
+
+done
