@@ -38,7 +38,7 @@ def read_params(path):
 
             prob = float(prob)
 
-            probs[target][source] = prob
+            probs[source][target] = prob
 
     return probs
 
@@ -47,17 +47,21 @@ def get_probs(target_token, source_tokens, probs):
 
     extracted_probs = []
 
-    sub_dict = probs[target_token]
+    inserted_default_prob = 0
 
     for source_token in source_tokens:
-        if source_token in sub_dict.keys():
-            prob = sub_dict[source_token]
+
+        sub_dict = probs[source_token]
+
+        if target_token in sub_dict.keys():
+            prob = sub_dict[target_token]
         else:
             prob = VERY_NEGATIVE_LOGPROB
+            inserted_default_prob += 1
 
         extracted_probs.append(prob)
 
-    return extracted_probs
+    return extracted_probs, inserted_default_prob
 
 
 def main():
@@ -78,6 +82,8 @@ def main():
 
     lines_seen = 0
 
+    inserted_default_prob_global = 0
+
     for source, target in zip(*input_handles):
 
         source_tokens = source.strip().split(" ")
@@ -89,7 +95,9 @@ def main():
 
         for target_token in target_tokens:
 
-            source_probs = get_probs(target_token, source_tokens, probs)
+            source_probs, inserted_default_prob = get_probs(target_token, source_tokens, probs)
+
+            inserted_default_prob_global += inserted_default_prob
 
             assert len(source_probs) != 0
 
@@ -110,6 +118,8 @@ def main():
             logging.debug("Lines seen: %d, time taken so far: %f seconds" % (lines_seen, intermediate_toc))
 
     toc = time.time() - tic
+
+    logging.debug("Number of times inserted default prob: %d" % inserted_default_prob_global)
 
     logging.debug("Overall time taken: %f seconds" % toc)
 
