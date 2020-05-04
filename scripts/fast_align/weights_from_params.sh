@@ -25,7 +25,7 @@ for model_name in raw_paracrawl.100.filtered; do
 
          echo "fast_align_model: $fast_align_model"
 
-         for reverse_method in min max mean ignore; do
+         for reverse_method in min max mean ignore only; do
 
              echo "reverse_method: $reverse_method"
 
