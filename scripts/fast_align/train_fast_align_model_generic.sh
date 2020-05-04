@@ -11,7 +11,8 @@ fast_align_sub=$2
 reverse_option=$3
 
 
-OMP_NUM_THREADS=16 $base/tools/fast_align/build/fast_align \
+OMP_NUM_THREADS=32 $base/tools/fast_align/build/fast_align \
+    -t -10000.0 \
     -i $fast_align_sub/input \
     -d -v -o $reverse_option \
     -p $fast_align_sub/params.out \
