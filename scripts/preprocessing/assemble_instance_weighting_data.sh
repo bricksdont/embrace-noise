@@ -12,6 +12,7 @@ scripts=$base/scripts
 data=$base/data
 preprocessed=$base/preprocessed
 filtered=$base/filtered
+alignments=$base/alignments
 
 mined=$base/mined
 dcce=$base/dcce
@@ -204,24 +205,79 @@ for original_name in baseline baseline.filtered raw_paracrawl.100 raw_paracrawl.
 
 done
 
-# then one more system with fast_align token-level weights
+# systems with fast_align token-level weights: clean corpus has 1.0 for all tokens
 
-original_name="raw_paracrawl.100.filtered"
-original_data_sub=$data/$original_name
+for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
 
-name=$original_name.token_weighting
-data_sub=$data/$name
+    original_name="raw_paracrawl.100.filtered"
+    original_data_sub=$data/$original_name
 
-mkdir -p $data_sub
+    name=$original_name.token_weighting.trust_clean.fa_model.$fast_align_model
+    data_sub=$data/$name
 
- # link entire data folder
+    if [[ -d $data_sub ]]; then
+        echo "data_sub exists: $data_sub"
+        echo "Skipping."
+        continue
+    fi
 
-for lang in $src $trg; do
-    for corpus in train dev test test_ood; do
-        ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+    mkdir -p $data_sub
+
+    alignments_sub=$alignments/$original_name.$fast_align_model
+
+     # link entire data folder
+
+    for lang in $src $trg; do
+        for corpus in train dev test test_ood; do
+            ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+        done
     done
+
+    # baseline lines: 3520019, raw_paracrawl.100.filtered: 5589342 noise part: 2069323
+
+    python $scripts/preprocessing/create_weights_like.py --like $data/baseline/train.bpe.$trg \
+        --method ones --instance-weight-type word > $data_sub/train.clean.weights
+
+    tail -n 2069323 $alignments_sub/weights > $data_sub/train.noisy.weights
+
+    # concat weights
+
+    cat $data_sub/train.clean.weights $data_sub/train.noisy.weights > $data_sub/train.weights
+
 done
 
-# link weights
+# systems with fast_align token-level weights: clean corpus has FA weights as well
 
-ln -snf $base/alignments/$original_name/weights $data_sub/train.weights
+for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
+
+    original_name="raw_paracrawl.100.filtered"
+    original_data_sub=$data/$original_name
+
+    name=$original_name.token_weighting.distrust_clean.fa_model.$fast_align_model
+    data_sub=$data/$name
+
+    if [[ -d $data_sub ]]; then
+        echo "data_sub exists: $data_sub"
+        echo "Skipping."
+        continue
+    fi
+
+    mkdir -p $data_sub
+
+    alignments_sub=$alignments/$original_name.$fast_align_model
+
+     # link entire data folder
+
+    for lang in $src $trg; do
+        for corpus in train dev test test_ood; do
+            ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+        done
+    done
+
+    # link weights
+
+    ln -snf $alignments_sub/weights $data_sub/train.weights
+
+done
+
+# exponential smoothing for token_weighting systems

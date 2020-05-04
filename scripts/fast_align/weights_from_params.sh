@@ -30,7 +30,3 @@ for model_name in raw_paracrawl.100.filtered; do
 
   done
 done
-
-
-
-
