@@ -24,7 +24,7 @@ for model_name in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
 
     # forward model
 
-    fast_align_sub=$fast_align/baseline
+    fast_align_sub=$fast_align/$model_name
 
     if [[ -d $fast_align_sub ]]; then
         echo "Folder exists: $fast_align_sub"
