@@ -99,7 +99,7 @@ def combine_probs(probs_forward, probs_reverse, use_reverse_method):
     elif use_reverse_method == "max":
         return np.maximum(probs_forward, probs_reverse)
     elif use_reverse_method == "mean":
-        return np.mean([probs_forward, probs_reverse])
+        return np.mean([probs_forward, probs_reverse], axis=0)
     else:
         raise NotImplementedError
 
