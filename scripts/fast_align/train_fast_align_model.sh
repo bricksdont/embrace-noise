@@ -29,6 +29,7 @@ for model_name in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
     if [[ -d $fast_align_sub ]]; then
         echo "Folder exists: $fast_align_sub"
         echo "Skipping."
+        continue
     fi
 
     mkdir -p $fast_align_sub
@@ -76,6 +77,7 @@ for original_model_name in baseline raw_paracrawl.100 raw_paracrawl.100.filtered
     if [[ -d $fast_align_sub ]]; then
         echo "Folder exists: $fast_align_sub"
         echo "Skipping."
+        continue
     fi
 
     mkdir -p $fast_align_sub
