@@ -42,7 +42,7 @@ for model_name in raw_paracrawl.100.filtered; do
 
              mkdir -p $alignments_sub
 
-             sbatch --cpus-per-task=1 --time=12:00:00 --mem=32G --partition=hpc $base/scripts/fast_align/weights_from_params_generic.sh \
+             sbatch --cpus-per-task=1 --time=12:00:00 --mem=64G --partition=hpc $base/scripts/fast_align/weights_from_params_generic.sh \
                  $base $fast_align_sub $alignments_sub $data_sub $fast_align_sub_reverse $reverse_method
 
           done
