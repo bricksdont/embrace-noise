@@ -26,7 +26,10 @@ def parse_args():
     parser.add_argument("--source", type=str, help="Path to source sentences", required=True)
     parser.add_argument("--target", type=str, help="Path to source sentences", required=True)
 
-    parser.add_argument("--use-reverse-method", type=str, help="Path to source sentences", required=False, default="mean")
+    parser.add_argument("--use-reverse-method", type=str, help="How to factor in the reverse alignment model.", required=False, default="mean",
+                        choices=USE_REVERSE_METHODS)
+    parser.add_argument("--word-level", action="store_true", help="Use if probs are word-level and need to be propagated to subwords", required=False,
+                        default=False)
 
     args = parser.parse_args()
 
@@ -127,6 +130,12 @@ def main():
 
     for source, target in zip(*input_handles):
 
+        if args.word_level:
+            # remove BPE from tokens but save a copy of target subwords
+            target_subwords = target.strip().split(" ")
+            source = source.replace("@@ ", "").replace("@@", "")
+            target = target.replace("@@ ", "").replace("@@", "")
+
         source_tokens = source.strip().split(" ")
         target_tokens = target.strip().split(" ")
 
@@ -154,6 +163,21 @@ def main():
             weights.append(max_prob)
 
         assert len(weights) == len_target
+
+        if args.word_level:
+            subword_weights = []
+
+            # propagate weights to target subwords
+            weight_index = 0
+            for target_subword in target_subwords:
+                subword_weights.append(weights[weight_index])
+                if "@@" in target_subword:
+                    # do not advance weight index
+                    continue
+                else:
+                    weight_index += 1
+
+            weights = subword_weights
 
         output_handle.write(" ".join(weights) + "\n")
 
