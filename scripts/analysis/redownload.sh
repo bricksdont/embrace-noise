@@ -4,7 +4,7 @@ base=/Users/mathiasmuller/Desktop/noise-distill-tensorboard-logs/weights
 
 dataset_names="raw_paracrawl.100.filtered"
 methods="ignore only min max mean"
-align_models="baseline raw_paracrawl.100 raw_paracrawl.100.filtered"
+align_models="baseline baseline.word_level raw_paracrawl.100 raw_paracrawl.100.word_level raw_paracrawl.100.filtered raw_paracrawl.100.filtered.word_level"
 
 for dataset in $dataset_names; do
     for method in $methods; do

@@ -20,22 +20,23 @@ word_level_arg=$7
 src=de
 trg=en
 
-# TODO uncomment
+if [[ -f $data_sub/train.bpe.sample.$src ]]; then
 
-#python $base/scripts/fast_align/weights_from_params.py \
-#   --params $fast_align_sub/params.out \
-#   --params-reverse $fast_align_sub_reverse/params.out \
-#   --use-reverse-method $use_reverse_method \
-#   --weights $alignments_sub/weights \
-#   --source $data_sub/train.bpe.$src \
-#   --target $data_sub/train.bpe.$trg $word_level_arg
+    python $base/scripts/fast_align/weights_from_params.py \
+       --params $fast_align_sub/params.out \
+       --params-reverse $fast_align_sub_reverse/params.out \
+       --use-reverse-method $use_reverse_method \
+       --weights $alignments_sub/sample \
+       --source $data_sub/train.bpe.sample.$src \
+       --target $data_sub/train.bpe.sample.$trg $word_level_arg
+fi
 
-# for now, sample only
+exit
 
 python $base/scripts/fast_align/weights_from_params.py \
    --params $fast_align_sub/params.out \
    --params-reverse $fast_align_sub_reverse/params.out \
    --use-reverse-method $use_reverse_method \
-   --weights $alignments_sub/sample \
-   --source $data_sub/train.bpe.sample.$src \
-   --target $data_sub/train.bpe.sample.$trg $word_level_arg
+   --weights $alignments_sub/weights \
+   --source $data_sub/train.bpe.$src \
+   --target $data_sub/train.bpe.$trg $word_level_arg
