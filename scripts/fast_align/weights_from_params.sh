@@ -52,6 +52,10 @@ for model_name in raw_paracrawl.100.filtered; do
 
     # word-level models
 
+    for lang in $src $trg; do
+        cat $data_sub/train.bpe.$lang | python $base/scripts/analysis/strided_sample.py > $data_sub/train.bpe.sample.$lang
+    done
+
     for fast_align_model in baseline.word_level raw_paracrawl.100.word_level raw_paracrawl.100.filtered.word_level; do
 
          echo "fast_align_model: $fast_align_model"
