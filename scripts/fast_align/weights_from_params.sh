@@ -21,6 +21,8 @@ for model_name in raw_paracrawl.100.filtered; do
 
     echo "model_name: $model_name"
 
+    data_sub=$data/$model_name
+
     for lang in $src $trg; do
         cat $data_sub/train.bpe.$lang | python $base/scripts/analysis/strided_sample.py > $data_sub/train.bpe.sample.$lang
     done
@@ -33,7 +35,6 @@ for model_name in raw_paracrawl.100.filtered; do
 
              echo "reverse_method: $reverse_method"
 
-             data_sub=$data/$model_name
              fast_align_sub=$fast_align/$fast_align_model
              fast_align_sub_reverse="$fast_align/$fast_align_model"_reverse
              alignments_sub=$alignments/$model_name.$fast_align_model.$reverse_method
@@ -64,7 +65,6 @@ for model_name in raw_paracrawl.100.filtered; do
 
              echo "reverse_method: $reverse_method"
 
-             data_sub=$data/$model_name
              fast_align_sub=$fast_align/$fast_align_model
              fast_align_sub_reverse="$fast_align/$fast_align_model"_reverse
              alignments_sub=$alignments/$model_name.$fast_align_model.$reverse_method
