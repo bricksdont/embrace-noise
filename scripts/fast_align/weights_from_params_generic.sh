@@ -31,6 +31,17 @@ if [[ -f $data_sub/train.bpe.sample.$src ]]; then
        --target $data_sub/train.bpe.sample.$trg $word_level_arg
 fi
 
+if [[ -f $data_sub/train.bpe.sample2.$src ]]; then
+
+    python $base/scripts/fast_align/weights_from_params.py \
+       --params $fast_align_sub/params.out \
+       --params-reverse $fast_align_sub_reverse/params.out \
+       --use-reverse-method $use_reverse_method \
+       --weights $alignments_sub/sample2 \
+       --source $data_sub/train.bpe.sample2.$src \
+       --target $data_sub/train.bpe.sample2.$trg $word_level_arg
+fi
+
 exit
 
 python $base/scripts/fast_align/weights_from_params.py \

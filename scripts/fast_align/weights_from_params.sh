@@ -42,7 +42,7 @@ for model_name in raw_paracrawl.100.filtered; do
              if [[ -d $alignments_sub ]]; then
               echo "alignments_sub exists: $alignments_sub"
               echo "Skipping."
-              continue
+              #continue
              fi
 
              mkdir -p $alignments_sub
@@ -72,7 +72,7 @@ for model_name in raw_paracrawl.100.filtered; do
              if [[ -d $alignments_sub ]]; then
               echo "alignments_sub exists: $alignments_sub"
               echo "Skipping."
-              continue
+              #continue
              fi
 
              mkdir -p $alignments_sub
