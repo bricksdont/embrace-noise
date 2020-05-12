@@ -153,6 +153,8 @@ def main():
             target_subwords = target.strip().split(" ")
             source = source.replace("@@ ", "").replace("@@", "")
             target = target.replace("@@ ", "").replace("@@", "")
+        else:
+            target_subwords = []
 
         source_tokens = source.strip().split(" ")
         target_tokens = target.strip().split(" ")
@@ -166,7 +168,8 @@ def main():
             source_probs_forward, inserted_default_prob = get_probs(target_token, source_tokens, probs)
             inserted_default_prob_global += inserted_default_prob
 
-            source_probs_reverse, inserted_default_prob = get_probs(target_token, source_tokens, probs_reverse, reverse=True)
+            source_probs_reverse, inserted_default_prob = get_probs(target_token, source_tokens, probs_reverse,
+                                                                    reverse=True)
             inserted_default_prob_global += inserted_default_prob
 
             assert len(source_probs_forward) != 0
@@ -176,7 +179,7 @@ def main():
 
             max_log_prob = np.max(source_probs)
 
-            max_prob = str(np.exp(max_log_prob))
+            max_prob = np.exp(max_log_prob)
 
             weights.append(max_prob)
 
@@ -202,6 +205,8 @@ def main():
                 assert len(weights) == len(averaged_weights)
 
                 weights = averaged_weights
+
+        weights = [str(w) for w in weights]
 
         output_handle.write(" ".join(weights) + "\n")
 
