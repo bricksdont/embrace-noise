@@ -120,7 +120,7 @@ def combine_probs(probs_forward, probs_reverse, use_reverse_method):
     elif use_reverse_method == "mean":
         return np.mean([probs_forward, probs_reverse], axis=0)
     elif use_reverse_method == "geomean":
-        return np.multiply(probs_forward, probs_reverse, axis=0) ** 0.5
+        return np.multiply(probs_forward, probs_reverse) ** 0.5
     else:
         raise NotImplementedError
 
