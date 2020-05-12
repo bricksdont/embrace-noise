@@ -12,28 +12,44 @@ from collections import defaultdict
 VERY_NEGATIVE_LOGPROB = -100.0
 NULL_TOKEN_STRING = "<eps>"
 
-USE_REVERSE_METHODS=["min", "max", "mean", "ignore", "only"]
+USE_REVERSE_METHODS = ["min", "max", "mean", "geomean", "ignore", "only"]
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--params", type=str, help="Path to params.out (word-based translation probabilities)", required=True)
-    parser.add_argument("--params-reverse", type=str, help="Path to reverse model params.out (word-based translation probabilities)",
+    parser.add_argument("--params", type=str, help="Path to params.out (word-based translation probabilities)",
+                        required=True)
+    parser.add_argument("--params-reverse", type=str, help="Path to reverse model params.out (word-based translation "
+                                                           "probabilities)",
                         required=True)
     parser.add_argument("--weights", type=str, help="Path to write weights", required=True)
 
     parser.add_argument("--source", type=str, help="Path to source sentences", required=True)
     parser.add_argument("--target", type=str, help="Path to source sentences", required=True)
 
-    parser.add_argument("--use-reverse-method", type=str, help="How to factor in the reverse alignment model.", required=False, default="mean",
+    parser.add_argument("--use-reverse-method", type=str, help="How to factor in the reverse alignment model.",
+                        required=False, default="mean",
                         choices=USE_REVERSE_METHODS)
-    parser.add_argument("--word-level", action="store_true", help="Use if probs are word-level and need to be propagated to subwords", required=False,
+    parser.add_argument("--word-level", action="store_true", help="Use if probs are word-level and need to be"
+                                                                  "propagated to subwords", required=False,
+                        default=False)
+    parser.add_argument("--word-level-average-window", action="store_true",
+                        help="Average final word-level weights over a window of 3", required=False,
                         default=False)
 
     args = parser.parse_args()
 
     return args
+
+
+def moving_average(a, n=3) -> np.array:
+
+    edge_start = np.mean(a[:2], keepdims=True)
+    edge_end = np.mean(a[-2:], keepdims=True)
+    conv = np.convolve(a, np.ones((n,))/n, mode='valid')
+
+    return np.concatenate([edge_start, conv, edge_end])
 
 
 def read_params(path):
@@ -78,10 +94,10 @@ def get_probs(target_token, source_tokens, probs, reverse=False):
 
         for source_token in source_tokens:
 
-            sub_dict= probs[source_token]
+            sub_dict = probs[source_token]
 
             if target_token in sub_dict.keys():
-                prob= sub_dict[target_token]
+                prob = sub_dict[target_token]
             else:
                 prob = VERY_NEGATIVE_LOGPROB
                 inserted_default_prob += 1
@@ -103,6 +119,8 @@ def combine_probs(probs_forward, probs_reverse, use_reverse_method):
         return np.maximum(probs_forward, probs_reverse)
     elif use_reverse_method == "mean":
         return np.mean([probs_forward, probs_reverse], axis=0)
+    elif use_reverse_method == "geomean":
+        return np.multiply(probs_forward, probs_reverse, axis=0) ** 0.5
     else:
         raise NotImplementedError
 
@@ -178,6 +196,12 @@ def main():
                     weight_index += 1
 
             weights = subword_weights
+
+            if args.word_level_average_window:
+                averaged_weights = moving_average(weights, 3)
+                assert len(weights) == len(averaged_weights)
+
+                weights = averaged_weights
 
         output_handle.write(" ".join(weights) + "\n")
 

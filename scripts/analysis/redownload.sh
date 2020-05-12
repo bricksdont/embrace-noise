@@ -12,11 +12,12 @@ for dataset in $dataset_names; do
             sub=$base/$dataset.$model.$method
             mkdir -p $sub
             scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/$dataset.$model.$method/sample $sub/sample
-
+            scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/$dataset.$model.$method/sample2 $sub/sample2
         done
     done
 done
 
 scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/train.bpe.sample.* $base/
+scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/train.bpe.sample2.* $base/
 
 wc -l $base/* $base/*/*
