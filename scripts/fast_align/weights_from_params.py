@@ -104,6 +104,12 @@ def get_probs(target_token, source_tokens, probs, reverse=False):
 
             extracted_probs.append(prob)
 
+    extracted_probs = np.asarray(extracted_probs)
+
+    # remove log scale
+
+    extracted_probs = np.exp(extracted_probs)
+
     return extracted_probs, inserted_default_prob
 
 
@@ -177,9 +183,7 @@ def main():
 
             source_probs = combine_probs(source_probs_forward, source_probs_reverse, args.use_reverse_method)
 
-            max_log_prob = np.max(source_probs)
-
-            max_prob = np.exp(max_log_prob)
+            max_prob = np.max(source_probs)
 
             weights.append(max_prob)
 
