@@ -13,6 +13,7 @@ VERY_NEGATIVE_LOGPROB = -100.0
 NULL_TOKEN_STRING = "<eps>"
 
 USE_REVERSE_METHODS = ["min", "max", "mean", "geomean", "ignore", "only"]
+SMOOTH_METHODS = ["pre-3", "post-3", "pre-3-edge", "post-3-edge"]
 
 
 def parse_args() -> argparse.Namespace:
@@ -34,22 +35,32 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--word-level", action="store_true", help="Use if probs are word-level and need to be"
                                                                   "propagated to subwords", required=False,
                         default=False)
-    parser.add_argument("--word-level-average-window", action="store_true",
-                        help="Average final word-level weights over a window of 3", required=False,
-                        default=False)
+    parser.add_argument("--smooth-method", type=str,
+                        help="Average weights to smooth over window", required=False,
+                        default=None, choices=SMOOTH_METHODS)
 
     args = parser.parse_args()
 
     return args
 
 
-def moving_average(a, n=3) -> np.array:
+def moving_average(input_array: np.array, window_size: int = 3, ignore_edges: bool = False) -> np.array:
 
-    edge_start = np.mean(a[:2], keepdims=True)
-    edge_end = np.mean(a[-2:], keepdims=True)
-    conv = np.convolve(a, np.ones((n,))/n, mode='valid')
+    original_array = input_array.copy()
 
-    return np.concatenate([edge_start, conv, edge_end])
+    if ignore_edges:
+        edge_start = input_array[:1]
+        edge_end = input_array[-1:]
+    else:
+        edge_start = np.mean(input_array[:2], keepdims=True)
+        edge_end = np.mean(input_array[-2:], keepdims=True)
+    conv = np.convolve(input_array, np.ones((window_size,)) / window_size, mode='valid')
+
+    averaged_array = np.concatenate([edge_start, conv, edge_end])
+
+    assert original_array.shape == averaged_array.shape
+
+    return averaged_array
 
 
 def read_params(path):
@@ -190,6 +201,12 @@ def main():
         assert len(weights) == len_target
 
         if args.word_level:
+
+            if args.smooth_method == "pre-3":
+                weights = moving_average(weights, window_size=3, ignore_edges=True)
+            elif args.smooth_method == "pre-3-edge":
+                weights = moving_average(weights, window_size=3, ignore_edges=False)
+
             subword_weights = []
 
             # propagate weights to target subwords
@@ -204,11 +221,10 @@ def main():
 
             weights = subword_weights
 
-            if args.word_level_average_window:
-                averaged_weights = moving_average(weights, 3)
-                assert len(weights) == len(averaged_weights)
-
-                weights = averaged_weights
+            if args.smooth_method == "post-3":
+                weights = moving_average(weights, window_size=3, ignore_edges=True)
+            elif args.smooth_method == "post-3-edge":
+                weights = moving_average(weights, window_size=3, ignore_edges=False)
 
         weights = [str(w) for w in weights]
 

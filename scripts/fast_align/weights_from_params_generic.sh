@@ -8,7 +8,7 @@
 # $fast_align_sub_reverse
 # $use_reverse_method
 # $word_level_arg ("--word-level" or "")
-# $average_window_arg ("--word-level-average-window" or "")
+# $smooth_method_arg ("--smooth-method pre-3" or "--smooth-method post-3" etc., or "")
 
 base=$1
 fast_align_sub=$2
@@ -17,10 +17,12 @@ data_sub=$4
 fast_align_sub_reverse=$5
 use_reverse_method=$6
 word_level_arg=$7
-average_window_arg=$8
+smooth_method_arg=$8
 
 src=de
 trg=en
+
+SECONDS=0
 
 if [[ -f $data_sub/train.bpe.sample.$src ]]; then
 
@@ -30,7 +32,7 @@ if [[ -f $data_sub/train.bpe.sample.$src ]]; then
        --use-reverse-method $use_reverse_method \
        --weights $alignments_sub/sample \
        --source $data_sub/train.bpe.sample.$src \
-       --target $data_sub/train.bpe.sample.$trg $word_level_arg $average_window_arg
+       --target $data_sub/train.bpe.sample.$trg $word_level_arg $smooth_method_arg
 fi
 
 if [[ -f $data_sub/train.bpe.sample2.$src ]]; then
@@ -41,7 +43,7 @@ if [[ -f $data_sub/train.bpe.sample2.$src ]]; then
        --use-reverse-method $use_reverse_method \
        --weights $alignments_sub/sample2 \
        --source $data_sub/train.bpe.sample2.$src \
-       --target $data_sub/train.bpe.sample2.$trg $word_level_arg $average_window_arg
+       --target $data_sub/train.bpe.sample2.$trg $word_level_arg $smooth_method_arg
 fi
 
 # only for small samples for now
@@ -55,4 +57,7 @@ python $base/scripts/fast_align/weights_from_params.py \
    --use-reverse-method $use_reverse_method \
    --weights $alignments_sub/weights \
    --source $data_sub/train.bpe.$src \
-   --target $data_sub/train.bpe.$trg $word_level_arg $average_window_arg
+   --target $data_sub/train.bpe.$trg $word_level_arg $smooth_method_arg
+
+echo "time taken:"
+echo "$SECONDS seconds"
