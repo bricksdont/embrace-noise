@@ -7,6 +7,7 @@ import argparse
 import logging
 
 from collections import defaultdict
+from typing import List
 
 
 VERY_NEGATIVE_LOGPROB = -100.0
@@ -44,9 +45,9 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-def moving_average(input_array: np.array, window_size: int = 3, ignore_edges: bool = False) -> np.array:
+def moving_average(input_list: List[float], window_size: int = 3, ignore_edges: bool = False) -> np.array:
 
-    original_array = input_array.copy()
+    input_array = np.array(input_list)
 
     if ignore_edges:
         edge_start = input_array[:1]
@@ -58,7 +59,7 @@ def moving_average(input_array: np.array, window_size: int = 3, ignore_edges: bo
 
     averaged_array = np.concatenate([edge_start, conv, edge_end])
 
-    assert original_array.shape == averaged_array.shape
+    assert input_array.shape == averaged_array.shape
 
     return averaged_array
 
