@@ -21,15 +21,18 @@ done
 
 dataset_names="raw_paracrawl.100.filtered"
 methods="ignore only min max mean geomean"
-align_models="baseline.word_level raw_paracrawl.100.word_level raw_paracrawl.100.filtered.word_level"
+smooth_methods="pre-3 pre-3-edge post-3 post-3-edge"
+align_models="raw_paracrawl.100.filtered.word_level"
 
 for dataset in $dataset_names; do
     for method in $methods; do
-        for model in $align_models; do
-            sub=$base/$dataset.$model.$method.smooth
-            mkdir -p $sub
-            scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/$dataset.$model.$method.smooth/sample $sub/sample
-            scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/$dataset.$model.$method.smooth/sample2 $sub/sample2
+        for smooth_method in $smooth_methods; do
+            for model in $align_models; do
+                sub=$base/$dataset.$model.$method.$smooth_method
+                mkdir -p $sub
+                scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/$dataset.$model.$method.$smooth_method/sample $sub/sample
+                scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/$dataset.$model.$method.$smooth_method/sample2 $sub/sample2
+            done
         done
     done
 done

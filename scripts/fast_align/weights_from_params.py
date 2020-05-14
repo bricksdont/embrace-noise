@@ -52,10 +52,14 @@ def moving_average(input_list: List[float], window_size: int = 3, ignore_edges: 
     if ignore_edges:
         edge_start = input_array[:1]
         edge_end = input_array[-1:]
+
+        conv = moving_average(input_array[1:-1], window_size=window_size, ignore_edges=False)
+
     else:
         edge_start = np.mean(input_array[:2], keepdims=True)
         edge_end = np.mean(input_array[-2:], keepdims=True)
-    conv = np.convolve(input_array, np.ones((window_size,)) / window_size, mode='valid')
+
+        conv = np.convolve(input_array, np.ones((window_size,)) / window_size, mode='valid')
 
     averaged_array = np.concatenate([edge_start, conv, edge_end])
 
