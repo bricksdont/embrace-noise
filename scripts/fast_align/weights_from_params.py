@@ -49,6 +49,12 @@ def moving_average(input_list: List[float], window_size: int = 3, ignore_edges: 
 
     input_array = np.array(input_list)
 
+    # base case
+
+    if len(input_array) < window_size:
+        mean_value = np.mean(input_array)
+        return np.full_like(input_array, fill_value=mean_value)
+
     if ignore_edges:
         edge_start = input_array[:1]
         edge_end = input_array[-1:]

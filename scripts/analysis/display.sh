@@ -94,19 +94,17 @@ python3 display.py --source train.bpe.sample2.de --target train.bpe.sample2.en \
                     filtered.word_level.ignore.smooth filtered.word_level.only.smooth filtered.word_level.mean.smooth filtered.word_level.min.smooth filtered.word_level.max.smooth filtered.word_level.geomean.smooth > \
     results.all.sample2.csv
 
-# trained on clean data, subword, compare combination methods
+# trained on filtered data, word level, compare combination methods
 
 python3 display.py --source train.bpe.sample2.de --target train.bpe.sample2.en \
-    --weights raw_paracrawl.100.filtered.baseline.ignore/sample2 \
-              raw_paracrawl.100.filtered.baseline.only/sample2 \
-              raw_paracrawl.100.filtered.baseline.mean/sample2 \
-              raw_paracrawl.100.filtered.baseline.min/sample2 \
-              raw_paracrawl.100.filtered.baseline.max/sample2 \
-              raw_paracrawl.100.filtered.baseline.geomean/sample2 \
-    --weights-names baseline.ignore baseline.only baseline.mean baseline.min baseline.max baseline.geomean > \
+    --weights raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.ignore/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.only/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.min/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.max/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.geomean/sample2 \
+    --weights-names filtered.ignore filtered.only filtered.mean filtered.min filtered.max filtered.geomean > \
     results.compare_methods.sample2.csv
-
-# TODO: change remaining MEAN method to GEOMEAN after inspecting results
 
 # subword, MEAN method, compare training data
 
@@ -126,11 +124,43 @@ python3 display.py --source train.bpe.sample2.de --target train.bpe.sample2.en \
     --weights-names baseline.word_level.mean all.word_level.mean filtered.word_level.mean > \
     results.compare_training_data_word_level.sample2.csv
 
-# trained on clean data, MEAN method, compare subword vs. word level
+# trained on filtered data, MEAN method, compare subword vs. word level
 
 python3 display.py --source train.bpe.sample2.de --target train.bpe.sample2.en \
-    --weights raw_paracrawl.100.filtered.baseline.mean/sample2 \
-              raw_paracrawl.100.filtered.baseline.word_level.mean/sample2 \
-    --weights-names baseline.mean baseline.word_level.mean > \
+    --weights raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.mean/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean/sample2 \
+    --weights-names filtered.mean filtered.word_level.mean > \
     results.compare_subword_word.sample2.csv
+
+# trained on filtered data, MEAN method, word level, compare smoothness
+
+python3 display.py --source train.bpe.sample.de --target train.bpe.sample.en \
+    --weights raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean/sample \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean.pre-3/sample \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean.pre-3-edge/sample \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean.post-3/sample \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean.post-3-edge/sample \
+    --weights-names filtered.word_level.mean filtered.word_level.mean.pre-3 filtered.word_level.mean.pre-3-edge filtered.word_level.mean.post-3 filtered.word_level.mean.post-3-edge > \
+    results.compare_smoothness.sample1.csv
+
+# trained on filtered data, MEAN method, word level, compare smoothness, sample2
+
+python3 display.py --source train.bpe.sample2.de --target train.bpe.sample2.en \
+    --weights raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean.pre-3/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean.pre-3-edge/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean.post-3/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean.post-3-edge/sample2 \
+    --weights-names filtered.word_level.mean filtered.word_level.mean.pre-3 filtered.word_level.mean.pre-3-edge filtered.word_level.mean.post-3 filtered.word_level.mean.post-3-edge > \
+    results.compare_smoothness.sample2.csv
+
+# trained on filtered data, word level, compare mean and geomean
+
+python3 display.py --source train.bpe.sample2.de --target train.bpe.sample2.en \
+    --weights raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.mean.smooth/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.geomean/sample2 \
+              raw_paracrawl.100.filtered.raw_paracrawl.100.filtered.word_level.geomean.smooth/sample2 \
+    --weights-names filtered.word_level.mean filtered.word_level.mean.smooth filtered.word_level.geomean filtered.word_level.geomean.smooth > \
+    results.compare_mean_geomean.sample2.csv
 
