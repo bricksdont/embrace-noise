@@ -21,7 +21,7 @@ done
 
 dataset_names="raw_paracrawl.100.filtered"
 methods="ignore only min max mean geomean"
-smooth_methods="pre-3 pre-3-edge post-3 post-3-edge"
+smooth_methods="mean geomean"
 align_models="raw_paracrawl.100.filtered.word_level"
 
 for dataset in $dataset_names; do

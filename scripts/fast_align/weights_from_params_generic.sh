@@ -46,9 +46,6 @@ if [[ -f $data_sub/train.bpe.sample2.$src ]]; then
        --target $data_sub/train.bpe.sample2.$trg $word_level_arg $smooth_method_arg
 fi
 
-# only for small samples for now
-# TODO: remove this
-
 exit
 
 python $base/scripts/fast_align/weights_from_params.py \

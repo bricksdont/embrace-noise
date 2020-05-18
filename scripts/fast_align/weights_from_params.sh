@@ -27,6 +27,8 @@ for model_name in raw_paracrawl.100.filtered; do
         cat $data_sub/train.bpe.$lang | python $base/scripts/analysis/strided_sample.py > $data_sub/train.bpe.sample.$lang
     done
 
+# subword-level models
+
 #    for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
 #
 #         echo "fast_align_model: $fast_align_model"
@@ -58,34 +60,34 @@ for model_name in raw_paracrawl.100.filtered; do
 
     # word-level models
 
-    for fast_align_model in raw_paracrawl.100.filtered.word_level; do # baseline.word_level raw_paracrawl.100.word_level
-
-         echo "fast_align_model: $fast_align_model"
-
-         for reverse_method in min max mean geomean ignore only; do
-
-             echo "reverse_method: $reverse_method"
-
-             fast_align_sub=$fast_align/$fast_align_model
-             fast_align_sub_reverse="$fast_align/$fast_align_model"_reverse
-             alignments_sub=$alignments/$model_name.$fast_align_model.$reverse_method
-
-             if [[ -d $alignments_sub ]]; then
-              echo "alignments_sub exists: $alignments_sub"
-              echo "Skipping."
-              continue
-             fi
-
-             mkdir -p $alignments_sub
-
-             word_level_arg="--word-level"
-             smooth_method_arg=""
-
-             sbatch --cpus-per-task=1 --time=12:00:00 --mem=128G --partition=hpc $base/scripts/fast_align/weights_from_params_generic.sh \
-                 $base $fast_align_sub $alignments_sub $data_sub $fast_align_sub_reverse $reverse_method $word_level_arg $smooth_method_arg
-
-          done
-    done
+#    for fast_align_model in raw_paracrawl.100.filtered.word_level; do # baseline.word_level raw_paracrawl.100.word_level
+#
+#         echo "fast_align_model: $fast_align_model"
+#
+#         for reverse_method in min max mean geomean ignore only; do
+#
+#             echo "reverse_method: $reverse_method"
+#
+#             fast_align_sub=$fast_align/$fast_align_model
+#             fast_align_sub_reverse="$fast_align/$fast_align_model"_reverse
+#             alignments_sub=$alignments/$model_name.$fast_align_model.$reverse_method
+#
+#             if [[ -d $alignments_sub ]]; then
+#              echo "alignments_sub exists: $alignments_sub"
+#              echo "Skipping."
+#              continue
+#             fi
+#
+#             mkdir -p $alignments_sub
+#
+#             word_level_arg="--word-level"
+#             smooth_method_arg=""
+#
+#             sbatch --cpus-per-task=1 --time=18:00:00 --mem=128G --partition=hpc $base/scripts/fast_align/weights_from_params_generic.sh \
+#                 $base $fast_align_sub $alignments_sub $data_sub $fast_align_sub_reverse $reverse_method $word_level_arg $smooth_method_arg
+#
+#          done
+#    done
 
     # word-level with window averaging
 
@@ -93,7 +95,7 @@ for model_name in raw_paracrawl.100.filtered; do
 
          echo "fast_align_model: $fast_align_model"
 
-         for reverse_method in mean geomean; do # min max mean geomean ignore only
+         for reverse_method in max mean geomean; do # min max mean geomean ignore only
 
              echo "reverse_method: $reverse_method"
 
@@ -116,7 +118,7 @@ for model_name in raw_paracrawl.100.filtered; do
                  word_level_arg="--word-level"
                  smooth_method_arg="--smooth-method $smooth_method"
 
-                 sbatch --cpus-per-task=1 --time=12:00:00 --mem=128G --partition=hpc $base/scripts/fast_align/weights_from_params_generic.sh \
+                 sbatch --cpus-per-task=1 --time=18:00:00 --mem=128G --partition=hpc $base/scripts/fast_align/weights_from_params_generic.sh \
                      $base $fast_align_sub $alignments_sub $data_sub $fast_align_sub_reverse $reverse_method $word_level_arg "$smooth_method_arg"
 
               done
