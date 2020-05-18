@@ -97,7 +97,7 @@ for model_name in raw_paracrawl.100.filtered; do
 
              echo "reverse_method: $reverse_method"
 
-             for smooth_method in pre-3 pre-3-edge post-3 post-3-edge; do
+             for smooth_method in mean geomean; do
 
                  echo "smooth_method: $smooth_method"
 

@@ -14,7 +14,7 @@ VERY_NEGATIVE_LOGPROB = -100.0
 NULL_TOKEN_STRING = "<eps>"
 
 USE_REVERSE_METHODS = ["min", "max", "mean", "geomean", "ignore", "only"]
-SMOOTH_METHODS = ["pre-3", "post-3", "pre-3-edge", "post-3-edge"]
+SMOOTH_METHODS = ["mean", "geomean"]
 
 
 def parse_args() -> argparse.Namespace:
@@ -45,29 +45,62 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-def moving_average(input_list: List[float], window_size: int = 3, ignore_edges: bool = False) -> np.array:
+def rolling_window_lastaxis(a, window):
+    """
+    https://stackoverflow.com/questions/4936620/using-strides-for-an-efficient-moving-average-filter
+
+    Directly taken from Erik Rigtorp's post to numpy-discussion.
+    <http://www.mail-archive.com/numpy-discussion@scipy.org/msg29450.html>"""
+    if window < 1:
+        raise ValueError
+    if window > a.shape[-1]:
+        raise ValueError
+    shape = a.shape[:-1] + (a.shape[-1] - window + 1, window)
+    strides = a.strides + (a.strides[-1],)
+    return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
+
+
+def rolling_window(a, window):
+    """
+    https://stackoverflow.com/questions/4936620/using-strides-for-an-efficient-moving-average-filter
+    :param a:
+    :param window:
+    :return:
+    """
+    if not hasattr(window, '__iter__'):
+        return rolling_window_lastaxis(a, window)
+    for i, win in enumerate(window):
+        if win > 1:
+            a = a.swapaxes(i, -1)
+            a = rolling_window_lastaxis(a, win)
+            a = a.swapaxes(-2, i)
+    return a
+
+
+def mean_function(input_array: np.array, mean_type: str = "mean",
+                  keepdims: bool = False, axis: int = -1):
+
+    if mean_type == "mean":
+        return np.mean(input_array, keepdims=keepdims, axis=axis)
+    elif mean_type == "geomean":
+        combined_array = np.exp(np.sum(np.log(input_array), axis=axis) / input_array.shape[axis])
+
+        if keepdims:
+            return np.expand_dims(combined_array, axis=0)
+        else:
+            return combined_array
+    else:
+        raise NotImplementedError
+
+
+def moving_average(input_list: List[float], window_size: int = 3, mean_type: str = "mean") -> np.array:
 
     input_array = np.array(input_list)
 
-    # base case
+    extended_input_array = np.concatenate([input_array[:1], input_array, input_array[-1:]])
+    strides = rolling_window(extended_input_array, window_size)
 
-    if len(input_array) < window_size:
-        mean_value = np.mean(input_array)
-        return np.full_like(input_array, fill_value=mean_value)
-
-    if ignore_edges:
-        edge_start = input_array[:1]
-        edge_end = input_array[-1:]
-
-        conv = moving_average(input_array[1:-1], window_size=window_size, ignore_edges=False)
-
-    else:
-        edge_start = np.mean(input_array[:2], keepdims=True)
-        edge_end = np.mean(input_array[-2:], keepdims=True)
-
-        conv = np.convolve(input_array, np.ones((window_size,)) / window_size, mode='valid')
-
-    averaged_array = np.concatenate([edge_start, conv, edge_end])
+    averaged_array = mean_function(strides, mean_type=mean_type, keepdims=False, axis=-1)
 
     assert input_array.shape == averaged_array.shape
 
@@ -138,17 +171,23 @@ def get_probs(target_token, source_tokens, probs, reverse=False):
 def combine_probs(probs_forward, probs_reverse, use_reverse_method):
 
     if use_reverse_method == "ignore":
-        return probs_forward
-    if use_reverse_method == "only":
-        return probs_reverse
-    elif use_reverse_method == "min":
-        return np.minimum(probs_forward, probs_reverse)
+        return np.max(probs_forward)
+    elif use_reverse_method == "only":
+        return np.max(probs_reverse)
+
+    max_forward = np.max(probs_forward)
+    max_reverse = np.max(probs_reverse)
+
+    max_combined = np.asarray([max_forward, max_reverse])
+
+    if use_reverse_method == "min":
+        return np.min(max_combined)
     elif use_reverse_method == "max":
-        return np.maximum(probs_forward, probs_reverse)
+        return np.max(max_combined)
     elif use_reverse_method == "mean":
-        return np.mean([probs_forward, probs_reverse], axis=0)
+        return mean_function(max_combined, mean_type="mean", keepdims=False, axis=-1)
     elif use_reverse_method == "geomean":
-        return np.multiply(probs_forward, probs_reverse) ** 0.5
+        return mean_function(max_combined, mean_type="geomean", keepdims=False, axis=-1)
     else:
         raise NotImplementedError
 
@@ -203,9 +242,7 @@ def main():
             assert len(source_probs_forward) != 0
             assert len(source_probs_reverse) != 0
 
-            source_probs = combine_probs(source_probs_forward, source_probs_reverse, args.use_reverse_method)
-
-            max_prob = np.max(source_probs)
+            max_prob = combine_probs(source_probs_forward, source_probs_reverse, args.use_reverse_method)
 
             weights.append(max_prob)
 
@@ -213,10 +250,8 @@ def main():
 
         if args.word_level:
 
-            if args.smooth_method == "pre-3":
-                weights = moving_average(weights, window_size=3, ignore_edges=True)
-            elif args.smooth_method == "pre-3-edge":
-                weights = moving_average(weights, window_size=3, ignore_edges=False)
+            if args.smooth_method is not None:
+                weights = moving_average(weights, window_size=3, mean_type=args.smooth_method)
 
             subword_weights = []
 
@@ -231,11 +266,6 @@ def main():
                     weight_index += 1
 
             weights = subword_weights
-
-            if args.smooth_method == "post-3":
-                weights = moving_average(weights, window_size=3, ignore_edges=True)
-            elif args.smooth_method == "post-3-edge":
-                weights = moving_average(weights, window_size=3, ignore_edges=False)
 
         weights = [str(w) for w in weights]
 
