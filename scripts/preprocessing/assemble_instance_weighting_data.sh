@@ -205,6 +205,49 @@ for original_name in baseline baseline.filtered raw_paracrawl.100 raw_paracrawl.
 
 done
 
+
+# systems with fast_align token-level weights: clean corpus has FA weights as well
+
+for fast_align_model in raw_paracrawl.100.filtered; do
+
+    for exp in 0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6 1.8 2.0; do
+
+        original_name="raw_paracrawl.100.filtered"
+        original_data_sub=$data/$original_name
+
+        name=$original_name.token_weighting.exp$exp
+        data_sub=$data/$name
+
+        if [[ -d $data_sub ]]; then
+            echo "data_sub exists: $data_sub"
+            echo "Skipping."
+            continue
+        fi
+
+        mkdir -p $data_sub
+
+        alignments_sub=$alignments/$original_name.$fast_align_model.word_level.geomean.geomean
+
+         # link entire data folder
+
+        for lang in $src $trg; do
+            for corpus in train dev test test_ood; do
+                ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+            done
+        done
+
+        # token weights
+
+        cat $alignments_sub/weights | python $scripts/preprocessing/exponential_smoothing.py --exp $exp > \
+          $data_sub/train.weights
+
+    done
+done
+
+# no trusted clean data models for now
+
+exit
+
 # systems with fast_align token-level weights: clean corpus has 1.0 for all tokens
 
 for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
@@ -245,39 +288,3 @@ for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; d
     cat $data_sub/train.clean.weights $data_sub/train.noisy.weights > $data_sub/train.weights
 
 done
-
-# systems with fast_align token-level weights: clean corpus has FA weights as well
-
-for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
-
-    original_name="raw_paracrawl.100.filtered"
-    original_data_sub=$data/$original_name
-
-    name=$original_name.token_weighting.distrust_clean.fa_model.$fast_align_model
-    data_sub=$data/$name
-
-    if [[ -d $data_sub ]]; then
-        echo "data_sub exists: $data_sub"
-        echo "Skipping."
-        continue
-    fi
-
-    mkdir -p $data_sub
-
-    alignments_sub=$alignments/$original_name.$fast_align_model
-
-     # link entire data folder
-
-    for lang in $src $trg; do
-        for corpus in train dev test test_ood; do
-            ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
-        done
-    done
-
-    # link weights
-
-    ln -snf $alignments_sub/weights $data_sub/train.weights
-
-done
-
-# exponential smoothing for token_weighting systems

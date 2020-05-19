@@ -8,7 +8,7 @@
 # $fast_align_sub_reverse
 # $use_reverse_method
 # $word_level_arg ("--word-level" or "")
-# $smooth_method_arg ("--smooth-method pre-3" or "--smooth-method post-3" etc., or "")
+# $smooth_method_arg ("--smooth-method mean" or "--smooth-method geomean", or "")
 
 base=$1
 fast_align_sub=$2

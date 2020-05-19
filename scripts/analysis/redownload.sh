@@ -4,7 +4,7 @@ base=/Users/mathiasmuller/Desktop/noise-distill-tensorboard-logs/weights
 
 dataset_names="raw_paracrawl.100.filtered"
 methods="ignore only min max mean geomean"
-align_models="baseline baseline.word_level raw_paracrawl.100 raw_paracrawl.100.word_level raw_paracrawl.100.filtered raw_paracrawl.100.filtered.word_level"
+align_models="raw_paracrawl.100.filtered.word_level"
 
 for dataset in $dataset_names; do
     for method in $methods; do
@@ -20,7 +20,7 @@ done
 # smoothed versions for word-level models
 
 dataset_names="raw_paracrawl.100.filtered"
-methods="ignore only min max mean geomean"
+methods="max mean geomean"
 smooth_methods="mean geomean"
 align_models="raw_paracrawl.100.filtered.word_level"
 
@@ -32,6 +32,7 @@ for dataset in $dataset_names; do
                 mkdir -p $sub
                 scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/$dataset.$model.$method.$smooth_method/sample $sub/sample
                 scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/$dataset.$model.$method.$smooth_method/sample2 $sub/sample2
+                scp mathmu@login.s3it.uzh.ch:/net/cephfs/scratch/mathmu/noise-distill/alignments/$dataset.$model.$method.$smooth_method/weights $sub/weights
             done
         done
     done

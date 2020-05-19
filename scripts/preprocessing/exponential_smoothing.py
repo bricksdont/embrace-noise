@@ -24,24 +24,14 @@ def main():
     logging.basicConfig(level=logging.DEBUG)
     logging.debug(args)
 
-    weights = []
-
     for line in sys.stdin:
-        weight = float(line.strip())
-        weights.append(weight)
+        weights = [float(w) for w in line.strip().split(" ")]
+        weights = np.asarray(weights)
 
-    weights = np.asarray(weights)
+        weights **= args.exp
 
-    min_value = weights.min()
-    max_value = weights.max()
-
-    assert min_value >= 0.0
-    assert max_value <= 1.0
-
-    weights **= args.exp
-
-    for weight in weights:
-        sys.stdout.write(str(weight) + "\n")
+        as_string = " ".join([str(w) for w in weights])
+        sys.stdout.write(as_string + "\n")
 
 
 if __name__ == '__main__':
