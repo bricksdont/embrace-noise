@@ -72,7 +72,16 @@ PREPARE_INSTANCE_WEIGHTING_SUBSET=(
 )
 
 PREPARE_TOKEN_WEIGHTING_SUBSET=(
-  "raw_paracrawl.100.filtered.token_weighting"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.2"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.4"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.6"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.8"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.0"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.2"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.4"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.6"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.8"
+  "raw_paracrawl.100.filtered.token_weighting.exp2.0"
 )
 
 function contains() {
@@ -109,7 +118,7 @@ for data_sub in $data/*; do
 
     mkdir -p $prepared_sub
 
-    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hpc $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub
 
 done
 
@@ -140,11 +149,11 @@ for data_sub in $data/*; do
 
     instance_weighting_type="sentence"
 
-    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hpc $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type
 
 done
 
-for data_sub in $data/*token_weighting; do
+for data_sub in $data/*token_weighting*; do
 
     echo "data_sub: $data_sub"
     name=$(basename $data_sub)
@@ -167,7 +176,7 @@ for data_sub in $data/*token_weighting; do
 
     instance_weighting_type="word"
 
-    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hpc $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type
 
 done
 

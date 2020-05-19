@@ -68,7 +68,16 @@ TRAIN_SUBSET_INSTANCE_WEIGHTING=(
 )
 
 TRAIN_SUBSET_TOKEN_WEIGHTING=(
-  "raw_paracrawl.100.filtered.token_weighting"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.2"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.4"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.6"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.8"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.0"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.2"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.4"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.6"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.8"
+  "raw_paracrawl.100.filtered.token_weighting.exp2.0"
 )
 
 function contains() {
@@ -170,7 +179,7 @@ for prepared_sub in $prepared/*; do
 
 done
 
-for prepared_sub in $prepared/*token_weighting; do
+for prepared_sub in $prepared/*token_weighting*; do
 
     echo "prepared_sub: $prepared_sub"
 
