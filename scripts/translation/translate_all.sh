@@ -62,6 +62,16 @@ TRANSLATE_SUBSET=(
   "raw_paracrawl.100.mined.score.instance_weighting.weight_ones"
   "raw_paracrawl.100.dcce.adq.0.25.weight_ones"
   "raw_paracrawl.100.dcce.adq.instance_weighting.weight_ones"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.2"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.4"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.6"
+  "raw_paracrawl.100.filtered.token_weighting.exp0.8"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.0"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.2"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.4"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.6"
+  "raw_paracrawl.100.filtered.token_weighting.exp1.8"
+  "raw_paracrawl.100.filtered.token_weighting.exp2.0"
 )
 
 function contains() {
