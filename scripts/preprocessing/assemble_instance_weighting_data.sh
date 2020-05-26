@@ -210,37 +210,39 @@ done
 
 for fast_align_model in raw_paracrawl.100.filtered; do
 
-    for exp in 0.2 0.4 0.6 0.8 1.0 1.2 1.4 1.6 1.8 2.0; do
+    for exp in 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.6 0.8 1.0; do
 
-        original_name="raw_paracrawl.100.filtered"
-        original_data_sub=$data/$original_name
+        for reverse_method in max mean geomean; do
 
-        name=$original_name.token_weighting.exp$exp
-        data_sub=$data/$name
+            original_name="raw_paracrawl.100.filtered"
+            original_data_sub=$data/$original_name
 
-        if [[ -d $data_sub ]]; then
-            echo "data_sub exists: $data_sub"
-            echo "Skipping."
-            continue
-        fi
+            name=$original_name.token_weighting.exp$exp.$reverse_method
+            data_sub=$data/$name
 
-        mkdir -p $data_sub
+            if [[ -d $data_sub ]]; then
+                echo "data_sub exists: $data_sub"
+                echo "Skipping."
+                continue
+            fi
 
-        alignments_sub=$alignments/$original_name.$fast_align_model.word_level.geomean.geomean
+            mkdir -p $data_sub
 
-         # link entire data folder
+            alignments_sub=$alignments/$original_name.$fast_align_model.word_level.$reverse_method.geomean
 
-        for lang in $src $trg; do
-            for corpus in train dev test test_ood; do
-                ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+             # link entire data folder
+
+            for lang in $src $trg; do
+                for corpus in train dev test test_ood; do
+                    ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+                done
             done
+
+            # token weights
+
+            cat $alignments_sub/weights | python $scripts/preprocessing/exponential_smoothing.py --exp $exp > \
+              $data_sub/train.weights
         done
-
-        # token weights
-
-        cat $alignments_sub/weights | python $scripts/preprocessing/exponential_smoothing.py --exp $exp > \
-          $data_sub/train.weights
-
     done
 done
 
