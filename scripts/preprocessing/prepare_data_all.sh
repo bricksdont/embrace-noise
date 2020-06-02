@@ -40,6 +40,9 @@ PREPARE_SUBSET=(
   "raw_paracrawl.100.mined.score.0.25"
   "raw_paracrawl.100.mined.score.0.5"
   "raw_paracrawl.100.mined.score.0.75"
+  "raw_paracrawl.100.modelfront.0.25"
+  "raw_paracrawl.100.modelfront.0.5"
+  "raw_paracrawl.100.modelfront.0.75"
 )
 
 PREPARE_INSTANCE_WEIGHTING_SUBSET=(
