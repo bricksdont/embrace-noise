@@ -1,5 +1,7 @@
 #! /bin/bash
 
+base=/net/cephfs/home/mathmu/scratch/noise-distill/aspec
+
 # virtualenv must be installed on your system, install with e.g.
 # pip install virtualenv
 
@@ -20,27 +22,11 @@ virtualenv -p python3 $base/venvs/sockeye3-cpu
 
 virtualenv -p python3 $base/venvs/laser3
 
-# fourth one for custom sockeye
+# fourth/fifth one for custom sockeye
 
 virtualenv -p python3 $base/venvs/sockeye3-custom
 
 virtualenv -p python3 $base/venvs/sockeye3-custom-cpu
-
-# fifth one for fairseq
-
-echo "pyenv known versions before:"
-
-pyenv versions
-
-pyenv install 3.6.1
-
-echo "pyenv known versions after:"
-
-pyenv versions
-
-pyenv local 3.6.1
-
-virtualenv -p python3 $base/venvs/fairseq3
 
 echo "To activate your environment, e.g.:"
 echo "    source $base/venvs/sockeye3/bin/activate"
