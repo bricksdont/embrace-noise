@@ -151,9 +151,10 @@ for prepared_sub in $prepared/*; do
     mkdir -p $model_path
 
     additional_args=""
+    mode="bpe"
 
     sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/training/train_transformer_generic.sh \
-        $prepared_sub $data_sub $model_path "$additional_args" $src $trg
+        $prepared_sub $data_sub $model_path "$additional_args" $src $trg $mode
 done
 
 deactivate
@@ -194,13 +195,14 @@ for prepared_sub in $prepared/*; do
     mkdir -p $model_path
 
     additional_args=""
+    mode="bpe"
 
     instance_weighting_type="sentence"
 
     # used to be: 'gpu:Tesla-V100:1'
     sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g \
         $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path $instance_weighting_type \
-        "$additional_args" $src $trg
+        "$additional_args" $src $trg $mode
 
 done
 
@@ -239,10 +241,11 @@ for prepared_sub in $prepared/*token_weighting*; do
     additional_args=""
 
     instance_weighting_type="word"
+    mode="bpe"
 
     # used to be: 'gpu:Tesla-V100:1'
     sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g \
         $base/scripts/training/train_transformer_instance_weighting_generic.sh $prepared_sub $data_sub $model_path $instance_weighting_type \
-        "$additional_args" $src $trg
+        "$additional_args" $src $trg $mode
 
 done

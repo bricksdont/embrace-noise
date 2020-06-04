@@ -78,8 +78,9 @@ for prepared_sub in $prepared/*; do
     mkdir -p $model_path
 
     additional_args=""
+    mode="pieces"
 
     sbatch --qos=vesta --time=72:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g \
         $basebase/scripts/training/train_transformer_generic.sh \
-            $prepared_sub $data_sub $model_path "$additional_args" $src $trg
+            $prepared_sub $data_sub $model_path "$additional_args" $src $trg $mode
 done

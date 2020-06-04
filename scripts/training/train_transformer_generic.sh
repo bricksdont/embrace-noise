@@ -8,6 +8,7 @@
 # $additional_args
 # $src
 # $trg
+# $mode
 
 prepared_sub=$1
 data_sub=$2
@@ -15,6 +16,7 @@ model_path=$3
 additional_args=$4
 src=$5
 trg=$6
+mode=$7
 
 echo "additional args: "
 echo "$additional_args"
@@ -36,8 +38,8 @@ transformer_feed_forward_num_hidden="2048"
 
 python -m sockeye.train \
 -d $prepared_sub \
--vs $data_sub/dev.bpe.$src \
--vt $data_sub/dev.bpe.$trg \
+-vs $data_sub/dev.$mode.$src \
+-vt $data_sub/dev.$mode.$trg \
 --output $model_path \
 --seed 1 \
 --batch-type word \
