@@ -55,7 +55,7 @@ mkdir -p $data_sub
 # link data sets
 
 ln -snf $data/raw/dev/dev.extracted.en $data_sub/dev.en
-ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/test.ja
+ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/dev.ja
 
 ln -snf $data/raw/test/test.extracted.en $data_sub/test.en
 ln -snf $data/raw/test/test.extracted.ja $data_sub/test.ja
@@ -88,7 +88,7 @@ mkdir -p $data_sub
 # link data sets
 
 ln -snf $data/raw/dev/dev.extracted.en $data_sub/dev.en
-ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/test.ja
+ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/dev.ja
 
 ln -snf $data/raw/test/test.extracted.en $data_sub/test.en
 ln -snf $data/raw/test/test.extracted.ja $data_sub/test.ja
@@ -122,7 +122,7 @@ mkdir -p $data_sub
 # link data sets
 
 ln -snf $data/raw/dev/dev.extracted.en $data_sub/dev.en
-ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/test.ja
+ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/dev.ja
 
 ln -snf $data/raw/test/test.extracted.en $data_sub/test.en
 ln -snf $data/raw/test/test.extracted.ja $data_sub/test.ja
