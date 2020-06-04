@@ -24,15 +24,15 @@ SECONDS=0
 
 echo "data_sub: $data_sub"
 
-# concat training material
-
-if [[ ! -f $data_sub/train.both ]]; then
-    cat $data_sub/train.$src $data_sub/train.$trg > $data_sub/train.both
-fi
-
 # learn sentencepiece model on train (concatenate both languages)
 
 if [[ ! -f $shared_models_sub/$src$trg.sentencepiece.model ]]; then
+
+  # concat training material
+
+  if [[ ! -f $data_sub/train.both ]]; then
+      cat $data_sub/train.$src $data_sub/train.$trg > $data_sub/train.both
+  fi
 
   python $scripts/train_sentencepiece.py \
     --model-prefix $shared_models_sub/$src$trg.sentencepiece \
@@ -48,7 +48,7 @@ fi
 
 for corpus in train dev test; do
     for lang in $src $trg; do
-        cat $data_sub/$corpus.truecased.$lang | \
+        cat $data_sub/$corpus.$lang | \
             python $scripts/apply_sentencepiece.py \
                 --model $shared_models_sub/$src$trg.sentencepiece.model \
                 --nbest-size 1 --output-format nbest \
