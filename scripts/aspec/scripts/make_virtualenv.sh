@@ -12,4 +12,4 @@ mkdir -p $base/venvs
 virtualenv -p python3 $base/venvs/laser3
 
 echo "To activate your environment, e.g.:"
-echo "    source $base/venvs/sockeye3/bin/activate"
+echo "    source $base/venvs/laser3/bin/activate"

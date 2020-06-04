@@ -47,6 +47,23 @@ pip install sentencepiece
 
 ###########################################
 
+# source sockeye custom env cpu
+
+deactivate
+echo "check current python after deactivate:"
+which python
+
+source $basebase/venvs/sockeye3-custom-cpu/bin/activate
+
+echo "check current python after sourcing Sockeye custom env:"
+which python
+
+# install sentencepiece for subword regularization
+
+pip install sentencepiece
+
+###########################################
+
 # THEN source LASER env and do the same again
 
 deactivate
