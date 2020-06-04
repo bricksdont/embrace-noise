@@ -7,18 +7,19 @@
 # $model_path
 # $instance_weighting_type
 # $additional_args
+# $src
+# $trg
 
 prepared_sub=$1
 data_sub=$2
 model_path=$3
 instance_weighting_type=$4
 additional_args=$5
+src=$6
+trg=$7
 
 echo "additional args: "
 echo "$additional_args"
-
-src=de
-trg=en
 
 echo $CUDA_VISIBLE_DEVICES
 echo "Done reading visible devices."

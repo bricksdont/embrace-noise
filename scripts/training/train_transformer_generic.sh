@@ -6,14 +6,15 @@
 # $data_sub
 # $model_path
 # $additional_args
+# $src
+# $trg
 
 prepared_sub=$1
 data_sub=$2
 model_path=$3
 additional_args=$4
-
-src=de
-trg=en
+src=$5
+trg=$6
 
 echo "additional args: "
 echo "$additional_args"

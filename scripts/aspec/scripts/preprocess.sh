@@ -1,10 +1,11 @@
 #! /bin/bash
 
 base=/net/cephfs/home/mathmu/scratch/noise-distill/aspec
+basebase=/net/cephfs/home/mathmu/scratch/noise-distill
 
 scripts=/net/cephfs/home/mathmu/scratch/noise-distill/scripts/aspec/scripts
 
-source $base/venvs/sockeye3-cpu/bin/activate
+source $basebase/venvs/sockeye3-cpu/bin/activate
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
 module load hpc
