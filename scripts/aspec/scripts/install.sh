@@ -1,49 +1,13 @@
 #! /bin/bash
 
+basebase=/net/cephfs/home/mathmu/scratch/noise-distill
 base=/net/cephfs/home/mathmu/scratch/noise-distill/aspec
 
-tools=$base/tools
-mkdir -p $tools
-
-source $base/venvs/sockeye3/bin/activate
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
 module load volta cuda/10.0
 
-# install Sockeye
-
-# CUDA version on instance
-CUDA_VERSION=100
-
-## Method A: install from PyPi
-
-wget https://raw.githubusercontent.com/awslabs/sockeye/master/requirements/requirements.gpu-cu${CUDA_VERSION}.txt
-pip install sockeye --no-deps -r requirements.gpu-cu${CUDA_VERSION}.txt
-rm requirements.gpu-cu${CUDA_VERSION}.txt
-
-pip install matplotlib mxboard
-
-# install BPE library
-
-pip install subword-nmt
-
-# install sacrebleu for evaluation
-
-pip install sacrebleu
-
-# install Moses scripts for preprocessing
-
-git clone https://github.com/bricksdont/moses-scripts $tools/moses-scripts
-
-# install fasttext for language identification
-
-pip install fasttext
-
-# fix reload for continued training bug
-
-pip install --upgrade numpy==1.16.1
-
-# install sentencepiece for subword regularization
+source $basebase/venvs/sockeye3/bin/activate
 
 pip install sentencepiece
 
@@ -55,34 +19,10 @@ deactivate
 echo "check current python after deactivate:"
 which python
 
-source $base/venvs/sockeye3-cpu/bin/activate
+source $basebase/venvs/sockeye3-cpu/bin/activate
 
 echo "check current python after sourcing CPU env:"
 which python
-
-wget https://raw.githubusercontent.com/awslabs/sockeye/master/requirements/requirements.txt
-pip install sockeye --no-deps -r requirements.txt
-rm requirements.txt
-
-pip install matplotlib mxboard
-
-# install BPE library
-
-pip install subword-nmt
-
-# install sacrebleu for evaluation
-
-pip install sacrebleu
-
-# install fasttext for language identification
-
-pip install fasttext
-
-# download fasttext model
-
-mkdir -p $tools/fasttext
-
-wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P $tools/fasttext
 
 # install sentencepiece for subword regularization
 
@@ -96,30 +36,10 @@ deactivate
 echo "check current python after deactivate:"
 which python
 
-source $base/venvs/sockeye3-custom/bin/activate
+source $basebase/venvs/sockeye3-custom/bin/activate
 
 echo "check current python after sourcing Sockeye custom env:"
 which python
-
-git clone https://github.com/ZurichNLP/sockeye $tools/sockeye-custom
-
-(cd $tools/sockeye-custom && git checkout instance_weighting)
-
-pip install --no-deps -r $tools/sockeye-custom/requirements/requirements.gpu-cu${CUDA_VERSION}.txt $tools/sockeye-custom
-
-pip install matplotlib mxboard
-
-# install BPE library
-
-pip install subword-nmt
-
-# install sacrebleu for evaluation
-
-pip install sacrebleu
-
-# fix reload for continued training bug
-
-pip install --upgrade numpy==1.16.1
 
 # install sentencepiece for subword regularization
 
