@@ -1,9 +1,8 @@
 #! /bin/bash
 
 base=/net/cephfs/home/mathmu/scratch/noise-distill/aspec
-basebase=/net/cephfs/home/mathmu/scratch/noise-distill
 
-source $basebase/venvs/sockeye3-cpu/bin/activate
+source $base/venvs/laser3/bin/activate
 
 data=$base/data
 translations=$base/translations
@@ -34,6 +33,6 @@ for translations_sub in $translations/*; do
       trg=ja
     fi
 
-    . $basebase/scripts/evaluation/evaluate_generic.sh
+    . $base/scripts/evaluate_generic.sh
 
 done
