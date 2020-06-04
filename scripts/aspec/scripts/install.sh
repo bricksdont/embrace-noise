@@ -99,7 +99,7 @@ export LASER=$tools/laser
 
 (cd $tools/laser && checkout mecab-installation)
 
-. $tools/laser/install_external_tools.sh
+. $tools/laser/install_external_tools.sh --install-mecab
 
 . $tools/laser/install_models.sh
 
@@ -116,15 +116,3 @@ pip install fasttext
 mkdir -p $tools/fasttext
 
 wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P $tools/fasttext
-
-# install fast_align
-
-git clone https://github.com/clab/fast_align $tools/fast_align
-(cd $tools/fast_align && mkdir build)
-(cd $tools/fast_align/build && cmake ..)
-(cd $tools/fast_align/build && make)
-
-# fast_align helper tools
-
-(cd $tools && wget https://raw.githubusercontent.com/redpony/cdec/master/corpus/paste-files.pl)
-(cd $tools && wget https://raw.githubusercontent.com/redpony/cdec/master/corpus/filter-length.pl)
