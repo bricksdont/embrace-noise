@@ -97,7 +97,7 @@ export LASER=$tools/laser
 
 # unanswered PR that gets installation of Mecab right
 
-(cd $tools/laser && checkout mecab-installation)
+(cd $tools/laser && git checkout mecab-installation)
 
 . $tools/laser/install_external_tools.sh --install-mecab
 
