@@ -13,7 +13,7 @@ module load volta cuda/10.0
 
 source $basebase/venvs/sockeye3/bin/activate
 
-pip install --upgrade sentencepiece
+pip install --upgrade sentencepiece sacrebleu
 
 ###########################################
 
@@ -30,7 +30,7 @@ which python
 
 # install sentencepiece for subword regularization
 
-pip install --upgrade sentencepiece
+pip install --upgrade sentencepiece sacrebleu
 
 ###########################################
 
@@ -47,7 +47,7 @@ which python
 
 # install sentencepiece for subword regularization
 
-pip install --upgrade sentencepiece
+pip install --upgrade sentencepiece sacrebleu
 
 ###########################################
 
@@ -64,7 +64,7 @@ which python
 
 # install sentencepiece for subword regularization
 
-pip install --upgrade sentencepiece
+pip install --upgrade sentencepiece sacrebleu
 
 ###########################################
 
