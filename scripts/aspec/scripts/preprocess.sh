@@ -54,17 +54,17 @@ mkdir -p $data_sub
 
 # link data sets
 
-for corpus in dev test; do
-    for lang in $src $trg; do
-        ln -snf $data/raw/$corpus/$corpus.$lang $data_sub/$corpus.$lang
-    done
-done
+ln -snf $data/raw/dev/dev.extracted.en $data_sub/dev.en
+ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/test.ja
+
+ln -snf $data/raw/test/test.extracted.en $data_sub/test.en
+ln -snf $data/raw/test/test.extracted.ja $data_sub/test.ja
 
 # for baseline: only use train-1 as training data
 
-for lang in $src $trg; do
-    ln -snf $data/raw/train/train-1.$lang $data_sub/train.$lang
-done
+ln -snf $data/raw/train/train-1.extracted.en $data_sub/train.en
+ln -snf $data/raw/train/train-1.cleaned.ja $data_sub/train.ja
+
 
 shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
@@ -87,17 +87,16 @@ mkdir -p $data_sub
 
 # link data sets
 
-for corpus in dev test; do
-    for lang in $src $trg; do
-        ln -snf $data/raw/$corpus/$corpus.$lang $data_sub/$corpus.$lang
-    done
-done
+ln -snf $data/raw/dev/dev.extracted.en $data_sub/dev.en
+ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/test.ja
 
-# for noise1: use train-1 and train-2 as training data
+ln -snf $data/raw/test/test.extracted.en $data_sub/test.en
+ln -snf $data/raw/test/test.extracted.ja $data_sub/test.ja
 
-for lang in $src $trg; do
-    cat $data/raw/train/train-1.$lang $data/raw/train/train-2.$lang > $data_sub/train.$lang
-done
+# for noise1 : use train-1 and train-2 as training data
+
+cat $data/raw/train/train-1.extracted.en $data/raw/train/train-2.extracted.en > $data_sub/train.en
+cat $data/raw/train/train-1.cleaned.ja $data/raw/train/train-2.cleaned.ja > $data_sub/train.ja
 
 # do not train a new SP model: use baseline model for everything
 
@@ -122,17 +121,16 @@ mkdir -p $data_sub
 
 # link data sets
 
-for corpus in dev test; do
-    for lang in $src $trg; do
-        ln -snf $data/raw/$corpus/$corpus.$lang $data_sub/$corpus.$lang
-    done
-done
+ln -snf $data/raw/dev/dev.extracted.en $data_sub/dev.en
+ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/test.ja
 
-# for noise2: use train-1 and train-2 as training data
+ln -snf $data/raw/test/test.extracted.en $data_sub/test.en
+ln -snf $data/raw/test/test.extracted.ja $data_sub/test.ja
 
-for lang in $src $trg; do
-    cat $data/raw/train/train-1.$lang $data/raw/train/train-2.$lang $data/raw/train/train-3.$lang > $data_sub/train.$lang
-done
+# for noise1 : use train-1 and train-2 and train-3 as training data
+
+cat $data/raw/train/train-1.extracted.en $data/raw/train/train-2.extracted.en $data/raw/train/train3-extracted.en > $data_sub/train.en
+cat $data/raw/train/train-1.cleaned.ja $data/raw/train/train-2.cleaned.ja $data/raw/train/train-3.cleaned.ja > $data_sub/train.ja
 
 # do not train a new SP model: use baseline model for everything
 
