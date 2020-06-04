@@ -129,7 +129,7 @@ ln -snf $data/raw/test/test.extracted.ja $data_sub/test.ja
 
 # for noise1 : use train-1 and train-2 and train-3 as training data
 
-cat $data/raw/train/train-1.extracted.en $data/raw/train/train-2.extracted.en $data/raw/train/train3-extracted.en > $data_sub/train.en
+cat $data/raw/train/train-1.extracted.en $data/raw/train/train-2.extracted.en $data/raw/train/train-3.extracted.en > $data_sub/train.en
 cat $data/raw/train/train-1.cleaned.ja $data/raw/train/train-2.cleaned.ja $data/raw/train/train-3.cleaned.ja > $data_sub/train.ja
 
 # do not train a new SP model: use baseline model for everything
