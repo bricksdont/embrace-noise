@@ -3,13 +3,17 @@
 basebase=/net/cephfs/home/mathmu/scratch/noise-distill
 base=/net/cephfs/home/mathmu/scratch/noise-distill/aspec
 
+tools=$base/tools
+
+mkdir -p $tools
+
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
 module load volta cuda/10.0
 
 source $basebase/venvs/sockeye3/bin/activate
 
-pip install sentencepiece
+pip install --upgrade sentencepiece
 
 ###########################################
 
@@ -26,7 +30,7 @@ which python
 
 # install sentencepiece for subword regularization
 
-pip install sentencepiece
+pip install --upgrade sentencepiece
 
 ###########################################
 
@@ -43,7 +47,7 @@ which python
 
 # install sentencepiece for subword regularization
 
-pip install sentencepiece
+pip install --upgrade sentencepiece
 
 ###########################################
 
@@ -60,7 +64,7 @@ which python
 
 # install sentencepiece for subword regularization
 
-pip install sentencepiece
+pip install --upgrade sentencepiece
 
 ###########################################
 
@@ -77,11 +81,11 @@ which python
 
 # install torch
 
-wget https://download.pytorch.org/whl/cu100/torch-1.3.0%2Bcu100-cp35-cp35m-linux_x86_64.whl
+wget https://download.pytorch.org/whl/cu100/torch-1.3.0%2Bcu100-cp36-cp36m-linux_x86_64.whl
 
-pip install torch-1.3.0+cu100-cp35-cp35m-linux_x86_64.whl
+pip install torch-1.3.0+cu100-cp36-cp36m-linux_x86_64.whl
 
-rm torch-1.3.0+cu100-cp35-cp35m-linux_x86_64.whl
+rm torch-1.3.0+cu100-cp36-cp36m-linux_x86_64.whl
 
 # cython, numpy, transliterate: needed by fastBPE (dependency of LASER)
 
