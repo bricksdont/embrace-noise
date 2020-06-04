@@ -70,7 +70,7 @@ shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
 sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hpc \
-    $scripts/preprocessing/preprocess_generic.sh \
+    $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
     $scripts \
@@ -105,7 +105,7 @@ shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
 sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hpc \
-    $scripts/preprocessing/preprocess_generic.sh \
+    $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
     $scripts \
@@ -140,7 +140,7 @@ shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
 sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hpc \
-    $scripts/preprocessing/preprocess_generic.sh \
+    $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
     $scripts \
