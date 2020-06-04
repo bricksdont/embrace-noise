@@ -2,6 +2,8 @@
 
 base=/net/cephfs/home/mathmu/scratch/noise-distill/aspec
 
+scripts=/net/cephfs/home/mathmu/scratch/noise-distill/scripts/aspec/scripts
+
 source $base/venvs/sockeye3-cpu/bin/activate
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
@@ -66,10 +68,10 @@ shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
 sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hpc \
-    $base/scripts/preprocessing/preprocess_generic.sh \
+    $scripts/preprocessing/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
-    $base/scripts \
+    $scripts \
     $sentencepiece_vocab_size \
     $src \
     $trg
@@ -101,10 +103,10 @@ shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
 sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hpc \
-    $base/scripts/preprocessing/preprocess_generic.sh \
+    $scripts/preprocessing/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
-    $base/scripts \
+    $scripts \
     $sentencepiece_vocab_size \
     $src \
     $trg
@@ -136,10 +138,10 @@ shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
 sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hpc \
-    $base/scripts/preprocessing/preprocess_generic.sh \
+    $scripts/preprocessing/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
-    $base/scripts \
+    $scripts \
     $sentencepiece_vocab_size \
     $src \
     $trg
