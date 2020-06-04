@@ -1,6 +1,6 @@
 #! /bin/bash
 
-base=/net/cephfs/home/mathmu/scratch/noise-distill
+base=/net/cephfs/home/mathmu/scratch/noise-distill/aspec
 basebase=/net/cephfs/home/mathmu/scratch/noise-distill
 
 source $basebase/venvs/sockeye3-cpu/bin/activate
