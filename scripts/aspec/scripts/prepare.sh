@@ -36,6 +36,12 @@ function contains() {
     return 1
 }
 
+# create baseline.reverse if does not exist
+
+if [[ ! -d $data/baseline.reverse ]]; then
+    cp -r $data/baseline $data/baseline.reverse
+fi
+
 for data_sub in $data/*; do
 
     echo "data_sub: $data_sub"
