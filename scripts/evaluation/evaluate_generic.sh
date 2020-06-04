@@ -7,12 +7,7 @@
 # $data_sub
 # $translations_sub
 # $evaluations_sub
-
-trg=en
-
-if [[ $name == "baseline.reverse" ]]; then
-  trg=de
-fi
+# $trg
 
 for corpus in dev test test_ood; do
 

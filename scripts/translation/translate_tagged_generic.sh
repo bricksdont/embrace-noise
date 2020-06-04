@@ -6,21 +6,15 @@
 # $data_sub
 # $translations_sub
 # $model_path
+# $src
+# $trg
 
 base=$1
 data_sub=$2
 translations_sub=$3
 model_path=$4
-
-model_name=$(basename $model_path)
-
-src=de
-trg=en
-
-if [[ $model_name == "baseline.reverse" ]]; then
-  src=en
-  trg=de
-fi
+src=$5
+trg=$6
 
 scripts=$base/scripts
 MOSES=$base/tools/moses-scripts/scripts

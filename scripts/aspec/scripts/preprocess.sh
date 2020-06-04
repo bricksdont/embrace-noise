@@ -69,7 +69,7 @@ ln -snf $data/raw/train/train-1.cleaned.ja $data_sub/train.ja
 shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
-sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hpc \
+sbatch --cpus-per-task=1 --time=00:30:00 --mem=16G --partition=hydra \
     $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
@@ -103,7 +103,7 @@ cat $data/raw/train/train-1.cleaned.ja $data/raw/train/train-2.cleaned.ja > $dat
 shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
-sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hpc \
+sbatch --cpus-per-task=1 --time=00:30:00 --mem=16G --partition=hydra \
     $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
@@ -127,7 +127,7 @@ ln -snf $data/raw/dev/dev.cleaned.ja $data_sub/dev.ja
 ln -snf $data/raw/test/test.extracted.en $data_sub/test.en
 ln -snf $data/raw/test/test.extracted.ja $data_sub/test.ja
 
-# for noise1 : use train-1 and train-2 and train-3 as training data
+# for noise2 : use train-1 and train-2 and train-3 as training data
 
 cat $data/raw/train/train-1.extracted.en $data/raw/train/train-2.extracted.en $data/raw/train/train-3.extracted.en > $data_sub/train.en
 cat $data/raw/train/train-1.cleaned.ja $data/raw/train/train-2.cleaned.ja $data/raw/train/train-3.cleaned.ja > $data_sub/train.ja
@@ -137,7 +137,7 @@ cat $data/raw/train/train-1.cleaned.ja $data/raw/train/train-2.cleaned.ja $data/
 shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
-sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hpc \
+sbatch --cpus-per-task=1 --time=00:30:00 --mem=16G --partition=hydra \
     $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \

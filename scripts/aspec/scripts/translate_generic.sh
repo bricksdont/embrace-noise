@@ -16,15 +16,13 @@ model_path=$4
 src=$5
 trg=$6
 
-MOSES=$base/tools/moses-scripts/scripts
-
 num_threads=1
 device_arg="--device-ids 0"
 
-for corpus in dev test test_ood; do
+for corpus in dev test; do
 
-    if [[ -s $translations_sub/$corpus.bpe.$trg ]]; then
-      echo "File exists: $translations_sub/$corpus.bpe.$trg"
+    if [[ -s $translations_sub/$corpus.pieces.$trg ]]; then
+      echo "File exists: $translations_sub/$corpus.pieces.$trg"
       echo "Skipping"
       continue
     fi
@@ -34,8 +32,8 @@ for corpus in dev test test_ood; do
     # 1-best, fixed beam size, fixed batch size
 
     OMP_NUM_THREADS=$num_threads python -m sockeye.translate \
-            -i $data_sub/$corpus.bpe.$src \
-            -o $translations_sub/$corpus.bpe.$trg \
+            -i $data_sub/$corpus.pieces.$src \
+            -o $translations_sub/$corpus.pieces.$trg \
             -m $model_path \
             --beam-size 10 \
             --length-penalty-alpha 1.0 \
@@ -43,12 +41,10 @@ for corpus in dev test test_ood; do
             --batch-size 64 \
             --disable-device-locking
 
-    # undo BPE
+    # undo pieces
 
-    cat $translations_sub/$corpus.bpe.$trg | sed -r 's/@@( |$)//g' > $translations_sub/$corpus.tok.$trg
-
-    # undo tokenization
-
-    cat $translations_sub/$corpus.tok.$trg | $MOSES/tokenizer/detokenizer.perl -l $trg > $translations_sub/$corpus.$trg
+    cat $translations_sub/$corpus.pieces.$trg | \
+        python $base/scripts/remove_sentencepiece.py --model $base/shared_models/baseline/$src$trg.sentencepiece.model \
+            > $translations_sub/$corpus.$trg
 
 done

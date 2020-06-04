@@ -4,9 +4,6 @@ base=/net/cephfs/home/mathmu/scratch/noise-distill
 
 source $base/venvs/sockeye3-cpu/bin/activate
 
-src=de
-trg=en
-
 data=$base/data
 translations=$base/translations
 evaluations=$base/evaluation
@@ -29,6 +26,12 @@ for translations_sub in $translations/*; do
     #fi
 
     mkdir -p $evaluations_sub
+
+    if [[ $name == "baseline.reverse" ]]; then
+      trg=de
+    else
+      trg=en
+    fi
 
     . $base/scripts/evaluation/evaluate_generic.sh
 
