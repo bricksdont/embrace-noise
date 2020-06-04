@@ -34,6 +34,7 @@ for corpus in train-1 train-2 train-3; do
 done
 
 # (Removing date expressions at EOS in Japanese in the training and development data to reduce noise)
+# TODO: necessary for weighting schemes?
 
 for corpus in train-1 train-2 train-3; do
   $data/raw/train/$corpus.extracted.ja | perl -CSD -Mutf8 -pe 's/(.)［[０-９．]+］$/${1}/;' > $data/raw/train/$corpus.cleaned.ja

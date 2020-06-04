@@ -17,8 +17,6 @@ fi
 for corpus in dev test test_ood; do
 
     if [[ -s $evaluations_sub/$corpus.bleu ]]; then
-      echo "File exists: $evaluations_sub/$corpus.bleu"
-      echo "Skipping."
       continue
     fi
 
