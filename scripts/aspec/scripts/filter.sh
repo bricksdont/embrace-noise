@@ -25,6 +25,10 @@ for data_sub in $data/*; do
 
     name=$(basename $data_sub)
 
+    if [[ $name == "raw" ]]; then
+        continue
+    fi
+
     filter_sub=$filtered/$name
 
     if [[ -d $filter_sub ]]; then

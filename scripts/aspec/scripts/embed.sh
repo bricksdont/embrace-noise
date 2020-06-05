@@ -44,7 +44,7 @@ for filtered_sub in $filtered/*; do
         # remove pieces data (LASER has its own specific preprocessing)
 
         cat $filtered_sub/train.pieces.$lang | \
-            python $base/scripts/remove_sentencepiece.py --model $shared_models/baseline/$src$trg.sentencepiece.model \
+            python $scripts/aspec/scripts/remove_sentencepiece.py --model $shared_models/baseline/$src$trg.sentencepiece.model \
                 > $filtered_sub/train.$lang
       fi
 
