@@ -11,43 +11,21 @@ module load hydra
 src=en
 trg=ja
 
-scripts=$base/scripts
-preprocessed=$base/preprocessed
+data=$base/data
 filtered=$base/filtered
+
+scripts=$basebase/scripts
+tools=$basebase/tools
 
 mkdir -p $filtered
 
-# filter baseline
+for data_sub in $data/*; do
 
-preprocessed_sub=$preprocessed/baseline
-filter_sub=$filtered/baseline
+    echo "data_sub: $data_sub"
 
-mkdir -p $filter_sub
+    name=$(basename $data_sub)
 
-input_src=$preprocessed_sub/train.tok.$src
-input_trg=$preprocessed_sub/train.tok.$trg
-
-output_src=$filter_sub/train.tok.$src
-output_trg=$filter_sub/train.tok.$trg
-
-logfile=$filter_sub/log
-
-. $scripts/preprocessing/filter_generic.sh 2>&1 | tee -a $logfile
-
-
-# noise data sets (noise only, not combined with baseline data)
-
-# for noise_type in misaligned_sent misordered_words_src misordered_words_trg wrong_lang_fr_src wrong_lang_fr_trg untranslated_en_src untranslated_de_trg short_max2 short_max5 raw_paracrawl; do
-
-for noise_type in raw_paracrawl; do
-  # for noise_amount in 05 10 20 50 100; do
-  for noise_amount in 100; do
-
-    echo "noise_type: $noise_type"
-    echo "noise_amount: $noise_amount"
-
-    preprocessed_sub=$preprocessed/$noise_type.$noise_amount
-    filter_sub=$filtered/$noise_type.$noise_amount
+    filter_sub=$filtered/$name
 
     if [[ -d $filter_sub ]]; then
         echo "Folder exists: $filter_sub"
@@ -57,17 +35,16 @@ for noise_type in raw_paracrawl; do
 
     mkdir -p $filter_sub
 
-    input_src=$preprocessed_sub/train.tok.$src
-    input_trg=$preprocessed_sub/train.tok.$trg
+    input_src=$data_sub/train.pieces.$src
+    input_trg=$data_sub/train.pieces.$trg
 
-    output_src=$filter_sub/train.tok.$src
-    output_trg=$filter_sub/train.tok.$trg
+    output_src=$filter_sub/train.pieces.$src
+    output_trg=$filter_sub/train.pieces.$trg
 
     logfile=$filter_sub/log
+    rules="overlap min-length max-length"
 
     . $scripts/preprocessing/filter_generic.sh 2>&1 | tee -a $logfile
-
-  done
 done
 
 echo "Size of all files:"

@@ -10,6 +10,7 @@
 # $output_src
 # $output_trg
 # $tools
+# $rules
 
 python $scripts/preprocessing/apply_filter_rules.py \
           --src-lang $src \
@@ -18,6 +19,6 @@ python $scripts/preprocessing/apply_filter_rules.py \
           --input-trg $input_trg \
           --output-src $output_src \
           --output-trg $output_trg \
-          --rules all \
+          --rules $rules \
           --fasttext-model-path $tools/fasttext/lid.176.bin
 

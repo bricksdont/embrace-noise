@@ -32,6 +32,8 @@ output_trg=$filter_sub/train.tok.$trg
 
 logfile=$filter_sub/log
 
+rules=all
+
 . $scripts/preprocessing/filter_generic.sh 2>&1 | tee -a $logfile
 
 
@@ -64,6 +66,8 @@ for noise_type in raw_paracrawl; do
     output_trg=$filter_sub/train.tok.$trg
 
     logfile=$filter_sub/log
+
+    rules=all
 
     . $scripts/preprocessing/filter_generic.sh 2>&1 | tee -a $logfile
 
