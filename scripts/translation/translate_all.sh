@@ -137,6 +137,12 @@ for models_sub in $models/*; do
         continue
     fi
 
+    if [[ ! -d $models_sub ]]; then
+        echo "Folder does not exist: $models_sub"
+        echo "Skipping."
+        continue
+    fi
+
     if [ $(contains "${TRANSLATE_SUBSET[@]}" $name) == "n" ]; then
         echo "name: $name not in subset that should be translated"
         echo "Skipping."
