@@ -44,7 +44,7 @@ for corpus in dev test; do
     # undo pieces
 
     cat $translations_sub/$corpus.pieces.$trg | \
-        python $base/scripts/aspec/scripts/remove_sentencepiece.py --model $base/shared_models/baseline/$src$trg.sentencepiece.model \
+        python $base/scripts/aspec/scripts/remove_sentencepiece.py --model $base/aspec/shared_models/baseline/$src$trg.sentencepiece.model \
             > $translations_sub/$corpus.$trg
 
 done
