@@ -24,7 +24,7 @@ done
 
 # link dev and test sets
 
-for corpus in dev test; do
+for corpus in dev test test_ood; do
   ln -snf $baseline_sub/$corpus.bpe.$src $data_sub/$corpus.bpe.$src
   ln -snf $baseline_sub/$corpus.bpe.$trg $data_sub/$corpus.bpe.$trg
 done
