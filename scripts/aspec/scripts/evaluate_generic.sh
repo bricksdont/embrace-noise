@@ -17,7 +17,7 @@ for corpus in dev test; do
 
     # compute case-sensitive BLEU on detokenized data
     if [[ $trg == "ja" ]]; then
-        cat $translations_sub/$corpus.$trg | sacrebleu -t ja-mecab -t mtnt1.1 -l en-ja $data/raw/$corpus/$corpus.$trg > $evaluations_sub/$corpus.bleu
+        cat $translations_sub/$corpus.$trg | sacrebleu --tok ja-mecab -l en-ja $data/raw/$corpus/$corpus.$trg > $evaluations_sub/$corpus.bleu
     else
         cat $translations_sub/$corpus.$trg | sacrebleu $data/raw/$corpus/$corpus.$trg > $evaluations_sub/$corpus.bleu
     fi
