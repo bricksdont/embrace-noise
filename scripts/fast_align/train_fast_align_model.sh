@@ -35,11 +35,11 @@ for model_name in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
     mkdir -p $fast_align_sub
 
     if [[ ! -s $fast_align_sub/input.raw ]]; then
-        perl $base/tools/paste-files.pl $data_sub/train.bpe.$src $data_sub/train.bpe.$trg > $fast_align_sub/input.raw
+        perl $base/tools/paste-files.pl $data_sub/train.bpe.$src $data_sub/train.bpe.$trg > $fast_align_sub/input.raw 2> $fast_align_sub/paste.err
     fi
 
     if [[ ! -s $fast_align_sub/input ]]; then
-        perl $base/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input
+        perl $base/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input 2> $fast_align_sub/filter.err
     fi
 
     sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=generic $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub ""
