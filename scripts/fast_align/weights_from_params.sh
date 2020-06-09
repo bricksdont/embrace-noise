@@ -119,7 +119,7 @@ for model_name in raw_paracrawl.100.filtered; do
                  smooth_method_arg="--smooth-method $smooth_method"
 
                  sbatch --cpus-per-task=1 --time=18:00:00 --mem=128G --partition=hpc $base/scripts/fast_align/weights_from_params_generic.sh \
-                     $base $fast_align_sub $alignments_sub $data_sub $fast_align_sub_reverse $reverse_method $word_level_arg "$smooth_method_arg"
+                     $base $fast_align_sub $alignments_sub $data_sub $fast_align_sub_reverse $reverse_method $word_level_arg "$smooth_method_arg" $src $trg
 
               done
           done

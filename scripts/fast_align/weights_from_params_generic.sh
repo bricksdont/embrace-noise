@@ -9,6 +9,8 @@
 # $use_reverse_method
 # $word_level_arg ("--word-level" or "")
 # $smooth_method_arg ("--smooth-method mean" or "--smooth-method geomean", or "")
+# $src
+# $trg
 
 base=$1
 fast_align_sub=$2
@@ -18,9 +20,8 @@ fast_align_sub_reverse=$5
 use_reverse_method=$6
 word_level_arg=$7
 smooth_method_arg=$8
-
-src=de
-trg=en
+src=$9
+trg=${10}
 
 SECONDS=0
 

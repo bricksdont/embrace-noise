@@ -4,7 +4,6 @@
 
 # $data
 # $model_name
-# $preprocessed
 # $origin_sub
 # $src
 # $trg

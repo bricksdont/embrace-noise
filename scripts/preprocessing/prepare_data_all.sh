@@ -5,7 +5,7 @@ base=/net/cephfs/home/mathmu/scratch/noise-distill
 source $base/venvs/sockeye3-cpu/bin/activate
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
-module load hpc
+module load generic
 
 src=de
 trg=en
@@ -146,7 +146,7 @@ for data_sub in $data/*; do
 
     mode=bpe
 
-    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hpc $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub $src $trg $mode
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=generic $base/scripts/preprocessing/prepare_data_generic.sh $data_sub $prepared_sub $src $trg $mode
 
 done
 
@@ -178,7 +178,7 @@ for data_sub in $data/*; do
     mode=bpe
     instance_weighting_type="sentence"
 
-    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hpc $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type $src $trg $mode
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=generic $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type $src $trg $mode
 
 done
 
@@ -206,7 +206,7 @@ for data_sub in $data/*token_weighting*; do
     instance_weighting_type="word"
     mode=bpe
 
-    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hpc $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type $src $trg $mode
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=generic $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type $src $trg $mode
 
 done
 

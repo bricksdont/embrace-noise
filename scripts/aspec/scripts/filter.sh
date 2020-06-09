@@ -6,7 +6,7 @@ basebase=/net/cephfs/home/mathmu/scratch/noise-distill
 source $basebase/venvs/sockeye3-cpu/bin/activate
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
-module load hydra
+module load generic
 
 src=en
 trg=ja

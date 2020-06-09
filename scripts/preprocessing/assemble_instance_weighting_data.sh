@@ -246,18 +246,17 @@ for fast_align_model in raw_paracrawl.100.filtered; do
     done
 done
 
-# no trusted clean data models for now
-
-exit
-
 # systems with fast_align token-level weights: clean corpus has 1.0 for all tokens
 
-for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
+for exp in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0; do
+
+    reverse_method="geomean"
 
     original_name="raw_paracrawl.100.filtered"
+    fast_align_model="raw_paracrawl.100.filtered"
     original_data_sub=$data/$original_name
 
-    name=$original_name.token_weighting.trust_clean.fa_model.$fast_align_model
+    name=$original_name.token_weighting.trust_clean.exp$exp.$reverse_method
     data_sub=$data/$name
 
     if [[ -d $data_sub ]]; then
@@ -268,7 +267,7 @@ for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; d
 
     mkdir -p $data_sub
 
-    alignments_sub=$alignments/$original_name.$fast_align_model
+    alignments_sub=$alignments/$original_name.$fast_align_model.word_level.$reverse_method.geomean
 
      # link entire data folder
 
@@ -283,7 +282,8 @@ for fast_align_model in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; d
     python $scripts/preprocessing/create_weights_like.py --like $data/baseline/train.bpe.$trg \
         --method ones --instance-weight-type word > $data_sub/train.clean.weights
 
-    tail -n 2069323 $alignments_sub/weights > $data_sub/train.noisy.weights
+    tail -n 2069323 $alignments_sub/weights | python $scripts/preprocessing/exponential_smoothing.py --exp $exp > \
+        $data_sub/train.noisy.weights
 
     # concat weights
 

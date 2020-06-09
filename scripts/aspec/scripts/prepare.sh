@@ -6,7 +6,7 @@ basebase=/net/cephfs/home/mathmu/scratch/noise-distill
 source $basebase/venvs/sockeye3-cpu/bin/activate
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
-module load hydra
+module load generic
 
 data=$base/data
 prepared=$base/prepared
@@ -73,7 +73,7 @@ for data_sub in $data/*; do
 
     mode=bpe
 
-    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra \
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=generic \
         $basebase/scripts/preprocessing/prepare_data_generic.sh \
             $data_sub $prepared_sub $src $trg $mode
 
