@@ -42,7 +42,7 @@ for model_name in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
         perl $base/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input 2> $fast_align_sub/filter.err
     fi
 
-    sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=generic $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub ""
+    sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=hpc $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub ""
 
     # reverse model
 
@@ -57,7 +57,7 @@ for model_name in baseline raw_paracrawl.100 raw_paracrawl.100.filtered; do
 
     ln -snf $fast_align/$model_name/input $fast_align/"$model_name"_reverse/input
 
-    sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=generic $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub "-r"
+    sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=hpc $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub "-r"
 
 done
 
@@ -85,11 +85,11 @@ for original_model_name in baseline raw_paracrawl.100 raw_paracrawl.100.filtered
     if [[ ! -s $fast_align_sub/input.raw ]]; then
         cat $data_sub/train.bpe.$src | sed -r 's/@@( |$)//g' > $fast_align_sub/train.tok.$src
         cat $data_sub/train.bpe.$trg | sed -r 's/@@( |$)//g' > $fast_align_sub/train.tok.$trg
-        perl $base/tools/paste-files.pl $fast_align_sub/train.tok.$src $fast_align_sub/train.tok.$trg > $fast_align_sub/input.raw
+        perl $base/tools/paste-files.pl $fast_align_sub/train.tok.$src $fast_align_sub/train.tok.$trg > $fast_align_sub/input.raw 2> $fast_align_sub/paste.err
     fi
 
     if [[ ! -s $fast_align_sub/input ]]; then
-        perl $base/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input
+        perl $base/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input 2> $fast_align_sub/filter.err
     fi
 
     sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=hpc $base/scripts/fast_align/train_fast_align_model_generic.sh $base $fast_align_sub ""
