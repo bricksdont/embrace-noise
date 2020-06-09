@@ -30,30 +30,25 @@ SECONDS=0
 
 #################
 
-echo "data_sub: $data_sub"
-
 for lang in $src $trg; do
     for corpus in train dev test; do
-        if [[ ! -f $data_sub/$corpus.tok.$lang ]]; then
+        if [[ $lang == "ja" ]]; then
+            # juman tokenization
+            # see http://lotus.kuee.kyoto-u.ac.jp/WAT/WAT2019/baseline/dataPreparationJE.html
 
-            if [[ $lang == "ja" ]]; then
-              # juman tokenization
-              # see http://lotus.kuee.kyoto-u.ac.jp/WAT/WAT2019/baseline/dataPreparationJE.html
+            cat $data_sub/$corpus.$lang | \
+              perl -CSD -Mutf8 -pe 's/　/ /g;' | \
+              $tools/usr/local/bin/juman -r $tools/usr/local/etc/jumanrc -b | \
+              perl -ne 'chomp; if($_ eq "EOS"){print join(" ",@b),"\n"; @b=();} else {@a=split/ /; push @b, $a[0];}' | \
+              perl -pe 's/^ +//; s/ +$//; s/ +/ /g;' | \
+              perl -CSD -Mutf8 -pe 'tr/\|[]/｜［］/; ' \
+              > $data_sub/$corpus.tok.$lang
 
-              cat $data_sub/$corpus.$lang | \
-                perl -CSD -Mutf8 -pe 's/　/ /g;' | \
-                $tools/usr/local/bin/juman -r $tools/usr/local/etc/jumanrc -b | \
-                perl -ne 'chomp; if($_ eq "EOS"){print join(" ",@b),"\n"; @b=();} else {@a=split/ /; push @b, $a[0];}' | \
-                perl -pe 's/^ +//; s/ +$//; s/ +/ /g;' | \
-                perl -CSD -Mutf8 -pe 'tr/\|[]/｜［］/; ' \
-                > $data_sub/$corpus.tok.$lang
+        else
+            # assume lang is en, Moses tokenization
 
-            else
-              # assume lang is en, Moses tokenization
-
-              cat $data_sub/$corpus.$lang | \
-                perl $MOSES/tokenizer/tokenizer.perl -a -q -no-escape -l $lang > $data_sub/$corpus.tok.$lang
-            fi
+            cat $data_sub/$corpus.$lang | \
+              perl $MOSES/tokenizer/tokenizer.perl -a -q -no-escape -l $lang > $data_sub/$corpus.tok.$lang
         fi
     done
 done
