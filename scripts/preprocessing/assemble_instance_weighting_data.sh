@@ -290,3 +290,26 @@ for exp in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0; do
     cat $data_sub/train.clean.weights $data_sub/train.noisy.weights > $data_sub/train.weights
 
 done
+
+exit
+
+# below: WIP
+
+for fraction in 0.75; do
+
+    original_name="raw_paracrawl.100.mined.score.$fraction"
+    name=$original_name.token_weighting
+
+    data_sub=$data/$name
+
+    if [[ -d $data_sub ]]; then
+        echo "data_sub exists: $data_sub"
+        echo "Skipping."
+        continue
+    fi
+
+    mkdir -p $data_sub
+
+
+
+done

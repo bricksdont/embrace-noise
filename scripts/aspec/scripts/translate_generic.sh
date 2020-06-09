@@ -2,7 +2,7 @@
 
 # calling script needs to set:
 
-# $base
+# $basebase
 # $data_sub
 # $translations_sub
 # $model_path
