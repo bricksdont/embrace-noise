@@ -71,7 +71,7 @@ for data_sub in $data/*; do
 
     mkdir -p $prepared_sub
 
-    mode=pieces
+    mode=bpe
 
     sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=hydra \
         $basebase/scripts/preprocessing/prepare_data_generic.sh \

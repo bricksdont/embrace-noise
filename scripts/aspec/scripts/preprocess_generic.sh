@@ -4,17 +4,26 @@
 
 # $data_sub
 # $shared_models_sub
-# $scripts
-# $sentencepiece_vocab_size
+# $base
+# $basebase
 # $src
 # $trg
+# $bpe_total_symbols
+# $bpe_vocab_threshold
 
 data_sub=$1
 shared_models_sub=$2
-scripts=$3
-sentencepiece_vocab_size=$4
-src=$5
-trg=$6
+basebase=$3
+src=$4
+trg=$5
+bpe_total_symbols=$6
+bpe_vocab_threshold=$7
+
+tools=$basebase/aspec/tools
+MOSES=$basebase/tools/moses-scripts/scripts
+
+export LD_LIBRARY_PATH=$tools/usr/local/lib
+alias juman="$tools/usr/local/bin/juman -r $tools/usr/local/etc/jumanrc"
 
 # measure time
 
@@ -24,37 +33,36 @@ SECONDS=0
 
 echo "data_sub: $data_sub"
 
-# learn sentencepiece model on train (concatenate both languages)
+for lang in $src $trg; do
+    for corpus in train dev test; do
+        if [[ ! -f $data_sub/$corpus.tok.$lang ]]; then
 
-if [[ ! -f $shared_models_sub/$src$trg.sentencepiece.model ]]; then
+            if [[ $lang == "ja" ]]; then
+              # juman tokenization
+              # see http://lotus.kuee.kyoto-u.ac.jp/WAT/WAT2019/baseline/dataPreparationJE.html
 
-  # concat training material
+              cat $data_sub/$corpus.$lang | \
+                perl -CSD -Mutf8 -pe 's/　/ /g;' | \
+                juman -b | \
+                perl -ne 'chomp; if($_ eq "EOS"){print join(" ",@b),"\n"; @b=();} else {@a=split/ /; push @b, $a[0];}' | \
+                perl -pe 's/^ +//; s/ +$//; s/ +/ /g;' | \
+                perl -CSD -Mutf8 -pe 'tr/\|[]/｜［］/; ' \
+                > $data_sub/$corpus.tok.$lang
 
-  if [[ ! -f $data_sub/train.both ]]; then
-      cat $data_sub/train.$src $data_sub/train.$trg > $data_sub/train.both
-  fi
+            else
+              # assume lang is en, Moses tokenization
 
-  python $scripts/train_sentencepiece.py \
-    --model-prefix $shared_models_sub/$src$trg.sentencepiece \
-    --input $data_sub/train.both \
-    --vocab-size $sentencepiece_vocab_size
-
-else
-  echo "Sentencepiece model exists: $shared_models_sub/$src$trg.sentencepiece.model"
-  echo "Skipping model training"
-fi
-
-# apply SP model to train, test and dev
-
-for corpus in train dev test; do
-    for lang in $src $trg; do
-        cat $data_sub/$corpus.$lang | \
-            python $scripts/apply_sentencepiece.py \
-                --model $shared_models_sub/$src$trg.sentencepiece.model \
-                --nbest-size 1 --output-format nbest \
-                    > $data_sub/$corpus.pieces.$lang
+              cat $data_sub/$corpus.$lang | \
+                perl $MOSES/tokenizer/tokenizer.perl -a -q -no-escape -l $lang > $data_sub/$corpus.tok.$lang
+            fi
+        fi
     done
 done
+
+# learn and apply BPE model on train (concatenate both languages)
+
+. $basebase/scripts/preprocessing/preprocess_generic.sh \
+            $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols $src $trg
 
 # sizes
 echo "Sizes of all files:"

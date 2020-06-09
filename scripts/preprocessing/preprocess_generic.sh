@@ -6,14 +6,15 @@
 # $shared_models_sub
 # $bpe_vocab_threshold
 # $bpe_total_symbols
+# $src
+# $trg
 
 data_sub=$1
 shared_models_sub=$2
 bpe_vocab_threshold=$3
 bpe_total_symbols=$4
-
-src=de
-trg=en
+src=$5
+trg=$6
 
 # measure time
 

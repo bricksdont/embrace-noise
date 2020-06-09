@@ -57,7 +57,9 @@ done
 shared_models_sub=$shared_models/baseline
 mkdir -p $shared_models_sub
 
-sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
+sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra \
+    $base/scripts/preprocessing/preprocess_generic.sh \
+        $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols $src $trg
 
 # individual training data for each experiment
 
@@ -100,7 +102,9 @@ for noise_type in raw_paracrawl; do
 
       shared_models_sub=$shared_models/baseline
 
-      sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
+      sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra \
+          $base/scripts/preprocessing/preprocess_generic.sh \
+              $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols $src $trg
     done
 done
 
@@ -131,5 +135,7 @@ for filter_sub in $filtered/*; do
 
     shared_models_sub=$shared_models/baseline
 
-    sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra $base/scripts/preprocessing/preprocess_generic.sh $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols
+    sbatch --cpus-per-task=1 --time=00:30:00 --mem=4G --partition=hydra \
+        $base/scripts/preprocessing/preprocess_generic.sh \
+            $data_sub $shared_models_sub $bpe_vocab_threshold $bpe_total_symbols $src $trg
 done

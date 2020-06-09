@@ -18,7 +18,8 @@ shared_models=$base/shared_models
 
 mkdir -p $shared_models
 
-sentencepiece_vocab_size=32000
+bpe_total_symbols=16000
+bpe_vocab_threshold=10
 
 # extract sentences in raw folder
 
@@ -46,7 +47,7 @@ for corpus in dev; do
 done
 
 #######################################
-# preprocessing baseline
+# preprocessing baseline: train-1
 #######################################
 
 data_sub=$data/baseline
@@ -73,10 +74,11 @@ sbatch --cpus-per-task=1 --time=00:30:00 --mem=16G --partition=hydra \
     $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
-    $scripts \
-    $sentencepiece_vocab_size \
+    $basebase \
     $src \
-    $trg
+    $trg \
+    $bpe_total_symbols \
+    $bpe_vocab_threshold
 
 #######################################
 # preprocessing train-1 and train-2
@@ -107,10 +109,11 @@ sbatch --cpus-per-task=1 --time=00:30:00 --mem=16G --partition=hydra \
     $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
-    $scripts \
-    $sentencepiece_vocab_size \
+    $basebase \
     $src \
-    $trg
+    $trg \
+    $bpe_total_symbols \
+    $bpe_vocab_threshold
 
 #######################################
 # preprocessing entire training data
@@ -141,10 +144,11 @@ sbatch --cpus-per-task=1 --time=00:30:00 --mem=16G --partition=hydra \
     $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
-    $scripts \
-    $sentencepiece_vocab_size \
+    $basebase \
     $src \
-    $trg
+    $trg \
+    $bpe_total_symbols \
+    $bpe_vocab_threshold
 
 #######################################
 # noise1 only (without clean data)
@@ -175,10 +179,11 @@ sbatch --cpus-per-task=1 --time=00:30:00 --mem=16G --partition=hydra \
     $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
-    $scripts \
-    $sentencepiece_vocab_size \
+    $basebase \
     $src \
-    $trg
+    $trg \
+    $bpe_total_symbols \
+    $bpe_vocab_threshold
 
 #######################################
 # noise2 only (without clean data)
@@ -209,7 +214,8 @@ sbatch --cpus-per-task=1 --time=00:30:00 --mem=16G --partition=hydra \
     $scripts/preprocess_generic.sh \
     $data_sub \
     $shared_models_sub \
-    $scripts \
-    $sentencepiece_vocab_size \
+    $basebase \
     $src \
-    $trg
+    $trg \
+    $bpe_total_symbols \
+    $bpe_vocab_threshold

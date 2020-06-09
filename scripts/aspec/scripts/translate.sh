@@ -75,6 +75,8 @@ for models_sub in $models/*; do
 
     mkdir -p $translations_sub
 
+    mode="bpe"
+
     sbatch --qos=vesta --time=00:12:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g \
         $basebase/scripts/aspec/scripts/translate_generic.sh \
             $basebase $data_sub $translations_sub $models_sub $src $trg

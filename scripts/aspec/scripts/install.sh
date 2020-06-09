@@ -118,3 +118,33 @@ mkdir -p $tools/fasttext
 wget https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin -P $tools/fasttext
 
 pip install sacrebleu
+
+# japanese tokenizer for sacrebleu
+
+pip install mecab-python3
+
+# install juman
+
+wget "http://nlp.ist.i.kyoto-u.ac.jp/DLcounter/lime.cgi?down=http://nlp.ist.i.kyoto-u.ac.jp/nl-resource/juman/juman-7.01.tar.bz2&name=juman-7.01.tar.bz2"
+
+mv "lime.cgi\?down\=http\:%2F%2Fnlp.ist.i.kyoto-u.ac.jp%2Fnl-resource%2Fjuman%2Fjuman-7.01.tar.bz2\&name\=juman-7.01.tar.bz2" $tools/juman.tar.bz2
+
+tar xjvf $tools/juman.tar.bz2
+
+rm $tools/juman.tar.bz2
+
+(cd $tools/juman-7.01 && ./configure --prefix=$tools)
+(cd $tools/juman-7.01 && make)
+(cd $tools/juman-7.01 && make install)
+
+# must be exported again before use
+
+export LD_LIBRARY_PATH=$tools/usr/local/lib
+
+# edit hard-coded paths
+
+sed -i "s/\/usr/\/net\/cephfs\/scratch\/mathmu\/noise-distill\/aspec\/tools\/usr/g" $tools/usr/local/etc/jumanrc
+
+# might need to be set again before use
+
+alias juman="$tools/usr/local/bin/juman -r $tools/usr/local/etc/jumanrc"
