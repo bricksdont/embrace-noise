@@ -39,11 +39,11 @@ for data_sub in $data/*; do
 
     mkdir -p $filter_sub
 
-    input_src=$data_sub/train.pieces.$src
-    input_trg=$data_sub/train.pieces.$trg
+    input_src=$data_sub/train.tok.$src
+    input_trg=$data_sub/train.tok.$trg
 
-    output_src=$filter_sub/train.pieces.$src
-    output_trg=$filter_sub/train.pieces.$trg
+    output_src=$filter_sub/train.tok.$src
+    output_trg=$filter_sub/train.tok.$trg
 
     logfile=$filter_sub/log
     rules="overlap min-length max-length"

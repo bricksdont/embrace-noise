@@ -8,6 +8,7 @@
 # $model_path
 # $src
 # $trg
+# $mode
 
 basebase=$1
 data_sub=$2
@@ -15,6 +16,7 @@ translations_sub=$3
 model_path=$4
 src=$5
 trg=$6
+mode=$7
 
 MOSES=$basebase/tools/moses-scripts/scripts
 

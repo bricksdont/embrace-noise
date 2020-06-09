@@ -19,6 +19,7 @@ shared_models=$base/shared_models
 filtered=$base/filtered
 
 LASER=$tools/laser
+MOSES=$basebase/tools/moses-scripts/scripts
 
 model_dir="${LASER}/models"
 encoder="${model_dir}/bilstm.93langs.2018-12-26.pt"
@@ -41,11 +42,18 @@ for filtered_sub in $filtered/*; do
   for lang in $src $trg; do
 
       if [[ ! -f $filtered_sub/train.$lang ]]; then
-        # remove pieces data (LASER has its own specific preprocessing)
+        # remove tokenization (LASER has its own specific preprocessing)
+          if [[ $lang == "ja" ]]; then
+              cat $filtered_sub/train.tok.$lang | \
+                  perl -Mencoding=utf8 -pe 's/([^Ａ-Ｚａ-ｚA-Za-z]) +/${1}/g; s/ +([^Ａ-Ｚａ-ｚA-Za-z])/${1}/g; ' \
+                   > $filtered_sub/train.$lang
+          else
+              # assume language is en
 
-        cat $filtered_sub/train.pieces.$lang | \
-            python $scripts/aspec/scripts/remove_sentencepiece.py --model $shared_models/baseline/$src$trg.sentencepiece.model \
-                > $filtered_sub/train.$lang
+              cat $filtered_sub/train.tok.$lang | \
+                  $MOSES/tokenizer/detokenizer.perl -l $lang > \
+                  $filtered_sub/train.$lang
+          fi
       fi
 
       raw_file=$filtered_sub/train.$lang
