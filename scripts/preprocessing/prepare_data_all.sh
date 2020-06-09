@@ -108,6 +108,16 @@ PREPARE_TOKEN_WEIGHTING_SUBSET=(
   "raw_paracrawl.100.filtered.token_weighting.exp0.6.max"
   "raw_paracrawl.100.filtered.token_weighting.exp0.8.max"
   "raw_paracrawl.100.filtered.token_weighting.exp1.0.max"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp0.1.geomean"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp0.2.geomean"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp0.3.geomean"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp0.4.geomean"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp0.5.geomean"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp0.6.geomean"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp0.7.geomean"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp0.8.geomean"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp0.9.geomean"
+  "raw_paracrawl.100.filtered.token_weighting.trust_clean.exp1.0.geomean"
 )
 
 function contains() {
