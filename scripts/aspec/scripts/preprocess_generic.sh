@@ -23,7 +23,6 @@ tools=$basebase/aspec/tools
 MOSES=$basebase/tools/moses-scripts/scripts
 
 export LD_LIBRARY_PATH=$tools/usr/local/lib
-alias juman="$tools/usr/local/bin/juman -r $tools/usr/local/etc/jumanrc"
 
 # measure time
 
@@ -43,7 +42,7 @@ for lang in $src $trg; do
 
               cat $data_sub/$corpus.$lang | \
                 perl -CSD -Mutf8 -pe 's/　/ /g;' | \
-                juman -b | \
+                $tools/usr/local/bin/juman -r $tools/usr/local/etc/jumanrc -b | \
                 perl -ne 'chomp; if($_ eq "EOS"){print join(" ",@b),"\n"; @b=();} else {@a=split/ /; push @b, $a[0];}' | \
                 perl -pe 's/^ +//; s/ +$//; s/ +/ /g;' | \
                 perl -CSD -Mutf8 -pe 'tr/\|[]/｜［］/; ' \
