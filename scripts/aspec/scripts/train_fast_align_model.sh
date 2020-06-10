@@ -7,7 +7,7 @@ basebase=/net/cephfs/home/mathmu/scratch/noise-distill
 source $basebase/venvs/sockeye3-cpu/bin/activate
 module unuse /apps/etc/modules/start/
 module use /sapps/etc/modules/start/
-module load generic
+module load hpc
 
 src=en
 trg=ja
@@ -20,7 +20,7 @@ mkdir -p $fast_align
 
 # train with tokenized instead of BPE
 
-for original_model_name in noise-2.filtered; do
+for original_model_name in noise2.filtered; do
 
     data_sub=$data/$original_model_name
 
@@ -49,7 +49,7 @@ for original_model_name in noise-2.filtered; do
         perl $basebase/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input 2> $fast_align_sub/filter.err
     fi
 
-    sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=generic $basebase/scripts/fast_align/train_fast_align_model_generic.sh $basebase $fast_align_sub ""
+    sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=hpc $basebase/scripts/fast_align/train_fast_align_model_generic.sh $basebase $fast_align_sub ""
 
     # reverse model
 
@@ -64,6 +64,6 @@ for original_model_name in noise-2.filtered; do
 
     ln -snf $fast_align/$model_name/input $fast_align/"$model_name"_reverse/input
 
-    sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=generic $basebase/scripts/fast_align/train_fast_align_model_generic.sh $basebase $fast_align_sub "-r"
+    sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=hpc $basebase/scripts/fast_align/train_fast_align_model_generic.sh $basebase $fast_align_sub "-r"
 
 done
