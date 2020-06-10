@@ -18,7 +18,6 @@ scripts=$basebase/scripts
 
 tools=$base/tools
 data=$base/data
-scripts=$base/scripts
 
 LASER=$tools/laser
 
@@ -36,7 +35,7 @@ device_arg="--gpu"
 
 mining_threshold=0.0
 
-for embedded_sub in $embedded/*; do
+for embedded_sub in $embedded/noise2-only; do
 
     echo "embedded_sub: $embedded_sub"
 

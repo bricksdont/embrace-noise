@@ -20,6 +20,8 @@ export LASER=$LASER
 
 log_file=$embedded_file.log
 
+echo "Embedding: $raw_file"
+
 cat ${raw_file} | python ${LASER}/source/embed.py \
       --encoder ${encoder} \
       --bpe-codes ${bpe_codes} \
