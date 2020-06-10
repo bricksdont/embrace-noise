@@ -18,7 +18,7 @@ alignments=$base/alignments
 
 mkdir -p $alignments
 
-for model_name in noise-2.filtered; do
+for model_name in noise2.filtered; do
 
     echo "model_name: $model_name"
 
