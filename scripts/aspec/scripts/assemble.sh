@@ -39,18 +39,20 @@ for origin_sub in $filtered/*; do
     continue
   fi
 
-  if [[ ! -f $origin_sub/train.bpe.$lang ]]; then
-      if [[ -f $origin_sub/train.tok.$lang ]]; then
+  for lang in $src $trg; do
+      if [[ ! -f $origin_sub/train.bpe.$lang ]]; then
+          if [[ -f $origin_sub/train.tok.$lang ]]; then
 
-          subword-nmt apply-bpe -c $shared_models/baseline/$src$trg.bpe \
-             --vocabulary $shared_models/baseline/vocab.$lang \
-             --vocabulary-threshold $bpe_vocab_threshold < $origin_sub/train.tok.$lang > $origin_sub/train.bpe.$lang
-      else
-          echo "Both files do not exist:"
-          echo "$baseline_sub/train.bpe.$lang"
-          echo "$baseline_sub/train.tok.$lang"
+              subword-nmt apply-bpe -c $shared_models/baseline/$src$trg.bpe \
+                 --vocabulary $shared_models/baseline/vocab.$lang \
+                 --vocabulary-threshold $bpe_vocab_threshold < $origin_sub/train.tok.$lang > $origin_sub/train.bpe.$lang
+          else
+              echo "Both files do not exist:"
+              echo "$origin_sub/train.bpe.$lang"
+              echo "$origin_sub/train.tok.$lang"
+          fi
       fi
-  fi
+  done
 
   . $scripts/preprocessing/concat_with_baseline_generic.sh
 done
