@@ -66,7 +66,7 @@ for corpus in dev test; do
       # remove juman tokenization
       # see http://lotus.kuee.kyoto-u.ac.jp/WAT/WAT2019/baseline/baselineSystemNMT.html
 
-      $translations_sub/$corpus.tok.$trg | \
+      cat $translations_sub/$corpus.tok.$trg | \
           perl -Mencoding=utf8 -pe 's/([^Ａ-Ｚａ-ｚA-Za-z]) +/${1}/g; s/ +([^Ａ-Ｚａ-ｚA-Za-z])/${1}/g; ' \
               > $translations_sub/$corpus.$trg
     else

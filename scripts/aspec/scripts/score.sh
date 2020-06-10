@@ -19,7 +19,9 @@ scores=$base/scores
 
 mkdir -p $scores
 
-batch_size=512
+# try larger batch size with 32GB V100
+
+batch_size=1024
 max_seq_len=128
 score_type="neglogprob"
 
@@ -44,7 +46,7 @@ function contains() {
     return 1
 }
 
-for filtered_sub in $filtered/*; do
+for filtered_sub in $filtered/noise2-only; do
 
     echo "filtered_sub: $filtered_sub"
 
@@ -75,7 +77,7 @@ for filtered_sub in $filtered/*; do
 
     output=$scores_sub/scores.nmt.forward
 
-    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/scoring/score_generic.sh $input_src $input_trg $output $batch_size $model_path $max_seq_len $score_type
+    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g $base/scripts/scoring/score_generic.sh $input_src $input_trg $output $batch_size $model_path $max_seq_len $score_type
 
     # backward scoring
 
@@ -86,6 +88,6 @@ for filtered_sub in $filtered/*; do
 
     output=$scores_sub/scores.nmt.backward
 
-    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100:1 --cpus-per-task 1 --mem 16g $base/scripts/scoring/score_generic.sh $input_src $input_trg $output $batch_size $model_path $max_seq_len $score_type
+    sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 16g $base/scripts/scoring/score_generic.sh $input_src $input_trg $output $batch_size $model_path $max_seq_len $score_type
 
 done
