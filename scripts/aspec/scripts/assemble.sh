@@ -27,7 +27,7 @@ shopt -s nullglob
 
 # assemble baseline + filtered noisy parts
 
-for origin_sub in $filtered/*; do
+for origin_sub in $filtered/noise*; do
   model_name=$(basename $origin_sub)
   model_name=$model_name."filtered"
 
