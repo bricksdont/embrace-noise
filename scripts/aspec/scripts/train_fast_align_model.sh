@@ -42,11 +42,11 @@ for original_model_name in noise-2.filtered; do
     if [[ ! -s $fast_align_sub/input.raw ]]; then
         cat $data_sub/train.bpe.$src | sed -r 's/@@( |$)//g' > $fast_align_sub/train.tok.$src
         cat $data_sub/train.bpe.$trg | sed -r 's/@@( |$)//g' > $fast_align_sub/train.tok.$trg
-        perl $basebase/tools/paste-files.pl $fast_align_sub/train.tok.$src $fast_align_sub/train.tok.$trg > $fast_align_sub/input.raw
+        perl $basebase/tools/paste-files.pl $fast_align_sub/train.tok.$src $fast_align_sub/train.tok.$trg > $fast_align_sub/input.raw 2> $fast_align_sub/paste.err
     fi
 
     if [[ ! -s $fast_align_sub/input ]]; then
-        perl $basebase/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input
+        perl $basebase/tools/filter-length.pl -200 $fast_align_sub/input.raw > $fast_align_sub/input 2> $fast_align_sub/filter.err
     fi
 
     sbatch --cpus-per-task=32 --time=02:00:00 --mem=32G --partition=generic $basebase/scripts/fast_align/train_fast_align_model_generic.sh $basebase $fast_align_sub ""
