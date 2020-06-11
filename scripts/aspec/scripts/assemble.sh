@@ -58,9 +58,6 @@ for origin_sub in $filtered/noise1-only $filtered/noise2-only; do
   . $scripts/preprocessing/concat_with_baseline_generic.sh
 done
 
-# TODO: remove
-exit
-
 # assemble LASER scoring data
 
 for mined_sub in $mined/*; do
@@ -147,6 +144,9 @@ for dcce_sub in $dcce/*; do
 
   done
 done
+
+# TODO: remove
+exit
 
 # assemble LASER instance weighting data
 
