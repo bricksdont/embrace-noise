@@ -1,6 +1,5 @@
 #! /bin/bash
 
-
 base=/net/cephfs/home/mathmu/scratch/noise-distill/aspec
 basebase=/net/cephfs/home/mathmu/scratch/noise-distill
 

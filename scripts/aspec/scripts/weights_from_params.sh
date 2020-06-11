@@ -30,7 +30,7 @@ for model_name in noise2.filtered; do
 
     # word-level with window averaging
 
-    for fast_align_model in noise-2.filtered.word_level; do
+    for fast_align_model in noise2.filtered.word_level; do
 
          echo "fast_align_model: $fast_align_model"
 

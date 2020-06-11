@@ -17,7 +17,7 @@ alignments=$base/alignments
 
 mkdir -p $alignments
 
-for model_name in raw_paracrawl.100.filtered raw_paracrawl.100.dcce.adq.0.75 raw_paracrawl.100.mined.score.0.75; do
+for model_name in raw_paracrawl.100.filtered; do
 
     echo "model_name: $model_name"
 
@@ -128,7 +128,7 @@ for model_name in raw_paracrawl.100.filtered raw_paracrawl.100.dcce.adq.0.75 raw
 done
 
 
-for model_name in raw_paracrawl.100.dcce.adq.0.75 raw_paracrawl.100.mined.score.0.75; do
+for model_name in raw_paracrawl.100.mined.score.0.75.word_level raw_paracrawl.100.dcce.adq.0.75.word_level; do
 
     echo "model_name: $model_name"
 
