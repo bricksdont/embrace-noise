@@ -313,9 +313,6 @@ for dcce_sub in $dcce/*; do
   done
 done
 
-# TODO: remove
-exit
-
 # assemble FA token weighting data: clean corpus has FA weights as well
 
 for exp in 0.1 0.2 0.3 0.4 0.5; do
