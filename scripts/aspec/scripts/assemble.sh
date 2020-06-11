@@ -145,9 +145,6 @@ for dcce_sub in $dcce/*; do
   done
 done
 
-# TODO: remove
-exit
-
 # assemble LASER instance weighting data
 
 for mined_sub in $mined/*; do
@@ -221,7 +218,7 @@ for mined_sub in $mined/*; do
     model_name=$model_name.mined.$mining_method.instance_weighting
     original_data_sub=$data/$model_name
 
-    for exp in 1.5 1.75 2.0 2.25 2.5 2.75 3.0; do
+    for exp in 1.25 1.5 1.75 2.0 2.25 2.5 2.75 3.0; do
 
         data_sub=$original_data_sub.exp$exp
 
@@ -315,6 +312,9 @@ for dcce_sub in $dcce/*; do
 
   done
 done
+
+# TODO: remove
+exit
 
 # assemble FA token weighting data: clean corpus has FA weights as well
 
