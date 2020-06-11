@@ -47,6 +47,8 @@ for embedded_sub in $embedded/noise2-only; do
 
     mkdir -p $mined_sub
 
+    mining_method="score"
+
     mined_file=$mined_sub/mined.$mining_method
 
     if [[ -f $mined_file ]] ; then
@@ -60,8 +62,6 @@ for embedded_sub in $embedded/noise2-only; do
 
     embeddings_src=$embedded_sub/train.embedded.$src
     embeddings_trg=$embedded_sub/train.embedded.$trg
-
-    mining_method="score"
 
     sbatch --qos=vesta --time=12:00:00 --gres gpu:Tesla-V100-32GB:1 --cpus-per-task 1 --mem 48g \
         $scripts/mining/mine_generic.sh \
