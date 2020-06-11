@@ -12,7 +12,7 @@ scripts=$basebase/scripts
 scores=$base/scores
 filtered=$base/filtered
 
-dcce=$base/dcces
+dcce=$base/dcce
 
 mkdir -p $dcce
 

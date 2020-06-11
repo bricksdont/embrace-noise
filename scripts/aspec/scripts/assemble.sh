@@ -16,10 +16,11 @@ mined=$base/mined
 dcce=$base/dcce
 tools=$base/tools
 alignments=$base/alignments
-
 shared_models=$base/shared_models
 
 MOSES=$basebase/tools/moses-scripts/scripts
+
+export LD_LIBRARY_PATH=$tools/usr/local/lib
 
 bpe_vocab_threshold=10
 
@@ -27,7 +28,7 @@ shopt -s nullglob
 
 # assemble baseline + filtered noisy parts
 
-for origin_sub in $filtered/noise*; do
+for origin_sub in $filtered/noise1-only $filtered/noise2-only; do
   model_name=$(basename $origin_sub)
   model_name=$model_name."filtered"
 
@@ -320,8 +321,8 @@ done
 for exp in 0.1 0.2 0.3 0.4 0.5; do
 
     reverse_method="geomean"
-    original_name="noise-2.filtered"
-    fast_align_model="noise-2.filtered"
+    original_name="noise2-only.filtered"
+    fast_align_model="noise2-only.filtered"
 
     original_data_sub=$data/$original_name
 

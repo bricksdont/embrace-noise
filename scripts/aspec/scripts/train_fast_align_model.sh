@@ -20,7 +20,7 @@ mkdir -p $fast_align
 
 # train with tokenized instead of BPE
 
-for original_model_name in noise2.filtered; do
+for original_model_name in noise2-only.filtered; do
 
     data_sub=$data/$original_model_name
 

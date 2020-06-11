@@ -291,25 +291,40 @@ for exp in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0; do
 
 done
 
-exit
+for original_name in raw_paracrawl.100.dcce.adq.0.75 raw_paracrawl.100.mined.score.0.75; do
 
-# below: WIP
+    original_data_sub=$data/$original_name
+    reverse_method="geomean"
 
-for fraction in 0.75; do
+    for exp in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0; do
 
-    original_name="raw_paracrawl.100.mined.score.$fraction"
-    name=$original_name.token_weighting
+        name=$original_name.token_weighting.exp$exp.$reverse_method
+        data_sub=$data/$name
 
-    data_sub=$data/$name
+        if [[ -d $data_sub ]]; then
+            echo "data_sub exists: $data_sub"
+            echo "Skipping."
+            continue
+        fi
 
-    if [[ -d $data_sub ]]; then
-        echo "data_sub exists: $data_sub"
-        echo "Skipping."
-        continue
-    fi
+        mkdir -p $data_sub
 
-    mkdir -p $data_sub
+        alignments_sub=$alignments/$original_name.$fast_align_model.word_level.$reverse_method.geomean
 
+         # link entire data folder
 
+        for lang in $src $trg; do
+            for corpus in train dev test test_ood; do
+                ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+            done
+        done
 
+        # token weights
+
+        cat $alignments_sub/weights | python $scripts/preprocessing/exponential_smoothing.py --exp $exp > \
+          $data_sub/train.weights
+
+    done
 done
+
+# perhaps also: 1.0 token weights for clean data

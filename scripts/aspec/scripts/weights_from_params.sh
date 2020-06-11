@@ -18,7 +18,7 @@ alignments=$base/alignments
 
 mkdir -p $alignments
 
-for model_name in noise2.filtered; do
+for model_name in noise2-only.filtered; do
 
     echo "model_name: $model_name"
 
@@ -30,7 +30,7 @@ for model_name in noise2.filtered; do
 
     # word-level with window averaging
 
-    for fast_align_model in noise2.filtered.word_level; do
+    for fast_align_model in noise2-only.filtered.word_level; do
 
          echo "fast_align_model: $fast_align_model"
 
