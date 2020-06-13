@@ -12,18 +12,18 @@ mkdir -p $evaluations
 
 for translations_sub in $translations/*; do
 
-    echo "translations_sub: $translations_sub"
-
     name=$(basename $translations_sub)
 
     data_sub=$data/$name
     evaluations_sub=$evaluations/$name
 
-    #if [[ -d $evaluations_sub ]]; then
-    #    echo "Folder exists: $evaluations_sub"
-    #    echo "Skipping."
-    #    continue
-    #fi
+    if [[ -d $evaluations_sub ]]; then
+        # echo "Folder exists: $evaluations_sub"
+        # echo "Skipping."
+        continue
+    fi
+
+    echo "translations_sub: $translations_sub"
 
     mkdir -p $evaluations_sub
 
