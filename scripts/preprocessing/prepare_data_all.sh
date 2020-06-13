@@ -188,7 +188,9 @@ for data_sub in $data/*; do
     mode=bpe
     instance_weighting_type="sentence"
 
-    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=generic $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh $data_sub $prepared_sub $instance_weighting_type $src $trg $mode
+    sbatch --cpus-per-task=1 --time=12:00:00 --mem=16G --partition=generic \
+        $base/scripts/preprocessing/prepare_data_instance_weighting_generic.sh \
+            $data_sub $prepared_sub $instance_weighting_type $src $trg $mode
 
 done
 
