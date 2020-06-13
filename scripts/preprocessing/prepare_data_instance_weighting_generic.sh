@@ -20,9 +20,6 @@ src=$4
 trg=$5
 mode=$6
 
-src=de
-trg=en
-
 cmd="python -m sockeye.prepare_data -s $data_sub/train.$mode.$src -t $data_sub/train.$mode.$trg --shared-vocab -o $prepared_sub --instance-weighting --instance-weights-file $data_sub/train.weights --instance-weighting-type $instance_weighting_type "
 
 echo "Executing:"
