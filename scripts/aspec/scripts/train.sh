@@ -53,6 +53,7 @@ TRAIN_SUBSET_INSTANCE_WEIGHTING=(
 )
 
 TRAIN_SUBSET_TOKEN_WEIGHTING=(
+  "noise2-only.filtered.token_weighting.exp0.05.geomean"
   "noise2-only.filtered.token_weighting.exp0.1.geomean"
   "noise2-only.filtered.token_weighting.exp0.2.geomean"
   "noise2-only.filtered.token_weighting.exp0.3.geomean"

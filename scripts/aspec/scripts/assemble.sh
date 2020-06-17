@@ -315,7 +315,7 @@ done
 
 # assemble FA token weighting data: clean corpus has FA weights as well
 
-for exp in 0.1 0.2 0.3 0.4 0.5; do
+for exp in 0.05 0.1 0.2 0.3 0.4 0.5; do
 
     reverse_method="geomean"
     original_name="noise2-only.filtered"

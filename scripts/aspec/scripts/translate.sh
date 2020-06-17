@@ -47,6 +47,7 @@ TRANSLATE_SUBSET=(
   "noise2-only.mined.score.instance_weighting.exp2.5"
   "noise2-only.mined.score.instance_weighting.exp2.75"
   "noise2-only.mined.score.instance_weighting.exp3.0"
+  "noise2-only.filtered.token_weighting.exp0.05.geomean"
   "noise2-only.filtered.token_weighting.exp0.1.geomean"
   "noise2-only.filtered.token_weighting.exp0.2.geomean"
   "noise2-only.filtered.token_weighting.exp0.3.geomean"
