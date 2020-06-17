@@ -98,7 +98,7 @@ def main():
                 r = Result(dir_name, dev_bleu, test_bleu)
                 results.append(r)
 
-    joiner = "\t" + args.num_tabs
+    joiner = "\t" * args.num_tabs
     print(joiner.join(["NAME\t", "DEV", "TEST"]))
 
     for r in results:
