@@ -33,7 +33,7 @@ def tab(r: Result, num_tabs: int = 1) -> str:
     :param num_tabs:
     :return:
     """
-    parts = [r.name, r.dev, r.test]
+    parts = [r.name + "\t", r.dev, r.test]
     joiner = "\t" * num_tabs
     line = joiner.join(parts)
 
@@ -97,6 +97,9 @@ def main():
 
                 r = Result(dir_name, dev_bleu, test_bleu)
                 results.append(r)
+
+    joiner = "\t" + args.num_tabs
+    print(joiner.join(["NAME\t", "DEV", "TEST"]))
 
     for r in results:
         print(tab(r, args.num_tabs))
