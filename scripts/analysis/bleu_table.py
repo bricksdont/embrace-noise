@@ -18,6 +18,8 @@ def parse_args():
                         required=False)
     parser.add_argument("--num-tabs", type=int, help="Number of tabs between values",
                         required=False, default=1)
+    parser.add_argument("--sort", action="store_true", help="sort results by name",
+                        required=False, default=False)
     args = parser.parse_args()
 
     return args
@@ -97,6 +99,9 @@ def main():
 
                 r = Result(dir_name, dev_bleu, test_bleu)
                 results.append(r)
+
+    if args.sort:
+        results.sort()
 
     joiner = "\t" * args.num_tabs
     print(joiner.join(["NAME\t", "DEV", "TEST"]))
