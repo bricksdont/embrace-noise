@@ -293,37 +293,41 @@ done
 
 for original_name in raw_paracrawl.100.dcce.adq.0.75 raw_paracrawl.100.mined.score.0.75; do
 
+    fast_align_model=$original_name
     original_data_sub=$data/$original_name
     reverse_method="geomean"
 
-    for exp in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0; do
+    for fast_align_model in $original_name raw_paracrawl.100.filtered; do
 
-        name=$original_name.token_weighting.exp$exp.$reverse_method
-        data_sub=$data/$name
+        for exp in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0; do
 
-        if [[ -d $data_sub ]]; then
-            echo "data_sub exists: $data_sub"
-            echo "Skipping."
-            continue
-        fi
+            name=$original_name.token_weighting.exp$exp.$reverse_method
+            data_sub=$data/$name
 
-        mkdir -p $data_sub
+            if [[ -d $data_sub ]]; then
+                echo "data_sub exists: $data_sub"
+                echo "Skipping."
+                continue
+            fi
 
-        alignments_sub=$alignments/$original_name.$fast_align_model.word_level.$reverse_method.geomean
+            mkdir -p $data_sub
 
-         # link entire data folder
+            alignments_sub=$alignments/$original_name.$fast_align_model.word_level.$reverse_method.geomean
 
-        for lang in $src $trg; do
-            for corpus in train dev test test_ood; do
-                ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+             # link entire data folder
+
+            for lang in $src $trg; do
+                for corpus in train dev test test_ood; do
+                    ln -snf $original_data_sub/$corpus.bpe.$lang $data_sub/$corpus.bpe.$lang
+                done
             done
+
+            # token weights
+
+            cat $alignments_sub/weights | python $scripts/preprocessing/exponential_smoothing.py --exp $exp > \
+              $data_sub/train.weights
+
         done
-
-        # token weights
-
-        cat $alignments_sub/weights | python $scripts/preprocessing/exponential_smoothing.py --exp $exp > \
-          $data_sub/train.weights
-
     done
 done
 
